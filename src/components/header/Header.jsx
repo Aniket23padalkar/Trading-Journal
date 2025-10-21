@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import "./header.css";
-import logo from "../../src/assets/TradeLens-Logo2.png";
+import logo from "../../assets/TradeLens-Logo2.png";
 
 export default function Header() {
   return (
