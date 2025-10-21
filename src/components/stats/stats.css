@@ -1,0 +1,90 @@
+.stats-container {
+  display: flex;
+  gap: 1rem;
+}
+
+.stats {
+  height: 10rem;
+  width: 19rem;
+  background-color: rgb(229, 248, 255);
+  border-radius: 5px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  padding: 1rem;
+  gap: 1rem;
+}
+
+.overall {
+  display: flex;
+  flex-direction: column;
+}
+
+.overall > h4 {
+  text-decoration: underline;
+  font-weight: 500;
+}
+
+.overall > span {
+  display: flex;
+  align-items: center;
+}
+
+.arrow-trend {
+  font-size: 1.5rem;
+  margin-right: 0.5rem;
+}
+
+.overall > span > h3,
+.overall > h3 {
+  /* text-align: center; */
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.square-container {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.square-container > h4 {
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.average-profit,
+.average-loss {
+  display: flex;
+  /* padding-left: 1rem; */
+  align-items: center;
+}
+
+.average-profit > span > h4,
+.average-loss > span > h4 {
+  font-size: 0.7rem;
+  font-weight: 500;
+}
+
+.arrow-up-square,
+.arrow-down-square {
+  margin-right: 0.3rem;
+  padding: 0.3rem;
+  display: flex;
+  align-items: center;
+  background-color: rgb(36, 194, 36);
+}
+
+.arrow-down-square {
+  background-color: rgb(250, 103, 103);
+}
+
+.average-risk-per-trade > h4 {
+  font-weight: 500;
+  font-size: 0.9rem;
+}
+
+.average-risk-per-trade > h3 {
+  font-size: 1.3rem;
+  font-weight: 600;
+}
