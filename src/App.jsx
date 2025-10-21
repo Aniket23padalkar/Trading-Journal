@@ -12,8 +12,7 @@ export default function App() {
         <Aside />
         <div className="container">
           <Routes>
-            <Route path="/" element={<Navigate to="/home" replace />} />
-            <Route path="/home" element={<Home />} />
+            <Route path="/" element={<Home />} />
             <Route path="trades" element={<Trades />} />
           </Routes>
         </div>
