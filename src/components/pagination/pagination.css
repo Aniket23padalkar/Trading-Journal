@@ -1,0 +1,69 @@
+.pages-container {
+  background-color: #e9c46a;
+  padding: 0.5rem;
+  width: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 3rem;
+  gap: 0.5rem;
+  border-radius: 20px;
+  margin: 0.5rem 0;
+  box-shadow: 0 3px 3px rgba(0, 0, 0, 0.5);
+}
+
+.prev-next-btn {
+  display: flex;
+  align-items: center;
+  padding: 0.3rem 0.5rem;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.prev-next-btn.disabled:hover {
+  cursor: default;
+  scale: 1;
+}
+
+.page {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 201px;
+  gap: 0.3rem;
+  padding: 0 1rem;
+}
+
+.page-num {
+  height: 1.5rem;
+  width: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border-radius: 50%;
+  border: none;
+  background-color: transparent;
+  color: white;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.page-num.active {
+  background-color: black;
+  box-shadow: 0 3px 3px rgba(0, 0, 0, 0.5);
+  scale: 1.3;
+}
+
+.page-num.active:hover {
+  scale: 1.3;
+}
+
+.page-num:hover {
+  scale: 1.1;
+}
+
+.prev-next-btn:hover {
+  scale: 1.2;
+}

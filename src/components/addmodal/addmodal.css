@@ -1,0 +1,183 @@
+.add-modal-container {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  backdrop-filter: blur(10px);
+  background: rgba(0, 0, 0, 0.1);
+  top: 0;
+  left: 0;
+  padding: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+}
+
+.add-modal {
+  height: 90%;
+  width: 50%;
+  background-color: antiquewhite;
+  display: flex;
+  flex-direction: column;
+}
+
+.add-modal-header {
+  width: 100%;
+  padding: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  background-color: #e9c46a;
+  box-shadow: 0 2px 2px rgba(0, 0, 0, 0.5);
+}
+
+#close-add-modal {
+  position: absolute;
+  right: 1rem;
+  background-color: transparent;
+  border: none;
+  font-size: 1.5rem;
+  font-weight: 500;
+  color: red;
+  cursor: pointer;
+}
+
+.input-form {
+  flex: 1;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.first-row {
+  display: flex;
+  align-items: center;
+}
+
+.input {
+  height: 2rem;
+  border-radius: 5px;
+  padding-left: 0.5rem;
+  border: 2px solid transparent;
+  outline: none;
+}
+
+.input:focus {
+  border: 2px solid violet;
+}
+
+.select-container {
+  height: 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex: 1;
+  padding-left: 1rem;
+}
+
+.select {
+  height: 2rem;
+  width: 6.3rem;
+  border: 2px solid transparent;
+  padding-left: 1rem;
+  border-radius: 5px;
+  outline: none;
+  font-size: 0.9rem;
+  background-color: white;
+  font-weight: 500;
+}
+
+.select:focus {
+  border: 2px solid violet;
+}
+
+.second-row {
+  display: flex;
+  height: 2rem;
+  gap: 0.5rem;
+}
+
+.price {
+  gap: 0.5rem;
+  display: flex;
+}
+
+.price-input {
+  width: 8.5rem;
+  padding-left: 0.5rem;
+  border: 2px solid transparent;
+  border-radius: 5px;
+  outline: none;
+}
+
+.price-input:focus {
+  border: 2px solid violet;
+}
+
+.market-type {
+  flex: 1;
+}
+
+.fourth-row {
+  display: flex;
+  gap: 0.5rem;
+  height: 3rem;
+}
+
+.date-time {
+  font-size: 0.7rem;
+  height: 2rem;
+  /* padding-top: 1rem; */
+}
+
+.date-time:focus {
+  border: 2px solid violet;
+}
+
+#description {
+  flex: 1;
+  padding: 0.5rem 1rem;
+  font-size: 0.8rem;
+  outline: none;
+  border: 2px solid transparent;
+  resize: none;
+}
+
+#description:focus {
+  border: 2px solid violet;
+}
+
+#save-btn {
+  background-color: violet;
+  border: 2px solid transparent;
+  cursor: pointer;
+  color: white;
+}
+
+#save-btn:hover {
+  border: 2px solid rgb(206, 29, 206);
+}
+
+.entry-time,
+.exit-time {
+  display: flex;
+  align-items: flex-end;
+  position: relative;
+  height: 100%;
+}
+
+.entry-time > label,
+.exit-time > label {
+  position: absolute;
+  font-size: 0.8rem;
+  left: 0.5rem;
+  top: 0;
+}
+
+.third-row {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
