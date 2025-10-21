@@ -1,0 +1,52 @@
+main {
+  height: 100%;
+  width: 100%;
+  display: flex;
+}
+
+.overall-stats {
+  height: 10rem;
+  width: 17rem;
+  background-color: rgb(229, 248, 255);
+  border-radius: 5px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  padding: 1rem;
+  /* place-items: center; */
+}
+
+.overall {
+  display: flex;
+  flex-direction: column;
+}
+
+.overall > h4 {
+  text-decoration: underline;
+  font-weight: 500;
+}
+
+.overall > span {
+  display: flex;
+  align-items: center;
+}
+
+.arrow-trend {
+  font-size: 1.5rem;
+  margin-right: 0.5rem;
+}
+
+.overall > span > h3,
+.overall > h3 {
+  /* text-align: center; */
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.max-loss {
+  padding-left: 1rem;
+}
+
+.overall-pnl {
+  grid-column: 1/3;
+}
