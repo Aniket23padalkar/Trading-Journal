@@ -10,6 +10,7 @@ import {
   FaArrowUp,
   FaArrowDown,
 } from "react-icons/fa6";
+import FormatPnL from "../../utils/FormatPnL";
 
 export default function Stats() {
   const { trades } = useContext(GlobalContext);
@@ -26,7 +27,7 @@ export default function Stats() {
     return trades.reduce((acc, trade) => Math.min(acc, Number(trade.pnl)), 0);
   }
 
-  function calculateAverageProfit() {
+  function calculateTotalProfit() {
     const profitableTrades = trades.filter((trade) => Number(trade.pnl) > 0);
 
     if (profitableTrades.length === 0) return 0;
@@ -35,10 +36,10 @@ export default function Stats() {
       (acc, trade) => acc + Number(trade.pnl),
       0
     );
-    return (totalProfit / profitableTrades.length).toFixed(2);
+    return totalProfit.toFixed(2);
   }
 
-  function calculateAverageLoss() {
+  function calculateTotalLoss() {
     const losingTrades = trades.filter((trade) => Number(trade.pnl) < 0);
 
     if (losingTrades.length === 0) return 0;
@@ -47,7 +48,7 @@ export default function Stats() {
       (acc, trade) => acc + Number(trade.pnl),
       0
     );
-    return (totalLoss / losingTrades.length).toFixed(2);
+    return totalLoss.toFixed(2);
   }
 
   function calculateOverallRRratio() {
@@ -77,18 +78,6 @@ export default function Stats() {
     return lossTrades.length;
   }
 
-  function formatPnl(value) {
-    if (value >= 10000000 || value <= -10000000) {
-      return (value / 10000000).toFixed(2) + "Cr";
-    } else if (value >= 100000 || value <= -100000) {
-      return (value / 100000).toFixed(2) + "L";
-    } else if (value >= 1000 || value <= -1000) {
-      return (value / 1000).toFixed(2) + "K";
-    } else {
-      return value.toFixed(2);
-    }
-  }
-
   return (
     <main className="stats-container">
       <div className="stats">
@@ -101,7 +90,7 @@ export default function Stats() {
               <FaArrowTrendDown className="arrow-trend" />
             )}{" "}
             <h3 style={{ color: calculateOverallPnl() >= 0 ? "green" : "red" }}>
-              {formatPnl(calculateOverallPnl())}
+              {FormatPnL(calculateOverallPnl())}
             </h3>
           </span>
         </div>
@@ -117,7 +106,7 @@ export default function Stats() {
             }}
           >
             {calculateMaxProfit() >= 0 ? "+" : "-"}
-            {formatPnl(calculateMaxProfit())}
+            {FormatPnL(calculateMaxProfit())}
           </h3>
         </div>
 
@@ -131,7 +120,7 @@ export default function Stats() {
               fontSize: "1.2rem",
             }}
           >
-            {formatPnl(calculateMaxLoss())}
+            {FormatPnL(calculateMaxLoss())}
           </h3>
         </div>
       </div>
@@ -159,8 +148,8 @@ export default function Stats() {
             }
           </div>
           <span>
-            <h4>Avg Profit/Trade</h4>
-            <h3>+{formatPnl(calculateAverageProfit())}</h3>
+            <h4>Total Profit</h4>
+            <h3>+{FormatPnL(calculateTotalProfit())}</h3>
           </span>
         </div>
 
@@ -173,8 +162,8 @@ export default function Stats() {
             }
           </div>
           <span>
-            <h4>Avg Loss/Trade</h4>
-            <h3>{formatPnl(calculateAverageLoss())}</h3>
+            <h4>Total Loss</h4>
+            <h3>{FormatPnL(calculateTotalLoss())}</h3>
           </span>
         </div>
       </div>

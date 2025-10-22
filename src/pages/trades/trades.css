@@ -20,16 +20,20 @@
   box-shadow: 0 3px 3px rgba(0, 0, 0, 0.2);
 }
 
-#filter-btn {
+.filter-btn {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 0.3rem 0.5rem;
+  padding: 0rem 0.5rem;
   margin-right: 0.5rem;
   background-color: transparent;
-  border: none;
+  border: 2px solid transparent;
   color: rgb(58, 180, 228);
   cursor: pointer;
+}
+
+.filter-btn.active {
+  border-bottom: 2px solid rgb(2, 90, 46);
 }
 
 #add-btn {

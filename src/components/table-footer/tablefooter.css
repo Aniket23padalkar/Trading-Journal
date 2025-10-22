@@ -1,0 +1,37 @@
+.table-footer {
+  width: 95%;
+  height: 3rem;
+  border: 1px solid black;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 1rem;
+  margin-top: 0.3rem;
+}
+
+.table-footer-right {
+  display: flex;
+  align-items: center;
+}
+
+.total-pnl,
+.total-rr,
+.trades-count {
+  display: flex;
+  align-items: center;
+  padding: 0 0.5rem;
+}
+
+.total-pnl > p,
+.total-rr > p,
+.trades-count > p {
+  font-size: 0.9rem;
+  font-weight: 500;
+  padding-right: 0.5rem;
+}
+
+.total-pnl > h1,
+.total-rr > h1,
+.trades-count > h1 {
+  font-size: 1.2rem;
+}
