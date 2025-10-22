@@ -58,7 +58,23 @@ export default function Stats() {
     return (
       trades.reduce((acc, trade) => acc + Number(trade.formData.risk), 0) /
       trades.length
-    );
+    ).toFixed(2);
+  }
+
+  function totalProfitTrades() {
+    const profitTrades = trades.filter((trade) => Number(trade.pnl) > 0);
+
+    if (profitTrades.length === 0) return 0;
+
+    return profitTrades.length;
+  }
+
+  function totalLossTrades() {
+    const lossTrades = trades.filter((trade) => Number(trade.pnl) < 0);
+
+    if (lossTrades.length === 0) return 0;
+
+    return lossTrades.length;
   }
 
   function formatPnl(value) {
@@ -76,7 +92,7 @@ export default function Stats() {
   return (
     <main className="stats-container">
       <div className="stats">
-        <div className="overall-pnl overall">
+        <div className="overall-pnl overall" style={{ gridColumn: "1 / 3" }}>
           <h4>Overall PnL</h4>
           <span style={{ color: calculateOverallPnl() >= 0 ? "green" : "red" }}>
             {calculateOverallPnl() >= 0 ? (
@@ -87,14 +103,6 @@ export default function Stats() {
             <h3 style={{ color: calculateOverallPnl() >= 0 ? "green" : "red" }}>
               {formatPnl(calculateOverallPnl())}
             </h3>
-          </span>
-        </div>
-
-        <div className="overall">
-          <h4>Overall RR</h4>
-          <span>
-            {calculateOverallRRratio() >= 0 ? <FaArrowUp /> : <FaArrowDown />}
-            <h3>{calculateOverallRRratio()}X</h3>
           </span>
         </div>
 
@@ -112,6 +120,7 @@ export default function Stats() {
             {formatPnl(calculateMaxProfit())}
           </h3>
         </div>
+
         <div className="max-loss overall">
           <span className="square-container">
             <FaSquare size={13} color="red" />
@@ -128,6 +137,19 @@ export default function Stats() {
       </div>
 
       <div className="stats" style={{ columnGap: "0.5rem" }}>
+        <div className="overall">
+          <h4>Overall RR</h4>
+          <span>
+            {calculateOverallRRratio() >= 0 ? <FaArrowUp /> : <FaArrowDown />}
+            <h3>{calculateOverallRRratio()}X</h3>
+          </span>
+        </div>
+
+        <div className="average-risk-per-trade">
+          <h4>Avg Risk/Trade</h4>
+          <h3>{calculateAverageRiskPerTrade()}/-</h3>
+        </div>
+
         <div className="average-profit">
           <div className="arrow-up-square">
             {
@@ -155,10 +177,40 @@ export default function Stats() {
             <h3>{formatPnl(calculateAverageLoss())}</h3>
           </span>
         </div>
+      </div>
 
-        <div className="average-risk-per-trade">
-          <h4>Avg Risk/Trade</h4>
-          <h3>{calculateAverageRiskPerTrade()}</h3>
+      <div className="stats">
+        <div className="total-trades">
+          <h4>Total-Trades</h4>
+          <h3>{trades.length}</h3>
+        </div>
+
+        <div className="max-profit overall">
+          <span className="square-container">
+            <FaSquare size={13} color="green" />
+            <h4>Profit Trades</h4>
+          </span>
+          <h3
+            style={{
+              fontSize: "1.2rem",
+            }}
+          >
+            {totalProfitTrades()}
+          </h3>
+        </div>
+
+        <div className="max-loss overall">
+          <span className="square-container">
+            <FaSquare size={13} color="red" />
+            <h4>Loss Trades</h4>
+          </span>
+          <h3
+            style={{
+              fontSize: "1.2rem",
+            }}
+          >
+            {totalLossTrades()}
+          </h3>
         </div>
       </div>
     </main>

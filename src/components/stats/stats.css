@@ -1,6 +1,7 @@
 .stats-container {
   display: flex;
   gap: 1rem;
+  justify-content: space-evenly;
 }
 
 .stats {
@@ -79,12 +80,22 @@
   background-color: rgb(250, 103, 103);
 }
 
-.average-risk-per-trade > h4 {
+.average-risk-per-trade {
+  padding-left: 0.5rem;
+}
+
+.average-risk-per-trade > h4,
+.total-trades > h4 {
   font-weight: 500;
   font-size: 0.9rem;
 }
 
-.average-risk-per-trade > h3 {
+.average-risk-per-trade > h3,
+.total-trades > h3 {
   font-size: 1.3rem;
   font-weight: 600;
+}
+
+.total-trades {
+  grid-column: 1/3;
 }
