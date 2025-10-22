@@ -1,10 +1,10 @@
 import { useContext } from "react";
 import "./viewmodal.css";
 import { GlobalContext } from "../../context/Context";
+import formatDateTime from "../../utils/formatDateTime";
 
 export default function ViewModal() {
-  const { setViewModal, currentViewTrade, formatDateTime } =
-    useContext(GlobalContext);
+  const { setViewModal, currentViewTrade } = useContext(GlobalContext);
 
   function handleViewOrderColor() {
     if (currentViewTrade.formData.order === "BUY") return "#6fca44ff";

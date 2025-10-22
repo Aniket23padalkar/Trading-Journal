@@ -1,4 +1,6 @@
 import { createContext, useContext, useEffect, useState } from "react";
+import FilterTrades from "../utils/FilterTrades.jsx";
+import calculatePnL from "../utils/CalculatePnl.jsx";
 
 export const GlobalContext = createContext(null);
 
@@ -44,40 +46,15 @@ export default function GlobalStateContext({ children }) {
     return [];
   }
 
-  function formatDateTime(dt) {
-    if (!dt) return "--";
-    return new Date(dt).toLocaleString("en-IN", {
-      day: "2-digit",
-      month: "short",
-      year: "2-digit",
-      hour: "2-digit",
-      minute: "2-digit",
-      hour12: true,
-    });
-  }
-
-  function calculatePnL(buyPrice, sellPrice, quantity) {
-    const b = Number(buyPrice);
-    const s = Number(sellPrice);
-    const q = Number(quantity);
-
-    if (!b || !s) return 0;
-
-    let pnl = (s - b) * q;
-
-    return pnl.toFixed(2);
-  }
-
-  function calculateRRratio(formData) {
-    const rrRatio =
-      calculatePnL(formData.buyPrice, formData.sellPrice, formData.quantity) /
-      formData.risk;
-    return rrRatio.toFixed(2);
-  }
-
   useEffect(() => {
     localStorage.setItem("trades", JSON.stringify(trades));
   }, [trades]);
+
+  useEffect(() => {
+    const result = FilterTrades(trades, filterValue);
+    setFilteredTrades(result);
+    setCurrentPage(1);
+  }, [filterValue, trades]);
 
   return (
     <GlobalContext.Provider
@@ -94,9 +71,6 @@ export default function GlobalStateContext({ children }) {
         setViewModal,
         currentViewTrade,
         setCurrentViewTrade,
-        formatDateTime,
-        calculatePnL,
-        calculateRRratio,
         currentPage,
         setCurrentPage,
         viewFilters,

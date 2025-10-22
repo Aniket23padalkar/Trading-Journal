@@ -1,0 +1,172 @@
+import { useContext, useEffect } from "react";
+import "./tradestable.css";
+import { GlobalContext } from "../../context/Context";
+import { FaEdit, FaTrash } from "react-icons/fa";
+import formatDateTime from "../../utils/formatDateTime";
+
+export default function TradesTable({ currentTrades }) {
+  const {
+    setTrades,
+    setCurrentViewTrade,
+    setViewModal,
+    setCurrentEditId,
+    setFormData,
+    setAddModal,
+  } = useContext(GlobalContext);
+
+  function orderColor(order) {
+    if (order === "BUY") return "#ade494ff";
+    if (order === "SELL") return "#ee8486ff";
+    return "white";
+  }
+
+  function handleViewModal(trade) {
+    setCurrentViewTrade(trade);
+    setViewModal(true);
+  }
+
+  function handleDeleteTrade(id) {
+    setTrades((prevTrade) => prevTrade.filter((trade) => trade.id !== id));
+  }
+
+  function viewEditTradeModal(mode, trade) {
+    if (mode === "edit") {
+      setCurrentEditId(trade.id);
+      setFormData({
+        symbol: trade.formData.symbol,
+        order: trade.formData.order,
+        status: trade.formData.status,
+        buyPrice: trade.formData.buyPrice,
+        sellPrice: trade.formData.sellPrice,
+        marketType: trade.formData.marketType,
+        quantity: trade.formData.quantity,
+        risk: trade.formData.risk,
+        position: trade.formData.position,
+        entryTime: trade.formData.entryTime,
+        exitTime: trade.formData.exitTime,
+        rating: trade.formData.rating,
+        description: trade.formData.description,
+      });
+    } else {
+      setCurrentEditId(null);
+      setFormData({
+        symbol: "",
+        order: "",
+        status: "",
+        buyPrice: "",
+        sellPrice: "",
+        marketType: "",
+        quantity: "",
+        risk: "",
+        position: "",
+        orderTime: "",
+        exitTime: "",
+        rating: "",
+        description: "",
+      });
+    }
+
+    setAddModal(true);
+  }
+
+  return (
+    <div className="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th>symbol</th>
+            <th>order</th>
+            <th>status</th>
+            <th>market-type</th>
+            <th>quantity</th>
+            <th>position</th>
+            <th>entry/exit Time</th>
+            <th>risk/trade</th>
+            <th>P&L (₹)</th>
+            <th>R:R Ratio</th>
+            <th>rating</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          {currentTrades.length > 0 &&
+            currentTrades.map((trade) => {
+              return (
+                <tr key={trade.id} onClick={() => handleViewModal(trade)}>
+                  <td id="symbol">{trade.formData.symbol}</td>
+                  <td
+                    style={{
+                      backgroundColor: orderColor(trade.formData.order),
+                    }}
+                  >
+                    {trade.formData.order}
+                  </td>
+                  <td>{trade.formData.status}</td>
+                  <td>{trade.formData.marketType}</td>
+                  <td>{trade.formData.quantity}</td>
+
+                  <td>{trade.formData.position}</td>
+                  <td
+                    style={{
+                      color: "blue",
+                      display: "flex",
+                      flexDirection: "column",
+                    }}
+                  >
+                    {formatDateTime(trade.formData.entryTime)}
+                    <small style={{ fontSize: "0.8rem" }}>
+                      {formatDateTime(trade.formData.exitTime)}
+                    </small>
+                  </td>
+                  <td>{trade.formData.risk}</td>
+                  <td
+                    style={{
+                      fontSize: "0.9rem",
+                      fontWeight: 600,
+                      color: trade.pnl >= 0 ? "green" : "red",
+                    }}
+                  >
+                    {trade.formData.status === "Open" ? "-" : trade.pnl}
+                    {trade.formData.status === "Open" ? "-" : "/-"}
+                  </td>
+                  <td style={{ fontWeight: 600 }}>
+                    {trade.formData.status === "Open" ? "-" : trade.rrRatio}
+                    {trade.formData.status === "Open" ? "-" : "X"}
+                  </td>
+                  <td>{trade.formData.rating}</td>
+                  <td>
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        viewEditTradeModal("edit", trade);
+                      }}
+                      className="edit-delete-btn"
+                    >
+                      <FaEdit className="edit-trade" />
+                    </button>
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleDeleteTrade(trade.id);
+                      }}
+                      style={{
+                        paddingLeft: "0.5rem",
+                      }}
+                      className="edit-delete-btn"
+                    >
+                      <FaTrash className="delete-trade" />
+                    </button>
+                  </td>
+                </tr>
+              );
+            })}
+        </tbody>
+      </table>
+      {currentTrades.length === 0 && (
+        <div className="empty-msg">
+          <h1>Nothing To Show! Please Add Trades</h1>
+        </div>
+      )}
+    </div>
+  );
+}
