@@ -8,6 +8,7 @@ import Filters from "../../components/filters/Filters";
 import Pagination from "../../components/pagination/Pagination";
 import TradesTable from "../../components/trades-table/TradesTable";
 import usePagination from "../../hooks/usePagination";
+import TableFooter from "../../components/table-footer/TableFooter";
 
 export default function Trades() {
   const {
@@ -22,7 +23,7 @@ export default function Trades() {
 
   const { totalPages, currentTrades } = usePagination(
     filteredTrades,
-    5,
+    7,
     currentPage
   );
 
@@ -31,7 +32,10 @@ export default function Trades() {
       {/* Header Section */}
       <div className="header">
         {viewFilters && <Filters />}
-        <button id="filter-btn" onClick={() => setViewFilters(!viewFilters)}>
+        <button
+          className={viewFilters ? "filter-btn active" : "filter-btn"}
+          onClick={() => setViewFilters(!viewFilters)}
+        >
           <FaFilter size={12} /> <span>Filters</span>
         </button>
 
@@ -42,6 +46,9 @@ export default function Trades() {
 
       {/* Trades Table */}
       <TradesTable currentTrades={currentTrades} />
+
+      {/* Table Footer */}
+      <TableFooter />
 
       {/* Pagination Section */}
       <Pagination totalPages={totalPages} currentTrades={currentTrades} />
