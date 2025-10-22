@@ -1,6 +1,8 @@
 import { useContext } from "react";
 import "./addmodal.css";
 import { GlobalContext } from "../../context/Context";
+import calculatePnL from "../../utils/CalculatePnl";
+import CalculateRRratio from "../../utils/CalculateRRratio";
 
 export default function AddModal() {
   const {
@@ -10,8 +12,6 @@ export default function AddModal() {
     formData,
     setFormData,
     currentEditId,
-    calculatePnL,
-    calculateRRratio,
   } = useContext(GlobalContext);
 
   const orderSideColor = () => {
@@ -55,7 +55,7 @@ export default function AddModal() {
       formData.quantity
     );
 
-    const rrRatio = calculateRRratio(formData);
+    const rrRatio = CalculateRRratio(formData);
 
     if (currentEditId) {
       const updatedTrade = trades.map((trade) =>
