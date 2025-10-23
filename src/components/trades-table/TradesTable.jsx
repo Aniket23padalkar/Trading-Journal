@@ -15,9 +15,9 @@ export default function TradesTable({ currentTrades }) {
   } = useContext(GlobalContext);
 
   function orderColor(order) {
-    if (order === "BUY") return "#ade494ff";
-    if (order === "SELL") return "#ee8486ff";
-    return "white";
+    if (order === "BUY") return "#03c988";
+    if (order === "SELL") return "#ff7779ff";
+    return "#fff";
   }
 
   function handleViewModal(trade) {
@@ -97,6 +97,7 @@ export default function TradesTable({ currentTrades }) {
                   <td
                     style={{
                       backgroundColor: orderColor(trade.formData.order),
+                      color: "#fff",
                     }}
                   >
                     {trade.formData.order}

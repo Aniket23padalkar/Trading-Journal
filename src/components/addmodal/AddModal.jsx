@@ -15,9 +15,9 @@ export default function AddModal() {
   } = useContext(GlobalContext);
 
   const orderSideColor = () => {
-    if (formData.order === "BUY") return "#48e200ff";
-    if (formData.order === "SELL") return "#ff5659ff";
-    return "white";
+    if (formData.order === "BUY") return "#03c988";
+    if (formData.order === "SELL") return "#ff7779ff";
+    return "#fff";
   };
 
   function handleChange(e) {
@@ -108,7 +108,10 @@ export default function AddModal() {
                 name="order"
                 className="select"
                 onChange={handleChange}
-                style={{ backgroundColor: orderSideColor() }}
+                style={{
+                  backgroundColor: orderSideColor(),
+                  color: formData.order && "#fff",
+                }}
               >
                 <option value="">Order</option>
                 <option value="BUY">BUY</option>

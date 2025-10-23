@@ -13,18 +13,17 @@
   margin-top: 0.5rem;
   width: 100%;
   border-collapse: collapse;
-
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 0px 3px rgba(0, 0, 0, 0.5);
 }
 
 thead,
 tbody {
   width: 100%;
-  background-color: white;
+  background: var(--table-head-body-background);
 }
 
 .table-container tr:nth-child(even) {
-  background-color: rgb(223, 223, 223);
+  background-color: var(--table-even-bg);
 }
 
 .table-container td {
@@ -35,15 +34,17 @@ tbody {
 }
 
 .table-container th {
-  background-color: rgb(190, 190, 190);
+  background-color: var(--add-btn);
   padding: 0.5rem 0.3rem;
   text-transform: capitalize;
   font-size: 0.9rem;
-  border-left: 1px solid grey;
+  border-left: 1px solid rgb(201, 201, 201);
+  color: white;
 }
 
 .table-container th:nth-child(1) {
   border-left: none;
+  text-align: left;
 }
 
 .empty-msg {
@@ -74,7 +75,7 @@ tbody {
 }
 
 .edit-trade {
-  color: rgb(76, 151, 180);
+  color: var(--add-btn);
 }
 
 .delete-trade {

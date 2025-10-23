@@ -16,14 +16,14 @@
 .view-modal {
   height: 27rem;
   width: 35rem;
-  background: antiquewhite;
+  background: var(--stats-background);
   display: flex;
   flex-direction: column;
 }
 
 .view-modal-header {
   height: 3rem;
-  background-color: #e9c46a;
+  background: var(--pagination-bg);
   box-shadow: 0 3px 3px rgba(0, 0, 0, 0.4);
   padding: 0.5rem 1rem;
   display: flex;
@@ -87,7 +87,7 @@ h1 {
 .close-view-modal {
   align-self: last baseline;
   height: 4rem;
-  background-color: #e9c46a;
+  background: var(--pagination-bg);
   width: 100%;
   display: flex;
   align-items: center;
@@ -99,4 +99,6 @@ h1 {
   border-radius: 5px;
   border: 2px solid transparent;
   cursor: pointer;
+  background: var(--add-btn);
+  color: #fff;
 }
