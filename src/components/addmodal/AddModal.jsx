@@ -12,6 +12,7 @@ export default function AddModal() {
     formData,
     setFormData,
     currentEditId,
+    setCurrentEditId,
   } = useContext(GlobalContext);
 
   const orderSideColor = () => {
@@ -57,28 +58,28 @@ export default function AddModal() {
 
     const rrRatio = CalculateRRratio(formData);
 
-    if (currentEditId) {
-      const updatedTrade = trades.map((trade) =>
-        trade.id === currentEditId
-          ? { ...trade, formData: { ...formData }, pnl, rrRatio }
-          : trade
-      );
-      setTrades(updatedTrade);
-      resetForm();
-    } else {
-      setTrades((prev) => [
-        ...prev,
-        { formData, pnl, rrRatio, id: Date.now() },
-      ]);
-      resetForm();
-    }
+    const newTrade = {
+      formData: { ...formData },
+      pnl,
+      rrRatio,
+      id: currentEditId ? currentEditId : Date.now(),
+    };
 
+    if (currentEditId) {
+      setTrades((prev) =>
+        prev.map((trade) => (trade.id === currentEditId ? newTrade : trade))
+      );
+    } else {
+      setTrades((prev) => [...prev, newTrade]);
+    }
+    resetForm();
     setAddModal(false);
   }
 
   function handleCloseModal() {
     setAddModal(false);
     resetForm();
+    setCurrentEditId(null);
   }
 
   return (

@@ -53,7 +53,9 @@ export default function Stats() {
   }
 
   function calculateOverallRRratio() {
-    return trades.reduce((acc, trade) => acc + Number(trade.rrRatio), 0);
+    return trades
+      .reduce((acc, trade) => acc + Number(trade.rrRatio), 0)
+      .toFixed(2);
   }
 
   function calculateAverageRiskPerTrade() {
@@ -79,10 +81,14 @@ export default function Stats() {
     return lossTrades.length;
   }
 
+  function calculateWinrate() {
+    return ((totalProfitTrades() / trades.length) * 100).toFixed(0);
+  }
+
   return (
     <main className="stats-container">
       <div className="stats">
-        <div className="overall-pnl overall" style={{ gridColumn: "1 / 3" }}>
+        <div className="overall-pnl overall">
           <h4>Overall PnL</h4>
           <span style={{ color: calculateOverallPnl() >= 0 ? "green" : "red" }}>
             {calculateOverallPnl() >= 0 ? (
@@ -93,6 +99,14 @@ export default function Stats() {
             <h3 style={{ color: calculateOverallPnl() >= 0 ? "green" : "red" }}>
               {FormatPnL(calculateOverallPnl())}
             </h3>
+          </span>
+        </div>
+
+        <div className="rr-ratio">
+          <h4>Win Rate</h4>
+          <span>
+            {calculateOverallRRratio() >= 0 ? <FaArrowUp /> : <FaArrowDown />}
+            <h3>{calculateWinrate()}%</h3>
           </span>
         </div>
 
