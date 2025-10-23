@@ -16,7 +16,7 @@
 .add-modal {
   height: 90%;
   width: 50%;
-  background-color: antiquewhite;
+  background: var(--stats-background);
   display: flex;
   flex-direction: column;
 }
@@ -28,7 +28,7 @@
   align-items: center;
   justify-content: center;
   position: relative;
-  background-color: #e9c46a;
+  background-color: var(--pagination-bg);
   box-shadow: 0 2px 2px rgba(0, 0, 0, 0.5);
 }
 
@@ -39,7 +39,7 @@
   border: none;
   font-size: 1.5rem;
   font-weight: 500;
-  color: red;
+  color: rgb(255, 82, 82);
   cursor: pointer;
 }
 
@@ -64,8 +64,12 @@
   outline: none;
 }
 
-.input:focus {
-  border: 2px solid violet;
+.input:focus,
+.select:focus,
+.price-input:focus,
+.date-time:focus,
+#description:focus {
+  border: 2px solid var(--border);
 }
 
 .select-container {
@@ -89,10 +93,6 @@
   font-weight: 500;
 }
 
-.select:focus {
-  border: 2px solid violet;
-}
-
 .second-row {
   display: flex;
   height: 2rem;
@@ -112,10 +112,6 @@
   outline: none;
 }
 
-.price-input:focus {
-  border: 2px solid violet;
-}
-
 .market-type {
   flex: 1;
 }
@@ -129,11 +125,6 @@
 .date-time {
   font-size: 0.7rem;
   height: 2rem;
-  /* padding-top: 1rem; */
-}
-
-.date-time:focus {
-  border: 2px solid violet;
 }
 
 #description {
@@ -145,19 +136,11 @@
   resize: none;
 }
 
-#description:focus {
-  border: 2px solid violet;
-}
-
 #save-btn {
-  background-color: violet;
+  background-color: var(--add-btn);
   border: 2px solid transparent;
   cursor: pointer;
   color: white;
-}
-
-#save-btn:hover {
-  border: 2px solid rgb(206, 29, 206);
 }
 
 .entry-time,

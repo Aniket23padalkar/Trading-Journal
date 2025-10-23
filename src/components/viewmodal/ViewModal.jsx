@@ -7,8 +7,8 @@ export default function ViewModal() {
   const { setViewModal, currentViewTrade } = useContext(GlobalContext);
 
   function handleViewOrderColor() {
-    if (currentViewTrade.formData.order === "BUY") return "#6fca44ff";
-    if (currentViewTrade.formData.order === "SELL") return "#fc4a4dff";
+    if (currentViewTrade.formData.order === "BUY") return "#44ca80ff";
+    if (currentViewTrade.formData.order === "SELL") return "#ff7779ff";
     return "white";
   }
 

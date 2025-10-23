@@ -1,7 +1,7 @@
 .table-footer {
-  width: 95%;
+  width: 97%;
   height: 3rem;
-  border: 1px solid black;
+  box-shadow: var(--btn-box-shadow);
   display: flex;
   align-items: center;
   justify-content: space-between;

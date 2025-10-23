@@ -3,4 +3,16 @@
   --icons: #2d6a4f;
   --btn-box-shadow: 0 0px 3px rgba(0, 0, 0, 0.5);
   --grey-text: #919191;
+  --stats-background: linear-gradient(to right, #acf0c5, #ecfaee, #acf0c5);
+  --add-btn: #4375b6;
+  --table-head-body-background: linear-gradient(
+    to right,
+    #b4e1ff,
+    #e0f2ff,
+    #b4e1ff,
+    #e0f2ff,
+    #b4e1ff
+  );
+  --table-even-bg: #a2daff;
+  --pagination-bg: #03c988;
 }

@@ -1,7 +1,7 @@
 .trades-container {
   height: 100%;
   width: 100%;
-  background-color: antiquewhite;
+  background: var(--stats-background);
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -33,18 +33,19 @@
 }
 
 .filter-btn.active {
-  border-bottom: 2px solid rgb(2, 90, 46);
+  border-bottom: 2px solid var(--border);
 }
 
 #add-btn {
   padding: 0 1rem;
-  background-color: violet;
+  background-color: var(--add-btn);
   border-radius: 5px;
   border: 2px solid transparent;
   cursor: pointer;
   color: white;
+  transition: scale 0.1s ease-in-out;
 }
 
 #add-btn:hover {
-  border: 2px solid rgb(206, 29, 206);
+  scale: 1.05;
 }
