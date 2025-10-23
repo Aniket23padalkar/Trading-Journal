@@ -1,8 +1,8 @@
 aside {
   width: 15rem;
-  box-shadow: 2px 0 2px rgba(0, 0, 0, 0.2);
+  box-shadow: 2px 0 2px rgba(0, 0, 0, 0.1);
   height: 100%;
-  padding: 2rem 1rem;
+  padding: 1rem;
 }
 
 .aside-ul {
@@ -15,29 +15,40 @@ aside {
 .aside-ul > a {
   text-decoration: none;
   color: black;
+  border-left: 5px solid transparent;
+  border-bottom-right-radius: 5px;
+  border-top-right-radius: 5px;
 }
 
 .aside-ul > a.active {
-  border-radius: 10px;
-  background-color: antiquewhite;
+  border-left: 5px solid var(--border);
+  box-shadow: var(--btn-box-shadow);
+}
+
+.aside-ul > a.active > li > h1 {
+  color: black;
 }
 
 .aside-ul > a > li {
   width: 100%;
-  padding: 0.5rem 1rem;
+  padding: 0.3rem 0.5rem;
   border-radius: 10px;
   display: flex;
   gap: 15px;
   cursor: pointer;
 }
 
+.aside-ul > a.active > li > span > .aside-icon {
+  color: var(--icons);
+}
+
 .aside-ul > a > li:hover {
-  background-color: antiquewhite;
 }
 
 .aside-ul > a > li > h1 {
   font-size: 1.1rem;
   font-weight: 500;
+  color: rgb(151, 151, 151);
 }
 
 .aside-ul > a > li > span {
@@ -47,4 +58,5 @@ aside {
 
 .aside-icon {
   font-size: 1.2rem;
+  color: rgb(151, 151, 151);
 }

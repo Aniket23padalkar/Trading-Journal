@@ -9,6 +9,7 @@ import {
   FaSquare,
   FaArrowUp,
   FaArrowDown,
+  FaIndianRupeeSign,
 } from "react-icons/fa6";
 import FormatPnL from "../../utils/FormatPnL";
 
@@ -126,7 +127,7 @@ export default function Stats() {
       </div>
 
       <div className="stats" style={{ columnGap: "0.5rem" }}>
-        <div className="overall">
+        <div className="rr-ratio">
           <h4>Overall RR</h4>
           <span>
             {calculateOverallRRratio() >= 0 ? <FaArrowUp /> : <FaArrowDown />}
@@ -136,7 +137,10 @@ export default function Stats() {
 
         <div className="average-risk-per-trade">
           <h4>Avg Risk/Trade</h4>
-          <h3>{calculateAverageRiskPerTrade()}/-</h3>
+          <h3>
+            <FaIndianRupeeSign />
+            {calculateAverageRiskPerTrade()}
+          </h3>
         </div>
 
         <div className="average-profit">
