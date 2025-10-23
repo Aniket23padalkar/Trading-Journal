@@ -1,8 +1,8 @@
 import Aside from "./components/aside/Aside";
 import Header from "./components/header/Header";
-import Home from "./pages/home/Home";
 import { Routes, Route, Navigate } from "react-router-dom";
 import Trades from "./pages/trades/Trades";
+import Dashboard from "./pages/dashboard/Dashboard";
 
 export default function App() {
   return (
@@ -12,7 +12,7 @@ export default function App() {
         <Aside />
         <div className="container">
           <Routes>
-            <Route path="/" element={<Home />} />
+            <Route path="/" element={<Dashboard />} />
             <Route path="trades" element={<Trades />} />
           </Routes>
         </div>

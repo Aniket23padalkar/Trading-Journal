@@ -1,7 +1,7 @@
-import "./home.css";
+import "./dashboard.css";
 import Stats from "../../components/stats/Stats";
 
-export default function Home() {
+export default function Dashboard() {
   return (
     <>
       <Stats />

@@ -11,10 +11,9 @@ export default function TableFooter() {
   }
 
   function totalRRratio() {
-    return filteredTrades.reduce(
-      (acc, trade) => acc + Number(trade.rrRatio),
-      0
-    );
+    return filteredTrades
+      .reduce((acc, trade) => acc + Number(trade.rrRatio), 0)
+      .toFixed(2);
   }
 
   return (
