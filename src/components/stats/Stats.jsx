@@ -1,6 +1,7 @@
 import { useContext } from "react";
 import "./stats.css";
 import { GlobalContext } from "../../context/Context";
+import { useMemo } from "react";
 import {
   FaArrowTrendDown,
   FaArrowTrendUp,
@@ -16,107 +17,84 @@ import FormatPnL from "../../utils/FormatPnL";
 export default function Stats() {
   const { trades } = useContext(GlobalContext);
 
-  function calculateOverallPnl() {
-    return trades.reduce((acc, trade) => acc + Number(trade.pnl), 0);
-  }
+  const {
+    overallPnl,
+    maxProfit,
+    maxLoss,
+    winRate,
+    totalProfit,
+    totalLoss,
+    overallRR,
+    averageRiskPerTrade,
+    totalProfitTrades,
+    totalLossTrades,
+  } = useMemo(() => {
+    if (trades.length === 0) {
+      return { overallPnl: 0, maxProfit: 0, maxLoss: 0, winRate: 0 };
+    }
 
-  function calculateMaxProfit() {
-    return trades.reduce((acc, trade) => Math.max(acc, Number(trade.pnl)), 0);
-  }
+    const pnl = trades.map((trade) => Number(trade.pnl));
+    const overallPnl = pnl.reduce((a, b) => a + b, 0);
+    const maxProfit = Math.max(...pnl);
+    const maxLoss = Math.min(...pnl);
 
-  function calculateMaxLoss() {
-    return trades.reduce((acc, trade) => Math.min(acc, Number(trade.pnl)), 0);
-  }
-
-  function calculateTotalProfit() {
-    const profitableTrades = trades.filter((trade) => Number(trade.pnl) > 0);
-
-    if (profitableTrades.length === 0) return 0;
-
-    const totalProfit = profitableTrades.reduce(
-      (acc, trade) => acc + Number(trade.pnl),
-      0
-    );
-    return totalProfit.toFixed(2);
-  }
-
-  function calculateTotalLoss() {
-    const losingTrades = trades.filter((trade) => Number(trade.pnl) < 0);
-
-    if (losingTrades.length === 0) return 0;
-
-    const totalLoss = losingTrades.reduce(
-      (acc, trade) => acc + Number(trade.pnl),
-      0
-    );
-    return totalLoss.toFixed(2);
-  }
-
-  function calculateOverallRRratio() {
-    return trades
-      .reduce((acc, trade) => acc + Number(trade.rrRatio), 0)
+    const overallRR = trades
+      .reduce((a, b) => a + Number(b.rrRatio), 0)
       .toFixed(2);
-  }
 
-  function calculateAverageRiskPerTrade() {
-    if (trades.length === 0) return 0;
-    return (
-      trades.reduce((acc, trade) => acc + Number(trade.formData.risk), 0) /
-      trades.length
+    const averageRiskPerTrade = (
+      trades.reduce((a, b) => a + Number(b.formData.risk), 0) / trades.length
     ).toFixed(2);
-  }
 
-  function totalProfitTrades() {
-    const profitTrades = trades.filter((trade) => Number(trade.pnl) > 0);
+    const profitTrades = pnl.filter((p) => Number(p) > 0);
+    const totalProfit =
+      profitTrades.length > 0 ? profitTrades.reduce((a, b) => a + b, 0) : 0;
 
-    if (profitTrades.length === 0) return 0;
+    const totalProfitTrades = profitTrades.length > 0 ? profitTrades.length : 0;
 
-    return profitTrades.length;
-  }
+    const losingTrades = pnl.filter((p) => Number(p) < 0);
+    const totalLoss =
+      losingTrades.length > 0 ? losingTrades.reduce((a, b) => a + b, 0) : 0;
 
-  function totalLossTrades() {
-    const lossTrades = trades.filter((trade) => Number(trade.pnl) < 0);
-
-    if (lossTrades.length === 0) return 0;
-
-    return lossTrades.length;
-  }
-
-  function calculateWinrate() {
-    if (trades.length === 0) return 0;
+    const totalLossTrades = losingTrades.length > 0 ? losingTrades.length : 0;
 
     const closedTrades = trades.filter(
       (trade) => trade.formData.status === "Closed"
     );
-    if (closedTrades.length === 0) return 0;
-
     const winningTrades = closedTrades.filter((trade) => Number(trade.pnl) > 0);
+    const winRate =
+      closedTrades.length > 0
+        ? ((winningTrades.length / closedTrades.length) * 100).toFixed(0)
+        : 0;
 
-    return ((winningTrades.length / closedTrades.length) * 100).toFixed(0);
-  }
+    return {
+      overallPnl,
+      maxProfit,
+      maxLoss,
+      winRate,
+      totalProfit,
+      totalLoss,
+      overallRR,
+      averageRiskPerTrade,
+      totalProfitTrades,
+      totalLossTrades,
+    };
+  }, [trades]);
 
   return (
     <main className="stats-container">
       <div className="stats">
         <div className="overall-pnl overall">
           <h4>Overall PnL</h4>
-          <span style={{ color: calculateOverallPnl() >= 0 ? "green" : "red" }}>
-            {calculateOverallPnl() >= 0 ? (
+          <span style={{ color: overallPnl >= 0 ? "green" : "red" }}>
+            {overallPnl >= 0 ? (
               <FaArrowTrendUp className="arrow-trend" />
             ) : (
               <FaArrowTrendDown className="arrow-trend" />
             )}{" "}
-            <h3 style={{ color: calculateOverallPnl() >= 0 ? "green" : "red" }}>
-              {FormatPnL(calculateOverallPnl())}
+            <h3 style={{ color: overallPnl >= 0 ? "green" : "red" }}>
+              {FormatPnL(overallPnl)}
             </h3>
-          </span>
-        </div>
-
-        <div className="rr-ratio">
-          <h4>Win Rate</h4>
-          <span>
-            {calculateOverallRRratio() >= 0 ? <FaArrowUp /> : <FaArrowDown />}
-            <h3>{calculateWinrate()}%</h3>
           </span>
         </div>
 
@@ -130,9 +108,17 @@ export default function Stats() {
               fontSize: "1.2rem",
             }}
           >
-            {calculateMaxProfit() >= 0 ? "+" : "-"}
-            {FormatPnL(calculateMaxProfit())}
+            {maxProfit >= 0 ? "+" : "-"}
+            {FormatPnL(maxProfit)}
           </h3>
+        </div>
+
+        <div className="win-rate rr-ratio">
+          <h4>Win Rate</h4>
+          <span>
+            {winRate >= 0 ? <FaArrowUp /> : <FaArrowDown />}
+            <h3>{winRate}%</h3>
+          </span>
         </div>
 
         <div className="max-loss overall">
@@ -145,7 +131,7 @@ export default function Stats() {
               fontSize: "1.2rem",
             }}
           >
-            {FormatPnL(calculateMaxLoss())}
+            {FormatPnL(maxLoss)}
           </h3>
         </div>
       </div>
@@ -154,17 +140,9 @@ export default function Stats() {
         <div className="rr-ratio">
           <h4>Overall RR</h4>
           <span>
-            {calculateOverallRRratio() >= 0 ? <FaArrowUp /> : <FaArrowDown />}
-            <h3>{calculateOverallRRratio()}X</h3>
+            {overallRR >= 0 ? <FaArrowUp /> : <FaArrowDown />}
+            <h3>{overallRR}X</h3>
           </span>
-        </div>
-
-        <div className="average-risk-per-trade">
-          <h4>Avg Risk/Trade</h4>
-          <h3>
-            <FaIndianRupeeSign />
-            {calculateAverageRiskPerTrade()}
-          </h3>
         </div>
 
         <div className="average-profit">
@@ -177,8 +155,16 @@ export default function Stats() {
           </div>
           <span>
             <h4>Total Profit</h4>
-            <h3>+{FormatPnL(calculateTotalProfit())}</h3>
+            <h3>+{FormatPnL(totalProfit)}</h3>
           </span>
+        </div>
+
+        <div className="average-risk-per-trade">
+          <h4>Avg Risk/Trade</h4>
+          <h3>
+            <FaIndianRupeeSign />
+            {averageRiskPerTrade}
+          </h3>
         </div>
 
         <div className="average-loss">
@@ -191,7 +177,7 @@ export default function Stats() {
           </div>
           <span>
             <h4>Total Loss</h4>
-            <h3>{FormatPnL(calculateTotalLoss())}</h3>
+            <h3>{FormatPnL(totalLoss)}</h3>
           </span>
         </div>
       </div>
@@ -212,7 +198,7 @@ export default function Stats() {
               fontSize: "1.2rem",
             }}
           >
-            {totalProfitTrades()}
+            {totalProfitTrades}
           </h3>
         </div>
 
@@ -226,7 +212,7 @@ export default function Stats() {
               fontSize: "1.2rem",
             }}
           >
-            {totalLossTrades()}
+            {totalLossTrades}
           </h3>
         </div>
       </div>

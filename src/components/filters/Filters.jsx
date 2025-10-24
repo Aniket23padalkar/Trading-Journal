@@ -70,8 +70,8 @@ export default function Filters() {
         <option value="Positional">Positional</option>
         <option value="Long-Term">Long-Term</option>
       </select>
-      <label>
-        From:
+      <div className="date-range">
+        {/* <label>Date Range:</label> */}
         <input
           type="date"
           name="fromDate"
@@ -79,9 +79,7 @@ export default function Filters() {
           onChange={handleChange}
           value={filterValue.fromDate}
         />
-      </label>
-      <label>
-        To:
+        <span>to</span>
         <input
           type="date"
           name="toDate"
@@ -89,7 +87,8 @@ export default function Filters() {
           onChange={handleChange}
           value={filterValue.toDate}
         />
-      </label>
+      </div>
+
       <button onClick={handleClearFilters} id="clear-btn">
         Clear
       </button>

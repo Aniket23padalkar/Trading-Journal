@@ -1,7 +1,6 @@
 .trades-container {
   height: 100%;
   width: 100%;
-  background: var(--stats-background);
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -18,6 +17,7 @@
   align-items: center;
   justify-content: flex-end;
   box-shadow: 0 3px 3px rgba(0, 0, 0, 0.2);
+  background-color: #eeeeee;
 }
 
 .filter-btn {
@@ -38,7 +38,7 @@
 
 #add-btn {
   padding: 0 1rem;
-  background-color: var(--add-btn);
+  background-color: var(--pagination-bg);
   border-radius: 5px;
   border: 2px solid transparent;
   cursor: pointer;

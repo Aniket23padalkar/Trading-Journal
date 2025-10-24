@@ -27,7 +27,7 @@ export default function TableFooter() {
       <div className="table-footer-right">
         <div className="total-pnl">
           <p>Total PnL :</p>
-          <h1 style={{ color: totalPnL() > 0 ? "#03c988" : "#ff787aff" }}>
+          <h1 style={{ color: totalPnL() >= 0 ? "green" : "red" }}>
             {totalPnL() > 0 ? "+" : ""}
             {FormatPnL(totalPnL())}
           </h1>

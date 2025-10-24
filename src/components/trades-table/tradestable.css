@@ -19,11 +19,6 @@
 thead,
 tbody {
   width: 100%;
-  background: var(--table-head-body-background);
-}
-
-.table-container tr:nth-child(even) {
-  background-color: var(--table-even-bg);
 }
 
 .table-container td {
@@ -31,20 +26,41 @@ tbody {
   text-align: center;
   font-size: 0.8rem;
   cursor: default;
+  border: 1px solid #d4d4d4;
 }
 
 .table-container th {
-  background-color: var(--add-btn);
   padding: 0.5rem 0.3rem;
   text-transform: capitalize;
+  font-weight: 500;
   font-size: 0.9rem;
-  border-left: 1px solid rgb(201, 201, 201);
-  color: white;
+  border: 1px solid #d4d4d4;
+  border-bottom: 1px solid #8a8a8a;
 }
 
 .table-container th:nth-child(1) {
-  border-left: none;
+  width: 2rem;
+}
+
+.table-container th:nth-child(2) {
   text-align: left;
+  min-width: 7.3rem;
+}
+
+.table-container th:nth-child(3) {
+  width: 5rem;
+}
+
+.table-container th:nth-last-child(4) {
+  min-width: 7rem;
+}
+
+.table-container th:nth-last-child(6) {
+  min-width: 8.5rem;
+}
+
+.table-container th:nth-last-child(2) {
+  min-width: 4rem;
 }
 
 .empty-msg {
@@ -67,6 +83,7 @@ tbody {
   text-transform: capitalize;
   text-align: left;
   font-size: 0.9rem;
+  /* background-color: #8d8d8d; */
 }
 
 .edit-trade,
@@ -86,4 +103,13 @@ tbody {
   background-color: transparent;
   border: none;
   cursor: pointer;
+}
+
+#position {
+  margin: 0 0.3rem;
+  padding: 0 0.2rem;
+  font-size: 0.8rem;
+  border-radius: 4px;
+  background-color: #e0f1ff;
+  font-weight: 500;
 }

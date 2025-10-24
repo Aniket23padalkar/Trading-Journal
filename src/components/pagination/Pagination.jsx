@@ -31,6 +31,7 @@ export default function Pagination({ totalPages, currentTrades }) {
         disabled={currentPage === 1 || currentTrades.length === 0}
       >
         <FaChevronLeft />
+        <p>Prev</p>
       </button>
       <div className="page">
         {start > 1 && (
@@ -38,7 +39,7 @@ export default function Pagination({ totalPages, currentTrades }) {
             1
           </button>
         )}
-        {start > 2 && <span>...</span>}
+        {start > 2 && <span>....</span>}
         {pages.map((page) => (
           <button
             key={page}
@@ -48,7 +49,7 @@ export default function Pagination({ totalPages, currentTrades }) {
             {page}
           </button>
         ))}
-        {end < totalPages - 1 && <span>...</span>}
+        {end < totalPages - 1 && <span>....</span>}
         {end < totalPages && (
           <button
             onClick={() => setCurrentPage(totalPages)}
@@ -67,6 +68,7 @@ export default function Pagination({ totalPages, currentTrades }) {
         onClick={() => setCurrentPage((prev) => Math.min(totalPages, prev + 1))}
         disabled={currentPage === totalPages || currentTrades.length === 0}
       >
+        <p>Next</p>
         <FaChevronRight />
       </button>
     </div>

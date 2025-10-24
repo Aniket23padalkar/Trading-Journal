@@ -13,5 +13,5 @@ export default function usePagination(
     indexOfLastTrade
   );
 
-  return { totalPages, currentTrades };
+  return { totalPages, currentTrades, indexOfFirstTrade };
 }
