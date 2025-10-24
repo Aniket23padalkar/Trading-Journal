@@ -21,9 +21,9 @@ export default function Trades() {
     filteredTrades,
   } = useContext(GlobalContext);
 
-  const { totalPages, currentTrades } = usePagination(
+  const { totalPages, currentTrades, indexOfFirstTrade } = usePagination(
     filteredTrades,
-    7,
+    9,
     currentPage
   );
 
@@ -45,7 +45,10 @@ export default function Trades() {
       </div>
 
       {/* Trades Table */}
-      <TradesTable currentTrades={currentTrades} />
+      <TradesTable
+        currentTrades={currentTrades}
+        indexOfFirstTrade={indexOfFirstTrade}
+      />
 
       {/* Table Footer */}
       <TableFooter />
