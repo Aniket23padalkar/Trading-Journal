@@ -59,6 +59,7 @@ export default function Stats() {
   }
 
   function calculateAverageRiskPerTrade() {
+    if (trades.length === 0) return 0;
     return (
       trades.reduce((acc, trade) => acc + Number(trade.formData.risk), 0) /
       trades.length
@@ -82,7 +83,16 @@ export default function Stats() {
   }
 
   function calculateWinrate() {
-    return ((totalProfitTrades() / trades.length) * 100).toFixed(0);
+    if (trades.length === 0) return 0;
+
+    const closedTrades = trades.filter(
+      (trade) => trade.formData.status === "Closed"
+    );
+    if (closedTrades.length === 0) return 0;
+
+    const winningTrades = closedTrades.filter((trade) => Number(trade.pnl) > 0);
+
+    return ((winningTrades.length / closedTrades.length) * 100).toFixed(0);
   }
 
   return (

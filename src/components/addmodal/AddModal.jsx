@@ -6,7 +6,6 @@ import CalculateRRratio from "../../utils/CalculateRRratio";
 
 export default function AddModal() {
   const {
-    trades,
     setTrades,
     setAddModal,
     formData,
