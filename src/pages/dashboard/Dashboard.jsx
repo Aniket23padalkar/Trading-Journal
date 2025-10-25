@@ -3,8 +3,8 @@ import Stats from "../../components/stats/Stats";
 
 export default function Dashboard() {
   return (
-    <>
+    <div className="dashboard-container">
       <Stats />
-    </>
+    </div>
   );
 }
