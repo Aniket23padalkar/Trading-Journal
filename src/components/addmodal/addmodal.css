@@ -16,7 +16,7 @@
 .add-modal {
   height: 90%;
   width: 50%;
-  background: var(--stats-background);
+  background: #fff;
   display: flex;
   flex-direction: column;
 }
@@ -28,8 +28,13 @@
   align-items: center;
   justify-content: center;
   position: relative;
-  background-color: var(--pagination-bg);
+  background-color: rgb(116, 116, 116);
   box-shadow: 0 2px 2px rgba(0, 0, 0, 0.5);
+}
+
+.add-modal-header > h1 {
+  font-weight: 500;
+  color: #fff;
 }
 
 #close-add-modal {
@@ -60,7 +65,7 @@
   height: 2rem;
   border-radius: 5px;
   padding-left: 0.5rem;
-  border: 2px solid transparent;
+  border: 1px solid var(--grey-text);
   outline: none;
 }
 
@@ -69,7 +74,7 @@
 .price-input:focus,
 .date-time:focus,
 #description:focus {
-  border: 2px solid var(--border);
+  border: 1px solid var(--border);
 }
 
 .select-container {
@@ -84,7 +89,7 @@
 .select {
   height: 2rem;
   width: 6.3rem;
-  border: 2px solid transparent;
+  border: 1px solid var(--grey-text);
   padding-left: 1rem;
   border-radius: 5px;
   outline: none;
@@ -107,7 +112,7 @@
 .price-input {
   width: 8.5rem;
   padding-left: 0.5rem;
-  border: 2px solid transparent;
+  border: 1px solid var(--grey-text);
   border-radius: 5px;
   outline: none;
 }
@@ -132,8 +137,9 @@
   padding: 0.5rem 1rem;
   font-size: 0.8rem;
   outline: none;
-  border: 2px solid transparent;
+  border: 1px solid var(--grey-text);
   resize: none;
+  /* background-color: #ececec; */
 }
 
 #save-btn {

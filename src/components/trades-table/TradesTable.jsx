@@ -116,11 +116,7 @@ export default function TradesTable({ currentTrades, indexOfFirstTrade }) {
                   <td>
                     <p id="position">{trade.formData.position}</p>
                   </td>
-                  <td
-                    style={{
-                      color: "blue",
-                    }}
-                  >
+                  <td style={{ color: "rgba(153, 0, 255, 1)" }}>
                     {formatDateTime(trade.formData.entryTime)}
                   </td>
                   <td>{trade.formData.risk}</td>

@@ -2,11 +2,13 @@
   display: flex;
   gap: 1rem;
   padding: 1rem;
+  row-gap: 0.5rem;
 }
 
 .stats {
   height: 10rem;
   border-radius: 5px;
+  width: 19rem;
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-template-rows: 1fr 1fr;
@@ -14,16 +16,12 @@
   gap: 1rem;
   box-shadow: 0 3px 3px rgba(0, 0, 0, 0.2);
   border: 1px solid #3b3b3b;
+  background-color: #fff;
+  align-items: center;
 }
 
-.overall,
-.rr-ratio,
-.average-risk-per-trade,
-.total-trades {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+.overall {
+  justify-content: space-between;
 }
 
 .average-loss,
@@ -33,13 +31,25 @@
   justify-content: center;
 }
 
+.overall-pnl,
+.win-rate,
+.max-profit,
+.max-loss {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
 .overall > h4 {
-  font-weight: 600;
+  font-weight: 400;
+  color: var(--grey-text);
 }
 
 .overall > span {
   display: flex;
   align-items: center;
+  font-size: 1rem;
 }
 
 .arrow-trend {
@@ -49,8 +59,8 @@
 
 .overall > span > h3,
 .overall > h3 {
-  font-size: 1.5rem;
-  font-weight: 700;
+  font-size: 1.1rem;
+  font-weight: 500;
 }
 
 .rr-ratio > h4 {
@@ -66,12 +76,12 @@
 
 .rr-ratio > span > h3 {
   font-size: 1.2rem;
-  font-weight: 600;
+  font-weight: 500;
 }
 
 .win-rate > span > h3 {
   letter-spacing: 2px;
-  font-weight: 700;
+  font-weight: 600;
 }
 
 .square-container {
@@ -89,8 +99,13 @@
 .average-profit,
 .average-loss {
   display: flex;
-  /* padding-left: 1rem; */
+  padding-left: 1rem;
   align-items: center;
+}
+
+.average-profit > span,
+.average-loss > span {
+  gap: 1rem;
 }
 
 .average-profit > span > h4,
@@ -98,11 +113,17 @@
   font-size: 0.8rem;
   font-weight: 400;
   color: var(--grey-text);
+  /* padding-top: 0.2rem; */
+}
+
+.average-profit > span > h3,
+.average-loss > span > h3 {
+  font-weight: 500;
 }
 
 .arrow-up-square,
 .arrow-down-square {
-  margin-right: 0.3rem;
+  margin-right: 0.5rem;
   padding: 0.3rem;
   display: flex;
   align-items: center;
@@ -131,7 +152,7 @@
 .average-risk-per-trade > h3,
 .total-trades > h3 {
   font-size: 1.2rem;
-  font-weight: 600;
+  font-weight: 400;
 }
 
 .total-trades {

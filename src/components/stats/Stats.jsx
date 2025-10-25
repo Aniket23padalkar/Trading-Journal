@@ -29,8 +29,19 @@ export default function Stats() {
     totalProfitTrades,
     totalLossTrades,
   } = useMemo(() => {
-    if (trades.length === 0) {
-      return { overallPnl: 0, maxProfit: 0, maxLoss: 0, winRate: 0 };
+    if (!trades || trades.length === 0) {
+      return {
+        overallPnl: 0,
+        maxProfit: 0,
+        maxLoss: 0,
+        winRate: 0,
+        totalProfit: 0,
+        totalLoss: 0,
+        overallRR: 0,
+        averageRiskPerTrade: 0,
+        totalProfitTrades: 0,
+        totalLossTrades: 0,
+      };
     }
 
     const pnl = trades.map((trade) => Number(trade.pnl));
@@ -98,6 +109,14 @@ export default function Stats() {
           </span>
         </div>
 
+        <div className="win-rate rr-ratio">
+          <h4>Win Rate</h4>
+          <span>
+            {winRate >= 0 ? <FaArrowUp /> : <FaArrowDown />}
+            <h3>{winRate}%</h3>
+          </span>
+        </div>
+
         <div className="max-profit overall">
           <span className="square-container">
             <FaSquare size={13} color="green" />
@@ -111,14 +130,6 @@ export default function Stats() {
             {maxProfit >= 0 ? "+" : "-"}
             {FormatPnL(maxProfit)}
           </h3>
-        </div>
-
-        <div className="win-rate rr-ratio">
-          <h4>Win Rate</h4>
-          <span>
-            {winRate >= 0 ? <FaArrowUp /> : <FaArrowDown />}
-            <h3>{winRate}%</h3>
-          </span>
         </div>
 
         <div className="max-loss overall">
@@ -149,7 +160,7 @@ export default function Stats() {
           <div className="arrow-up-square">
             {
               <FaArrowUpLong
-                style={{ height: "1.5rem", width: "1rem", color: "white" }}
+                style={{ height: "1.8rem", width: "1rem", color: "white" }}
               />
             }
           </div>
@@ -171,7 +182,7 @@ export default function Stats() {
           <div className="arrow-down-square">
             {
               <FaArrowDownLong
-                style={{ height: "1.5rem", width: "1rem", color: "white" }}
+                style={{ height: "1.8rem", width: "1rem", color: "white" }}
               />
             }
           </div>
