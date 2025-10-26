@@ -5,7 +5,7 @@ import { BrowserRouter } from "react-router-dom";
 import GlobalStateContext from "./context/Context";
 
 createRoot(document.getElementById("root")).render(
-  <BrowserRouter basename="/Trading-Journal/">
+  <BrowserRouter>
     <GlobalStateContext>
       <App />
     </GlobalStateContext>
