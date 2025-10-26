@@ -132,7 +132,12 @@ export default function TradesTable({ currentTrades, indexOfFirstTrade }) {
                     >
                       {" "}
                       {trade.pnl > 0 && "+"}
-                      {trade.formData.status === "Open" ? "-" : trade.pnl}
+                      {trade.formData.status === "Open"
+                        ? "-"
+                        : Number(trade.pnl).toLocaleString("en-IN", {
+                            minimumFractionDigits: 2,
+                            maximumFractionDigits: 2,
+                          })}
                       {trade.formData.status === "Open" ? "-" : "/-"}
                     </td>
                     <td style={{ fontWeight: 600 }}>

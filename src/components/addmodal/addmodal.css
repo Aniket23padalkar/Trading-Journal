@@ -13,38 +13,37 @@
 }
 
 .add-modal-header {
+  height: 3rem;
   width: 100%;
-  padding: 1rem;
+  padding: 0.5rem;
   display: flex;
   align-items: center;
   justify-content: center;
-  position: relative;
-  background-color: rgb(116, 116, 116);
+  background-color: var(--grey-text);
   box-shadow: 0 2px 2px rgba(0, 0, 0, 0.5);
+  user-select: none;
+  cursor: move;
 }
 
 .add-modal-header > h1 {
   font-weight: 500;
   color: #fff;
+  text-shadow: 0 2px 2px rgba(0, 0, 0, 1);
+  letter-spacing: 1px;
 }
 
-#close-add-modal {
-  position: absolute;
-  right: 1rem;
-  background-color: transparent;
-  border: none;
-  font-size: 1.5rem;
-  font-weight: 500;
-  color: rgb(255, 82, 82);
-  cursor: pointer;
+.form-details {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 1rem;
 }
 
 .input-form {
   flex: 1;
-  padding: 1rem;
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
 }
 
 .first-row {
@@ -56,8 +55,9 @@
   height: 2rem;
   border-radius: 5px;
   padding-left: 0.5rem;
-  border: 1px solid var(--grey-text);
+  border: 2px solid var(--border);
   outline: none;
+  background-color: #eeeeee;
 }
 
 .input:focus,
@@ -65,7 +65,7 @@
 .price-input:focus,
 .date-time:focus,
 #description:focus {
-  border: 1px solid var(--border);
+  border: 2px solid var(--border);
 }
 
 .select-container {
@@ -80,13 +80,13 @@
 .select {
   height: 2rem;
   width: 6.3rem;
-  border: 1px solid var(--grey-text);
+  border: 2px solid transparent;
   padding-left: 1rem;
   border-radius: 5px;
   outline: none;
   font-size: 0.9rem;
-  background-color: white;
   font-weight: 500;
+  background-color: #eeeeee;
 }
 
 .second-row {
@@ -103,9 +103,10 @@
 .price-input {
   width: 8.5rem;
   padding-left: 0.5rem;
-  border: 1px solid var(--grey-text);
+  border: 2px solid transparent;
   border-radius: 5px;
   outline: none;
+  background-color: #eeeeee;
 }
 
 .market-type {
@@ -128,16 +129,41 @@
   padding: 0.5rem 1rem;
   font-size: 0.8rem;
   outline: none;
-  border: 1px solid var(--grey-text);
+  background-color: #eeeeee;
+  border: 2px solid var(--border);
   resize: none;
-  /* background-color: #ececec; */
+}
+
+.add-modal-footer {
+  height: 3rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 3rem;
+  background-color: rgb(143, 143, 143);
+}
+
+#close-add-modal,
+#save-btn {
+  border: none;
+  padding: 0 2rem;
+  border-radius: 5px;
+  cursor: pointer;
+  color: #fff;
+  box-shadow: 0 3px 3px rgba(0, 0, 0, 0.2);
+}
+
+#close-add-modal:hover,
+#save-btn:hover {
+  scale: 1.05;
+}
+
+#close-add-modal {
+  background-color: var(--add-btn);
 }
 
 #save-btn {
-  background-color: var(--add-btn);
-  border: 2px solid transparent;
-  cursor: pointer;
-  color: white;
+  background-color: var(--pagination-bg);
 }
 
 .entry-time,
@@ -154,6 +180,7 @@
   font-size: 0.8rem;
   left: 0.5rem;
   top: 0;
+  color: var(--grey-text);
 }
 
 .third-row {
