@@ -2,39 +2,12 @@ import { useContext, useRef } from "react";
 import "./viewmodal.css";
 import { GlobalContext } from "../../context/Context";
 import formatDateTime from "../../utils/formatDateTime";
+import useDrag from "../../hooks/useDrag";
 
 export default function ViewModal() {
-  const {
-    setViewModal,
-    currentViewTrade,
-    isDragging,
-    setIsDragging,
-    offset,
-    setOffset,
-  } = useContext(GlobalContext);
-  const modalRef = useRef(null);
+  const { setViewModal, currentViewTrade } = useContext(GlobalContext);
 
-  function handleMouseDown(e) {
-    const rect = modalRef.current.getBoundingClientRect();
-    setIsDragging(true);
-    setOffset({
-      x: e.clientX - rect.left,
-      y: e.clientY - rect.top,
-    });
-
-    console.log(offset);
-  }
-
-  function handleMouseMove(e) {
-    if (!isDragging) return;
-    modalRef.current.style.left = `${e.clientX - offset.x}px`;
-    modalRef.current.style.top = `${e.clientY - offset.y}px`;
-    modalRef.current.style.transform = "none";
-  }
-
-  function handleMouseUp() {
-    setIsDragging(false);
-  }
+  const { modalRef, handleMouseDown } = useDrag();
 
   function handleViewOrderColor() {
     if (currentViewTrade.formData.order === "BUY") return "#44ca80ff";
@@ -52,12 +25,7 @@ export default function ViewModal() {
   }
 
   return (
-    <div
-      className="view-modal"
-      ref={modalRef}
-      onMouseMove={handleMouseMove}
-      onMouseUp={handleMouseUp}
-    >
+    <div className="view-modal" ref={modalRef}>
       <div className="view-modal-header" onMouseDown={handleMouseDown}>
         <h1>{currentViewTrade.formData.symbol}</h1>
         <span

@@ -20,6 +20,7 @@
   align-items: center;
   justify-content: space-between;
   user-select: none;
+  cursor: move;
 }
 
 .view-modal-header,

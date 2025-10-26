@@ -11,8 +11,7 @@ export default function GlobalStateContext({ children }) {
   const [currentViewTrade, setCurrentViewTrade] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [viewFilters, setViewFilters] = useState(false);
-  const [isDragging, setIsDragging] = useState(false);
-  const [offset, setOffset] = useState({ x: 0, y: 0 });
+
   const [filterValue, setFilterValue] = useState({
     order: "",
     status: "",
@@ -80,10 +79,6 @@ export default function GlobalStateContext({ children }) {
         setFilterValue,
         filteredTrades,
         setFilteredTrades,
-        isDragging,
-        setIsDragging,
-        offset,
-        setOffset,
       }}
     >
       {children}
