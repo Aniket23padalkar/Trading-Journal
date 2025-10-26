@@ -13,7 +13,7 @@ export default function App() {
         <div className="container">
           <Routes>
             <Route path="/" element={<Dashboard />} />
-            <Route path="trades" element={<Trades />} />
+            <Route path="/trades" element={<Trades />} />
           </Routes>
         </div>
       </div>
