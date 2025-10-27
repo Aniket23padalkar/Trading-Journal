@@ -1,6 +1,5 @@
 .stats-section {
   height: 100%;
-  padding: 0.5rem;
   width: 100%;
   gap: 0.5rem;
   display: flex;
@@ -10,9 +9,8 @@
 }
 
 .stats-container {
-  height: 9rem;
+  height: 100%;
   width: 17rem;
-  /* border: 1px solid black; */
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-template-rows: 1fr 1fr;

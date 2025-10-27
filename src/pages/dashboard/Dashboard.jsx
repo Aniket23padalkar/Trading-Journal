@@ -7,6 +7,9 @@ export default function Dashboard() {
     <div className="dashboard-container">
       <Stats />
       <PnlChart />
+      <div className="working-on">
+        <h1>Sorry We are woking on here!</h1>
+      </div>
     </div>
   );
 }
