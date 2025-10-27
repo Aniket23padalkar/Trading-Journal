@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { ZIndexStacking } from "../utils/zIndexStacking";
 
 export default function useDrag() {
   const [isDragging, setIsDragging] = useState(false);
@@ -7,6 +8,8 @@ export default function useDrag() {
 
   function handleMouseDown(e) {
     if (!modalRef.current) return;
+
+    modalRef.current.style.zIndex = ZIndexStacking();
     const rect = modalRef.current.getBoundingClientRect();
     setIsDragging(true);
     setOffset({

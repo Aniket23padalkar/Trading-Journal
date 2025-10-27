@@ -85,11 +85,7 @@ export default function AddModal() {
 
   return (
     <div className="add-modal" ref={modalRef}>
-      <div
-        className="add-modal-header"
-        onMouseDown={handleMouseDown}
-        style={{ zIndex: modalRef ? "11" : "10" }}
-      >
+      <div className="add-modal-header" onMouseDown={handleMouseDown}>
         <h1>Input Trade Details</h1>
       </div>
       <form onSubmit={handleSubmit} className="input-form">
