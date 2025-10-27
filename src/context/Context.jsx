@@ -53,8 +53,11 @@ export default function GlobalStateContext({ children }) {
   useEffect(() => {
     const result = FilterTrades(trades, filterValue);
     setFilteredTrades(result);
+  }, [trades]);
+
+  useEffect(() => {
     setCurrentPage(1);
-  }, [filterValue, trades]);
+  }, [filterValue]);
 
   return (
     <GlobalContext.Provider

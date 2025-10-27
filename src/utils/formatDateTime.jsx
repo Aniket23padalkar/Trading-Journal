@@ -1,5 +1,7 @@
 export default function formatDateTime(dt) {
   if (!dt) return "--";
+  console.log(dt);
+  console.log(new Date(dt));
   return new Date(dt).toLocaleString("en-IN", {
     day: "2-digit",
     month: "short",
