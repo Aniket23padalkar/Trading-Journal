@@ -1,14 +1,18 @@
 .stats-section {
+  height: 100%;
+  padding: 0.5rem;
   width: 100%;
-  padding: 1rem;
-  gap: 1rem;
+  gap: 0.5rem;
   display: flex;
+  align-items: center;
+  justify-content: center;
+  grid-column: 1/5;
 }
 
 .stats-container {
   height: 9rem;
-  width: 18rem;
-  border: 1px solid black;
+  width: 17rem;
+  /* border: 1px solid black; */
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-template-rows: 1fr 1fr;

@@ -1,9 +1,8 @@
-export default function getMonthlyPnl(trades, selectedYear) {
+export default function GetMonthlyPnl(trades, selectedYear) {
   const months = Array(12).fill(0);
 
   trades.forEach((trade) => {
-    if (!trade.formData.exitTime || isNaN(trade.pnl)) return;
-
+    if (!trade.formData.exitTime || !trade.pnl) return;
     const date = new Date(trade.formData.exitTime);
     const year = date.getFullYear();
     const month = date.getMonth();
@@ -13,7 +12,7 @@ export default function getMonthlyPnl(trades, selectedYear) {
     }
   });
 
-  const monthName = [
+  const monthsName = [
     "Jan",
     "Feb",
     "Mar",
@@ -28,7 +27,7 @@ export default function getMonthlyPnl(trades, selectedYear) {
     "Dec",
   ];
 
-  return monthName.map((m, i) => ({
+  return monthsName.map((m, i) => ({
     month: m,
     pnl: months[i],
   }));

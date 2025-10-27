@@ -1,4 +1,10 @@
 .dashboard-container {
   height: 100%;
   width: 100%;
+  max-height: 39rem;
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  row-gap: 0.5rem;
+  align-items: center;
+  justify-content: center;
 }
