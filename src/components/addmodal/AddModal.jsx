@@ -72,6 +72,7 @@ export default function AddModal() {
       );
     } else {
       setTrades((prev) => [...prev, newTrade]);
+      setCurrentEditId(null);
     }
     resetForm();
     setAddModal(false);
