@@ -1,9 +1,13 @@
 .filters {
-  flex: 1;
   height: 100%;
+  width: 84%;
   display: flex;
   align-items: center;
-  position: relative;
+  position: absolute;
+  z-index: 1;
+  left: 0;
+  border: 2px solid var(--border);
+  background-color: #eeeeee;
 }
 
 .filters > select {
@@ -17,11 +21,6 @@
   outline: none;
   color: #585858;
 }
-
-/* .filters > select:focus,
-.from-to-date:focus {
-  border: 2px solid var(--border);
-} */
 
 #clear-btn {
   font-size: 0.9rem;

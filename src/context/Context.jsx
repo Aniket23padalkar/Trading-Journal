@@ -19,6 +19,8 @@ export default function GlobalStateContext({ children }) {
     position: "",
     fromDate: "",
     toDate: "",
+    year: "",
+    month: "",
   });
   const [filteredTrades, setFilteredTrades] = useState([]);
   const [formData, setFormData] = useState({

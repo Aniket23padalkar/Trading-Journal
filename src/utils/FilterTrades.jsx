@@ -32,6 +32,24 @@ export default function FilterTrades(trades, filterValue) {
       return entry >= start && entry <= end;
     });
   }
+  if (filterValue.year !== "") {
+    filtered = filtered.filter((trade) => {
+      const tradesYear = new Date(trade.formData.entryTime).getFullYear();
+
+      return tradesYear === new Date(filterValue.year).getFullYear();
+    });
+  }
+  if (filterValue.month) {
+    filtered = filtered.filter((item) => {
+      let tradesMonth = new Date(item.formData.entryTime).toLocaleString(
+        "en-IN",
+        { month: "short" }
+      );
+      if (tradesMonth === "Sept") tradesMonth = "Sep";
+
+      return tradesMonth === filterValue.month;
+    });
+  }
 
   return filtered;
 }

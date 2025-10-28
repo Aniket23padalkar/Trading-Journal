@@ -23,6 +23,8 @@ export default function Filters() {
       position: "",
       fromDate: "",
       toDate: "",
+      year: "",
+      month: "",
     });
   }
 
