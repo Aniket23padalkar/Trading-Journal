@@ -4,8 +4,8 @@ import { FaBars } from "react-icons/fa6";
 
 export default function Header() {
   return (
-    <header className="col-start-1 col-end-3 flex justify-between items-center grow h-16 px-4 py-3">
-      <div className="h-full flex items-center">
+    <header className="col-start-1 col-end-3 flex h-16 w-full justify-between items-center grow  px-4 py-3">
+      <div className="h-16 flex items-center">
         <div className="text-xl cursor-pointer">
           <FaBars />
         </div>

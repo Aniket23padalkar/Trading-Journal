@@ -4,8 +4,6 @@ import { GlobalContext } from "../../context/Context";
 export default function Filters() {
   const { filterValue, setFilterValue } = useContext(GlobalContext);
 
-  console.log(filterValue);
-
   function handleChange(e) {
     const { name, value } = e.target;
     setFilterValue((prev) => ({

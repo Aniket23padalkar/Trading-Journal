@@ -139,9 +139,11 @@ export default function Stats() {
         <div>
           <div className="flex items-center h-10">
             <div className="h-5 w-5 bg-green-500 rounded-xl"></div>
-            <h1 className="font-bold pl-2 text-xl">Max-Profit</h1>
+            <h1 className="font-medium pl-2 text-lg text-gray-600">
+              Max-Profit
+            </h1>
           </div>
-          <h1 className="flex mt-2 gap-2 items-center text-xl ">
+          <h1 className="flex mt-2 gap-2 items-center text-xl font-bold">
             <FaIndianRupeeSign />
             {FormatPnL(maxProfit)}
           </h1>
@@ -149,9 +151,9 @@ export default function Stats() {
         <div>
           <div className="flex items-center h-10">
             <div className="h-5 w-5 bg-red-500 rounded-xl"></div>
-            <h1 className="font-bold pl-2 text-xl">Max-Profit</h1>
+            <h1 className="font-medium pl-2 text-lg text-gray-600">Max-Loss</h1>
           </div>
-          <h1 className="flex mt-2 gap-2 items-center text-xl ">
+          <h1 className="flex mt-2 font-bold gap-2 items-center text-xl">
             <FaIndianRupeeSign />
             {FormatPnL(maxLoss)}
           </h1>
@@ -173,9 +175,11 @@ export default function Stats() {
         <div>
           <div className="flex items-center h-10">
             <div className="h-5 w-5 bg-green-500 rounded-xl"></div>
-            <h1 className="font-bold pl-2 text-xl">Total-Profit</h1>
+            <h1 className="font-medium pl-2 text-lg text-gray-600">
+              Total-Profit
+            </h1>
           </div>
-          <h1 className="flex mt-2 gap-2 items-center text-xl ">
+          <h1 className="flex mt-2 gap-2 items-center text-xl font-bold">
             <FaIndianRupeeSign />
             {Number(totalProfit).toLocaleString("en-IN", {
               minimumFractionDigits: 2,
@@ -186,9 +190,11 @@ export default function Stats() {
         <div>
           <div className="flex items-center h-10">
             <div className="h-5 w-5 bg-red-500 rounded-xl"></div>
-            <h1 className="font-bold pl-2 text-xl">Total-Loss</h1>
+            <h1 className="font-medium pl-2 text-lg text-gray-600">
+              Total-Loss
+            </h1>
           </div>
-          <h1 className="flex mt-2 gap-2 items-center text-xl ">
+          <h1 className="flex mt-2 gap-2 items-center text-xl font-bold">
             <FaIndianRupeeSign />
             {Number(totalLoss).toLocaleString("en-IN", {
               minimumFractionDigits: 2,
@@ -204,9 +210,11 @@ export default function Stats() {
             <div className="flex items-center justify-center h-8 w-8 bg-red-200 rounded-md">
               <FaBullseye className="text-xl text-red-500" />
             </div>
-            <h1 className="font-bold text-xl">OverAll RR</h1>
+            <h1 className="font-medium pl-2 text-lg text-gray-600">
+              OverAll RR
+            </h1>
           </div>
-          <h1 className="flex items-center gap-2 pl-2 text-xl">
+          <h1 className="flex items-center gap-2 pl-2 text-xl font-bold">
             {overallRR > 0 ? (
               <FaArrowUp className="text-lg" />
             ) : (
@@ -220,9 +228,11 @@ export default function Stats() {
             <div className="flex items-center justify-center h-8 w-8 bg-emerald-200 shadow rounded-md">
               <FaExclamation className="text-xl text-emerald-600" />
             </div>
-            <h1 className="font-bold text-xl">Average Risk</h1>
+            <h1 className="font-medium pl-2 text-lg text-gray-600">
+              Average Risk
+            </h1>
           </div>
-          <h1 className="flex items-center gap-2 pl-2 text-xl">
+          <h1 className="flex items-center gap-2 pl-2 text-xl font-bold">
             <FaIndianRupeeSign />
             {averageRiskPerTrade}
           </h1>
