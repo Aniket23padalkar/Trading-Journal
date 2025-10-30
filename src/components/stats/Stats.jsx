@@ -145,7 +145,10 @@ export default function Stats() {
           </div>
           <h1 className="flex mt-2 gap-2 items-center text-xl font-bold">
             <FaIndianRupeeSign />
-            {FormatPnL(maxProfit)}
+            {Number(maxProfit).toLocaleString("en-IN", {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2,
+            })}
           </h1>
         </div>
         <div>
@@ -155,7 +158,10 @@ export default function Stats() {
           </div>
           <h1 className="flex mt-2 font-bold gap-2 items-center text-xl">
             <FaIndianRupeeSign />
-            {FormatPnL(maxLoss)}
+            {Number(maxLoss).toLocaleString("en-IN", {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2,
+            })}
           </h1>
         </div>
       </div>
@@ -247,165 +253,27 @@ export default function Stats() {
             </div>
             <h1 className="text-xl font-medium">Total Trades</h1>
           </div>
-          <h1 className="text-2xl">+{trades.length}</h1>
+          <h1 className="text-2xl font-bold">+{trades.length}</h1>
         </div>
         <div className="flex flex-1 items-end text-center">
           <div className="flex-1">
             <p>Profit-Trades</p>
-            <h1 className="text-2xl text-green-600 ">{totalProfitTrades}</h1>
+            <h1 className="text-2xl font-medium text-green-600 ">
+              {totalProfitTrades}
+            </h1>
           </div>
           <div className="flex-1 border-l-gray-400 border-l">
             <p>Loss-Trades</p>
-            <h1 className="text-2xl text-red-500">{totalLossTrades}</h1>
+            <h1 className="text-2xl font-medium text-red-500">
+              {totalLossTrades}
+            </h1>
           </div>
           <div className="flex-1 border-l-gray-400 border-l">
             <p>Open-Trades</p>
-            <h1 className="text-2xl">{openTrades}</h1>
+            <h1 className="text-2xl font-medium">{openTrades}</h1>
           </div>
         </div>
       </div>
     </>
-    // <div className="stats-section">
-    //   <div className="stats-container">
-    //     <div
-    //       className="stats"
-    //       style={{
-    //         gridColumn: "1 / 3",
-    //         borderBottom: "1px solid black",
-    //         alignItems: "center",
-    //       }}
-    //     >
-    //       <p>Overall PnL</p>
-    //       <span style={{ color: overallPnl >= 0 ? "green" : "red" }}>
-    //         {overallPnl >= 0 ? (
-    //           <FaArrowTrendUp className="arrow-trend" />
-    //         ) : (
-    //           <FaArrowTrendDown className="arrow-trend" />
-    //         )}{" "}
-    //         <h1
-    //           style={{
-    //             color: overallPnl >= 0 ? "green" : "red",
-    //             fontSize: "1.4rem",
-    //             paddingTop: "0",
-    //           }}
-    //         >
-    //           {FormatPnL(overallPnl)}
-    //         </h1>
-    //       </span>
-    //     </div>
-
-    //     <div className="stats">
-    //       <span>
-    //         <FaSquare
-    //           size={13}
-    //           color="green"
-    //           style={{ marginRight: "0.2rem" }}
-    //         />
-    //         <p style={{ marginTop: "0.05rem" }}>Biggest Profit</p>
-    //       </span>
-    //       <h1>
-    //         {maxProfit > 0 ? "+" : ""}
-    //         {FormatPnL(maxProfit)}
-    //       </h1>
-    //     </div>
-
-    //     <div className="stats">
-    //       <span>
-    //         <FaSquare size={13} color="red" style={{ marginRight: "0.2rem" }} />
-    //         <p style={{ marginTop: "0.05rem" }}>Biggest Loss</p>
-    //       </span>
-    //       <h1>{FormatPnL(maxLoss)}</h1>
-    //     </div>
-    //   </div>
-
-    //   <div className="stats-container">
-    //     <div className="stats" style={{ borderBottom: "1px solid black" }}>
-    //       <p>Win Rate</p>
-    //       <span>
-    //         {winRate >= 0 ? <FaArrowUp /> : <FaArrowDown />}
-    //         <h1 style={{ fontSize: "1.3rem", paddingTop: "0.1rem" }}>
-    //           {winRate}%
-    //         </h1>
-    //       </span>
-    //     </div>
-
-    //     <div
-    //       className="stats"
-    //       style={{ flexDirection: "row", alignItems: "center" }}
-    //     >
-    //       <div className="arrow-up-square">
-    //         {
-    //           <FaArrowUpLong
-    //             style={{ height: "2rem", width: "1.2rem", color: "white" }}
-    //           />
-    //         }
-    //       </div>
-    //       <span style={{ flexDirection: "column", marginLeft: "0.4rem" }}>
-    //         <p>Total Profit</p>
-    //         <h1>+{FormatPnL(totalProfit)}</h1>
-    //       </span>
-    //     </div>
-
-    //     <div className="stats">
-    //       <p style={{ paddingBottom: "0.2rem" }}>Avg Risk/Trade</p>
-    //       <h1>
-    //         <FaIndianRupeeSign />
-    //         {averageRiskPerTrade}
-    //       </h1>
-    //     </div>
-
-    //     <div
-    //       className="stats"
-    //       style={{ flexDirection: "row", alignItems: "center" }}
-    //     >
-    //       <div className="arrow-down-square">
-    //         {
-    //           <FaArrowDownLong
-    //             style={{ height: "2rem", width: "1.2rem", color: "white" }}
-    //           />
-    //         }
-    //       </div>
-    //       <span style={{ flexDirection: "column", marginLeft: "0.4rem" }}>
-    //         <p>Total Loss</p>
-    //         <h1>{FormatPnL(totalLoss)}</h1>
-    //       </span>
-    //     </div>
-    //   </div>
-
-    //   <div className="stats-container">
-    //     <div className="stats" style={{ borderBottom: "1px solid black" }}>
-    //       <p>Total-Trades</p>
-    //       <h1>{trades.length.toFixed(0)}</h1>
-    //     </div>
-
-    //     <div className="stats" style={{ borderBottom: "1px solid black" }}>
-    //       <p>Overall RR</p>
-    //       <span>
-    //         {overallRR >= 0 ? <FaArrowUp /> : <FaArrowDown />}
-    //         <h1>{overallRR}X</h1>
-    //       </span>
-    //     </div>
-
-    //     <div className="stats">
-    //       <span>
-    //         <FaSquare
-    //           size={13}
-    //           color="green"
-    //           style={{ marginRight: "0.2rem" }}
-    //         />
-    //         <p style={{ marginTop: "0.05rem" }}>Profit Trades</p>
-    //       </span>
-    //       <h1 style={{ fontSize: "1.3rem" }}>{totalProfitTrades.toFixed(0)}</h1>
-    //     </div>
-
-    //     <div className="stats">
-    //       <span>
-    //         <FaSquare size={13} color="red" style={{ marginRight: "0.2rem" }} />
-    //         <p style={{ marginTop: "0.05rem" }}>Loss Trades</p>
-    //       </span>
-    //       <h1 style={{ fontSize: "1.3rem" }}>{totalLossTrades.toFixed(0)}</h1>
-    //     </div>
-    //   </div>
-    // </div>
   );
 }

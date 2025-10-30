@@ -1,8 +1,9 @@
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { ZIndexStacking } from "../utils/zIndexStacking";
+import { GlobalContext } from "../context/Context";
 
 export default function useDrag() {
-  const [isDragging, setIsDragging] = useState(false);
+  const { isDragging, setIsDragging } = useContext(GlobalContext);
   const [offset, setOffset] = useState({ x: 0, y: 0 });
   const modalRef = useRef(null);
 

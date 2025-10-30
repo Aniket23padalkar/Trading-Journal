@@ -28,4 +28,8 @@
   .filter-select {
     @apply px-2 py-1 text-sm text-violet-400 bg-violet-50 outline-none rounded-md;
   }
+
+  .add-modal-select {
+    @apply bg-violet-50 text-sm py-1 pl-3 w-full rounded text-violet-500 outline-none shadow shadow-gray-500;
+  }
 }

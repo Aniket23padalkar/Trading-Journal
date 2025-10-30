@@ -19,7 +19,7 @@ export default function AddModal() {
   const orderSideColor = () => {
     if (formData.order === "BUY") return "#03c988";
     if (formData.order === "SELL") return "#ff7779ff";
-    return "#eeeeee";
+    return "oklch(96.9% 0.016 293.756)";
   };
 
   function handleChange(e) {
@@ -85,28 +85,36 @@ export default function AddModal() {
   }
 
   return (
-    <div className="add-modal" ref={modalRef}>
-      <div className="add-modal-header" onMouseDown={handleMouseDown}>
-        <h1>Input Trade Details</h1>
+    <div
+      className="flex flex-col overflow-hidden fixed inset-0 top-1/4 left-1/3 h-100 w-120 z-10 bg-linear-to-b from-emerald-400 to-emerald-100 rounded-xl shadow shadow-gray-500"
+      ref={modalRef}
+    >
+      <div
+        className="w-full px-4 py-2 bg-teal-600 shadow select-none"
+        onMouseDown={handleMouseDown}
+      >
+        <h1 className="text-white font-medium text-shadow-lg cursor-move">
+          Input Trade Details
+        </h1>
       </div>
-      <form onSubmit={handleSubmit} className="input-form">
-        <div className="form-details">
-          <div className="first-row">
+      <form onSubmit={handleSubmit} className="flex flex-1 flex-col">
+        <div className="flex flex-1 flex-col p-4 pb-0 gap-2">
+          <div className="flex justify-between gap-2">
             <input
               name="symbol"
               value={formData.symbol}
               required
-              className="input"
+              className="add-modal-select flex-1 text-black"
               type="text"
               placeholder="Symbol"
               onChange={handleChange}
             />
-            <div className="select-container">
+            <div className="gap-2 flex">
               <select
                 required
                 value={formData.order}
                 name="order"
-                className="select"
+                className="add-modal-select w-25"
                 onChange={handleChange}
                 style={{
                   backgroundColor: orderSideColor(),
@@ -122,7 +130,7 @@ export default function AddModal() {
                 value={formData.status}
                 required
                 name="status"
-                className="select"
+                className="add-modal-select w-25"
               >
                 <option value="">Status</option>
                 <option value="Open">Open</option>
@@ -131,8 +139,8 @@ export default function AddModal() {
             </div>
           </div>
 
-          <div className="second-row">
-            <div className="price">
+          <div className="flex justify-between gap-2">
+            <div className="flex w-full gap-2">
               <input
                 value={formData.buyPrice}
                 name="buyPrice"
@@ -140,7 +148,7 @@ export default function AddModal() {
                 disabled={
                   formData.status === "Open" && formData.order === "SELL"
                 }
-                className="price-input"
+                className="add-modal-select w-36 text-black"
                 type="number"
                 placeholder="Buy Price"
                 onChange={handleChange}
@@ -152,7 +160,7 @@ export default function AddModal() {
                 disabled={
                   formData.status === "Open" && formData.order === "BUY"
                 }
-                className="price-input"
+                className="add-modal-select w-36 text-black"
                 type="number"
                 placeholder="Sell Price"
                 onChange={handleChange}
@@ -162,7 +170,7 @@ export default function AddModal() {
               value={formData.marketType}
               required
               name="marketType"
-              className="select market-type"
+              className="add-modal-select"
               onChange={handleChange}
             >
               <option value="">Market-Type</option>
@@ -172,14 +180,14 @@ export default function AddModal() {
             </select>
           </div>
 
-          <div className="third-row">
+          <div className="flex w-full gap-2">
             <input
               required
               value={formData.quantity}
               name="quantity"
               type="number"
               placeholder="quantity"
-              className="price-input"
+              className="add-modal-select text-black"
               onChange={handleChange}
             />
             <input
@@ -188,7 +196,7 @@ export default function AddModal() {
               name="risk"
               type="number"
               placeholder="Risk"
-              className="price-input"
+              className="add-modal-select text-black"
               onChange={handleChange}
             />
             <select
@@ -196,7 +204,7 @@ export default function AddModal() {
               value={formData.position}
               name="position"
               onChange={handleChange}
-              className="select market-type"
+              className="add-modal-select"
             >
               <option value="">Position</option>
               <option value="Intraday">Intraday</option>
@@ -208,28 +216,32 @@ export default function AddModal() {
             </select>
           </div>
 
-          <div className="fourth-row">
-            <div className="entry-time">
-              <label>Entry Time:</label>
+          <div className="w-full flex justify-between gap-2">
+            <div className="flex relative">
+              <label className="absolute text-xs z-10 top-0 left-0 text-gray-600">
+                Entry Time:
+              </label>
               <input
                 value={formData.entryTime}
                 name="entryTime"
                 required
                 type="datetime-local"
-                className="price-input date-time"
+                className="add-modal-select h-8 mt-4 w-36"
                 onChange={handleChange}
               />
             </div>
 
-            <div className="exit-time">
-              <label>Exit Time:</label>
+            <div className="flex relative">
+              <label className="absolute text-xs z-10 top-0 left-0 text-gray-600">
+                Exit Time:
+              </label>
               <input
                 value={formData.exitTime}
                 name="exitTime"
                 required
                 disabled={formData.status === "Open"}
                 type="datetime-local"
-                className="price-input date-time"
+                className="add-modal-select h-8 mt-4 w-36"
                 onChange={handleChange}
               />
             </div>
@@ -239,7 +251,7 @@ export default function AddModal() {
               style={{ marginTop: "1rem" }}
               required
               name="rating"
-              className="select market-type"
+              className="add-modal-select"
               onChange={handleChange}
             >
               <option value="">Trade-Rate</option>
@@ -254,16 +266,23 @@ export default function AddModal() {
           <textarea
             value={formData.description}
             name="description"
-            id="description"
             placeholder="Describe this Trade...."
             onChange={handleChange}
+            className="flex-1 text-black bg-violet-50 p-2 outline-none text-xs rounded shadow shadow-gray-500"
           ></textarea>
         </div>
-        <div className="add-modal-footer">
-          <button type="submit" id="save-btn">
+        <div className="flex items-center justify-around gap-4 h-12 bg-transperant">
+          <button
+            type="submit"
+            className="px-8 bg-teal-400 text-teal-800 hover:bg-teal-300 font-bold rounded"
+          >
             Save
           </button>
-          <button type="button" onClick={handleCloseModal} id="close-add-modal">
+          <button
+            type="button"
+            className="px-8  bg-red-300 text-red-600 hover:bg-red-200 font-bold rounded"
+            onClick={handleCloseModal}
+          >
             Close
           </button>
         </div>
