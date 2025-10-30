@@ -1,5 +1,4 @@
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
-import "./pagination.css";
 import { useContext } from "react";
 import { GlobalContext } from "../../context/Context";
 
@@ -20,22 +19,25 @@ export default function Pagination({ totalPages, currentTrades }) {
   }
 
   return (
-    <div className="pages-container">
+    <div className="flex items-center h-10 p-0.5 px-2 rounded-xl bg-white">
       <button
-        className={
+        className={`flex items-center ${
           currentPage === 1 || currentTrades.length === 0
-            ? "prev-next-btn disabled"
-            : "prev-next-btn"
-        }
+            ? " text-gray-500 "
+            : "text-black hover:scale-110 cursor-pointer"
+        }`}
         onClick={() => setCurrentPage((prev) => Math.max(1, prev - 1))}
         disabled={currentPage === 1 || currentTrades.length === 0}
       >
         <FaChevronLeft />
         <p>Prev</p>
       </button>
-      <div className="page">
+      <div className="flex items-center justify-center gap-2 min-w-[300px]">
         {start > 1 && (
-          <button onClick={() => setCurrentPage(1)} className="page-num">
+          <button
+            onClick={() => setCurrentPage(1)}
+            className="flex items-center justify-center text-black h-5 w-5 cursor-pointer hover:scale-105 rounded text-sm font-medium"
+          >
             1
           </button>
         )}
@@ -44,7 +46,11 @@ export default function Pagination({ totalPages, currentTrades }) {
           <button
             key={page}
             onClick={() => setCurrentPage(page)}
-            className={currentPage === page ? "page-num active" : "page-num"}
+            className={`flex items-center justify-center text-black h-5 w-5 cursor-pointer rounded text-sm font-medium ${
+              currentPage === page
+                ? "bg-black text-white scale-120 border border-black"
+                : "hover:scale-105"
+            }`}
           >
             {page}
           </button>
@@ -53,18 +59,18 @@ export default function Pagination({ totalPages, currentTrades }) {
         {end < totalPages && (
           <button
             onClick={() => setCurrentPage(totalPages)}
-            className="page-num"
+            className="flex items-center justify-center text-black h-5 w-5 cursor-pointer hover:scale-105 rounded text-sm font-medium"
           >
             {totalPages}
           </button>
         )}
       </div>
       <button
-        className={
+        className={`flex items-center ${
           currentPage === totalPages || currentTrades.length === 0
-            ? "prev-next-btn disabled"
-            : "prev-next-btn"
-        }
+            ? " text-gray-500 "
+            : "text-black hover:scale-110 cursor-pointer"
+        }`}
         onClick={() => setCurrentPage((prev) => Math.min(totalPages, prev + 1))}
         disabled={currentPage === totalPages || currentTrades.length === 0}
       >

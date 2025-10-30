@@ -1,5 +1,4 @@
 import { useContext } from "react";
-import "./trades.css";
 import { GlobalContext } from "../../context/Context";
 import AddModal from "../../components/addmodal/AddModal";
 import ViewModal from "../../components/viewmodal/ViewModal";
@@ -20,7 +19,7 @@ export default function Trades() {
   );
 
   return (
-    <div className="trades-container">
+    <div className="flex flex-col gap-2 items-center justify-between h-full w-full p-4 rounded-3xl bg-gray-100">
       {/* Header Section */}
       <TradesHeader />
 

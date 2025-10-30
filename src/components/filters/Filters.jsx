@@ -1,5 +1,4 @@
 import { useContext } from "react";
-import "./filters.css";
 import { GlobalContext } from "../../context/Context";
 
 export default function Filters() {
@@ -29,11 +28,11 @@ export default function Filters() {
   }
 
   return (
-    <div className="filters">
+    <div className="flex items-center gap-2 absolute h-full w-9/12 pr-2 bg-white">
       <select
+        className="filter-select"
         name="order"
         value={filterValue.order}
-        id="order"
         onChange={handleChange}
       >
         <option value="">Order</option>
@@ -43,7 +42,7 @@ export default function Filters() {
       <select
         name="status"
         value={filterValue.status}
-        id="status"
+        className="filter-select"
         onChange={handleChange}
       >
         <option value="">Status</option>
@@ -53,7 +52,7 @@ export default function Filters() {
       <select
         name="marketType"
         value={filterValue.marketType}
-        id=""
+        className="filter-select"
         onChange={handleChange}
       >
         <option value="">Market-Type</option>
@@ -62,6 +61,7 @@ export default function Filters() {
         <option value="Futures">Futures</option>
       </select>
       <select
+        className="filter-select"
         name="position"
         value={filterValue.position}
         onChange={handleChange}
@@ -74,26 +74,29 @@ export default function Filters() {
         <option value="Positional">Positional</option>
         <option value="Long-Term">Long-Term</option>
       </select>
-      <div className="date-range">
+      <div className="flex py-1 items-center ml-1 text-violet-400 bg-violet-50 rounded-md">
         {/* <label>Date Range:</label> */}
         <input
           type="date"
           name="fromDate"
-          className="from-to-date"
+          className="px-2 outline-none text-xs text-violet-400 uppercase"
           onChange={handleChange}
           value={filterValue.fromDate}
         />
-        <span>to</span>
+        <span className="text-sm">to</span>
         <input
           type="date"
           name="toDate"
-          className="from-to-date"
+          className="px-2 outline-none text-xs text-violet-400 uppercase"
           onChange={handleChange}
           value={filterValue.toDate}
         />
       </div>
 
-      <button onClick={handleClearFilters} id="clear-btn">
+      <button
+        onClick={handleClearFilters}
+        className="py-1 px-3 rounded-md cursor-pointer hover:bg-red-300 text-sm bg-red-200 text-red-500"
+      >
         Clear
       </button>
     </div>

@@ -1,5 +1,4 @@
 import { useContext } from "react";
-import "./tradesheader.css";
 import { GlobalContext } from "../../context/Context";
 import { FaFilter } from "react-icons/fa";
 import Filters from "../../components/filters/Filters";
@@ -22,7 +21,6 @@ export default function TradesHeader() {
 
   let yearList = [];
   let monthList = [];
-  console.log(monthList);
 
   trades.forEach((trade) => {
     const date = new Date(trade.formData.entryTime);
@@ -61,12 +59,14 @@ export default function TradesHeader() {
   uniqueMonth.sort((a, b) => monthOrder.indexOf(a) - monthOrder.indexOf(b));
   const months = uniqueMonth;
   return (
-    <div className="header">
-      <div className="year-month">
-        <p>Yearly/Monthly Trades :</p>
+    <div className="flex w-full justify-between items-center py-2 px-6 relative rounded-xl shadow shadow-gray-400 bg-white">
+      <div className="flex items-center">
+        <p className="drop-shadow-lg font-medium mr-2">
+          Yearly/Monthly Trades :
+        </p>
         <select
           name="year"
-          className="year-month-filter"
+          className="filter-select mr-2"
           value={filterValue.year}
           onChange={handleChange}
         >
@@ -78,11 +78,7 @@ export default function TradesHeader() {
           ))}
         </select>
         {/* <p>Monthly Trades :</p> */}
-        <select
-          name="month"
-          className="year-month-filter"
-          onChange={handleChange}
-        >
+        <select name="month" className="filter-select" onChange={handleChange}>
           <option value="">All month</option>
           {months.map((month) => (
             <option key={month} value={month}>
@@ -92,15 +88,22 @@ export default function TradesHeader() {
         </select>
       </div>
       {viewFilters && <Filters />}
-      <div className="trades-header-btns">
+      <div className="flex items-center gap-2">
         <button
-          className={viewFilters ? "filter-btn active" : "filter-btn"}
+          className={
+            viewFilters
+              ? "flex items-center px-4 py-0 gap-1 cursor-pointer rounded-md bg-blue-100 text-blue-400 border border-blue-300"
+              : "flex items-center px-4 py-0 gap-1 cursor-pointer rounded-md bg-blue-100 text-blue-500 border border-blue-500"
+          }
           onClick={() => setViewFilters(!viewFilters)}
         >
           <FaFilter size={12} /> <span>Filters</span>
         </button>
 
-        <button onClick={() => setAddModal(true)} id="add-btn">
+        <button
+          onClick={() => setAddModal(true)}
+          className="h-full py-1 px-5 font-bold cursor-pointer hover:scale-105 text-green-700 text-sm rounded-lg bg-green-200 border border-green-700"
+        >
           + Add
         </button>
       </div>

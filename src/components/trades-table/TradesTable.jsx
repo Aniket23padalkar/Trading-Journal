@@ -1,5 +1,4 @@
-import { useContext, useEffect } from "react";
-import "./tradestable.css";
+import { useContext } from "react";
 import { GlobalContext } from "../../context/Context";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import formatDateTime from "../../utils/formatDateTime";
@@ -70,13 +69,13 @@ export default function TradesTable({ currentTrades, indexOfFirstTrade }) {
   }
 
   return (
-    <div className="table-container">
-      <div className="table">
-        <table>
+    <div className="flex h-full w-full items-center bg-transparent relative">
+      <div className="w-full min-h-102 h shadow-md shadow-gray-400">
+        <table className="w-full border-collapse bg-white">
           <thead>
-            <tr>
-              <th>#</th>
-              <th>symbol</th>
+            <tr className="text-center bg-gray-50">
+              <th className="w-8 bg-gray-100">#</th>
+              <th className="text-left">symbol</th>
               <th>order</th>
               <th>status</th>
               <th>market-type</th>
@@ -95,31 +94,41 @@ export default function TradesTable({ currentTrades, indexOfFirstTrade }) {
               currentTrades.map((trade, index) => {
                 return (
                   <tr key={trade.id} onClick={() => handleViewModal(trade)}>
-                    <td>{indexOfFirstTrade + index + 1}</td>
-                    <td id="symbol">{trade.formData.symbol}</td>
-                    <td style={{ paddingLeft: "1rem", paddingRight: "1rem" }}>
+                    <td className="bg-gray-100">
+                      {indexOfFirstTrade + index + 1}
+                    </td>
+                    <td className="text-left w-30 font-medium text-base capitalize px-1 bg-gray-50">
+                      {trade.formData.symbol}
+                    </td>
+                    <td>
                       <p
+                        className="text-xs px-1"
                         style={{
                           border: `1px solid ${orderColor(
                             trade.formData.order
                           )}`,
                           color: orderColor(trade.formData.order),
                           borderRadius: "3px",
-                          fontSize: "0.85rem",
+
                           fontWeight: 500,
                         }}
                       >
                         {trade.formData.order}
                       </p>
                     </td>
-                    <td>{trade.formData.status}</td>
+                    <td className="text-xs">{trade.formData.status}</td>
                     <td>{trade.formData.marketType}</td>
                     <td>{trade.formData.quantity}</td>
 
                     <td>
-                      <p id="position">{trade.formData.position}</p>
+                      <p className="text-xs bg-blue-100 rounded">
+                        {trade.formData.position}
+                      </p>
                     </td>
-                    <td style={{ color: "rgba(153, 0, 255, 1)" }}>
+                    <td
+                      className="text-xs"
+                      style={{ color: "rgba(153, 0, 255, 1)" }}
+                    >
                       {formatDateTime(trade.formData.entryTime)}
                     </td>
                     <td>{trade.formData.risk}</td>
@@ -141,7 +150,9 @@ export default function TradesTable({ currentTrades, indexOfFirstTrade }) {
                       {trade.formData.status === "Open" ? "-" : "/-"}
                     </td>
                     <td style={{ fontWeight: 600 }}>
-                      {trade.formData.status === "Open" ? "-" : trade.rrRatio}
+                      {trade.formData.status === "Open"
+                        ? "-"
+                        : Number(trade.rrRatio).toFixed(1)}
                       {trade.formData.status === "Open" ? "-" : "X"}
                     </td>
                     <td>{trade.formData.rating}</td>
@@ -151,9 +162,9 @@ export default function TradesTable({ currentTrades, indexOfFirstTrade }) {
                           e.stopPropagation();
                           viewEditTradeModal("edit", trade);
                         }}
-                        className="edit-delete-btn"
+                        className="cursor-pointer bg-transparent"
                       >
-                        <FaEdit className="edit-trade" />
+                        <FaEdit className="text-blue-400" />
                       </button>
                       <button
                         onClick={(e) => {
@@ -163,9 +174,9 @@ export default function TradesTable({ currentTrades, indexOfFirstTrade }) {
                         style={{
                           paddingLeft: "0.5rem",
                         }}
-                        className="edit-delete-btn"
+                        className="cursor-pointer bg-transparent"
                       >
-                        <FaTrash className="delete-trade" />
+                        <FaTrash className="text-red-400" />
                       </button>
                     </td>
                   </tr>
@@ -175,7 +186,7 @@ export default function TradesTable({ currentTrades, indexOfFirstTrade }) {
         </table>
       </div>
       {currentTrades.length === 0 && (
-        <div className="empty-msg">
+        <div className="flex items-center justify-center top-0 left-0 absolute h-full w-full">
           <h1>Nothing To Show! Please Add Trades</h1>
         </div>
       )}
