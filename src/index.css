@@ -30,6 +30,6 @@
   }
 
   .add-modal-select {
-    @apply bg-violet-50 text-sm py-1 pl-3 w-full rounded text-violet-500 outline-none shadow shadow-gray-500;
+    @apply bg-violet-50 text-sm py-1 pl-3 w-full rounded text-violet-500 outline-none shadow shadow-gray-300;
   }
 }

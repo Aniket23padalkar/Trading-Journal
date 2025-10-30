@@ -1,5 +1,4 @@
 import { useContext } from "react";
-import "./addmodal.css";
 import { GlobalContext } from "../../context/Context";
 import calculatePnL from "../../utils/CalculatePnl";
 import CalculateRRratio from "../../utils/CalculateRRratio";
@@ -86,7 +85,7 @@ export default function AddModal() {
 
   return (
     <div
-      className="flex flex-col overflow-hidden fixed inset-0 top-1/4 left-1/3 h-100 w-120 z-10 bg-linear-to-b from-emerald-400 to-emerald-100 rounded-xl shadow shadow-gray-500"
+      className="flex flex-col overflow-hidden fixed inset-0 top-1/4 left-1/3 h-100 w-120 z-10 bg-white rounded-xl shadow shadow-gray-500"
       ref={modalRef}
     >
       <div
@@ -268,7 +267,7 @@ export default function AddModal() {
             name="description"
             placeholder="Describe this Trade...."
             onChange={handleChange}
-            className="flex-1 text-black bg-violet-50 p-2 outline-none text-xs rounded shadow shadow-gray-500"
+            className="flex-1 text-black bg-violet-50 p-2 outline-none text-xs rounded shadow shadow-gray-300"
           ></textarea>
         </div>
         <div className="flex items-center justify-around gap-4 h-12 bg-transperant">
