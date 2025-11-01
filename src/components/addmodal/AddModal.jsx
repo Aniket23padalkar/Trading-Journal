@@ -1,7 +1,6 @@
 import { useContext, useMemo } from "react";
 import { GlobalContext } from "../../context/Context";
 import calculatePnL from "../../utils/CalculatePnl";
-import CalculateRRratio from "../../utils/CalculateRRratio";
 import useDrag from "../../hooks/useDrag";
 import { FaTrash } from "react-icons/fa6";
 
