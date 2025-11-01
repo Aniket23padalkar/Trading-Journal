@@ -6,21 +6,31 @@ export default function TableFooter() {
   const { filteredTrades } = useContext(GlobalContext);
 
   const { totalPnL, totalRRratio, winRate } = useMemo(() => {
+    if (!filteredTrades || filteredTrades.length === 0) {
+      return {
+        totalPnL: 0,
+        totalRRratio: 0,
+        winRate: 0,
+      };
+    }
     const totalPnL = filteredTrades.reduce(
-      (acc, trade) => acc + Number(trade.pnl),
+      (acc, trade) => acc + Number(trade.stats.pnl),
       0
     );
     const totalRRratio = filteredTrades
-      .reduce((acc, trade) => acc + Number(trade.rrRatio), 0)
+      .reduce((acc, trade) => acc + Number(trade.stats.avgRR), 0)
       .toFixed(2);
 
     const closedTrades = filteredTrades.filter(
       (trade) => trade.formData.status === "Closed"
     );
-    const profitTrades = filteredTrades.filter((trade) => trade.pnl > 0);
-    const winRate = ((profitTrades.length / closedTrades.length) * 100).toFixed(
-      0
+    const profitTrades = filteredTrades.filter(
+      (trade) => Number(trade.stats.pnl) > 0
     );
+    const winRate =
+      closedTrades.length > 0
+        ? ((profitTrades.length / closedTrades.length) * 100).toFixed(0)
+        : 0;
 
     return { totalPnL, totalRRratio, winRate };
   });
@@ -48,9 +58,9 @@ export default function TableFooter() {
             {FormatPnL(totalPnL)}
           </h1>
         </div>
-        <div className="flex items-center">
+        <div className="flex items-center gap-2">
           <p className="text-md font-medium text-shadow-lg">Total RR :</p>
-          <h1 className="font-bold text-xl">{totalRRratio}X</h1>
+          <h1 className="font-bold text-lg text-blue-500">{totalRRratio}X</h1>
         </div>
       </div>
     </div>

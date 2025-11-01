@@ -45,17 +45,17 @@ export default function Stats() {
       };
     }
 
-    const pnl = trades.map((trade) => Number(trade.pnl));
+    const pnl = trades.map((trade) => Number(trade.stats.pnl));
     const overallPnl = pnl.reduce((a, b) => a + b, 0);
     const maxProfit = Math.max(...pnl);
     const maxLoss = Math.min(...pnl);
 
     const overallRR = trades
-      .reduce((a, b) => a + Number(b.rrRatio), 0)
+      .reduce((a, b) => a + Number(b.stats.avgRR), 0)
       .toFixed(2);
 
     const averageRiskPerTrade = (
-      trades.reduce((a, b) => a + Number(b.formData.risk), 0) / trades.length
+      trades.reduce((a, b) => a + Number(b.stats.avgRisk), 0) / trades.length
     ).toFixed(2);
 
     const profitTrades = pnl.filter((p) => Number(p) > 0);
@@ -73,7 +73,9 @@ export default function Stats() {
     const closedTrades = trades.filter(
       (trade) => trade.formData.status === "Closed"
     );
-    const winningTrades = closedTrades.filter((trade) => Number(trade.pnl) > 0);
+    const winningTrades = closedTrades.filter(
+      (trade) => Number(trade.stats.pnl) > 0
+    );
     const winRate =
       closedTrades.length > 0
         ? ((winningTrades.length / closedTrades.length) * 100).toFixed(0)

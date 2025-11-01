@@ -27,21 +27,21 @@ export default function FilterTrades(trades, filterValue) {
     end.setHours(23, 59, 59, 999);
 
     filtered = filtered.filter((item) => {
-      const entry = new Date(item.formData.entryTime);
+      const entry = new Date(item.entries.initialEntryTime);
 
       return entry >= start && entry <= end;
     });
   }
   if (filterValue.year !== "") {
     filtered = filtered.filter((trade) => {
-      const tradesYear = new Date(trade.formData.entryTime).getFullYear();
+      const tradesYear = new Date(trade.entries.initialEntryTime).getFullYear();
 
       return tradesYear === new Date(filterValue.year).getFullYear();
     });
   }
   if (filterValue.month) {
     filtered = filtered.filter((item) => {
-      let tradesMonth = new Date(item.formData.entryTime).toLocaleString(
+      let tradesMonth = new Date(item.entries.initialEntryTime).toLocaleString(
         "en-IN",
         { month: "short" }
       );

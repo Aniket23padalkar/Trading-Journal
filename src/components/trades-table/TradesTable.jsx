@@ -11,6 +11,7 @@ export default function TradesTable({ currentTrades, indexOfFirstTrade }) {
     setCurrentEditId,
     setFormData,
     setAddModal,
+    setEntries,
   } = useContext(GlobalContext);
 
   function orderColor(order) {
@@ -35,16 +36,19 @@ export default function TradesTable({ currentTrades, indexOfFirstTrade }) {
         symbol: trade.formData.symbol,
         order: trade.formData.order,
         status: trade.formData.status,
-        buyPrice: trade.formData.buyPrice,
-        sellPrice: trade.formData.sellPrice,
         marketType: trade.formData.marketType,
-        quantity: trade.formData.quantity,
-        risk: trade.formData.risk,
         position: trade.formData.position,
-        entryTime: trade.formData.entryTime,
-        exitTime: trade.formData.exitTime,
         rating: trade.formData.rating,
         description: trade.formData.description,
+      });
+      setEntries({
+        addedEntries: trade.entries.addedEntries,
+        initialBuy: trade.entries.initialBuy,
+        initialSell: trade.entries.initialSell,
+        initialQty: trade.entries.initialQty,
+        initialRisk: trade.entries.initialRisk,
+        initialEntryTime: trade.entries.initialEntryTime,
+        initialExitTime: trade.entries.initialExitTime,
       });
     } else {
       setCurrentEditId(null);
@@ -52,16 +56,20 @@ export default function TradesTable({ currentTrades, indexOfFirstTrade }) {
         symbol: "",
         order: "",
         status: "",
-        buyPrice: "",
-        sellPrice: "",
         marketType: "",
-        quantity: "",
-        risk: "",
         position: "",
-        orderTime: "",
-        exitTime: "",
         rating: "",
         description: "",
+      });
+
+      setEntries({
+        addedEntries: [],
+        initialBuy: "",
+        initialSell: "",
+        initialQty: "",
+        initialRisk: "",
+        initialEntryTime: "",
+        initialExitTime: "",
       });
     }
 
@@ -118,7 +126,7 @@ export default function TradesTable({ currentTrades, indexOfFirstTrade }) {
                     </td>
                     <td className="text-xs">{trade.formData.status}</td>
                     <td>{trade.formData.marketType}</td>
-                    <td>{trade.formData.quantity}</td>
+                    <td>{trade.stats.totalQty}</td>
 
                     <td>
                       <p className="text-xs bg-blue-100 rounded">
@@ -129,21 +137,21 @@ export default function TradesTable({ currentTrades, indexOfFirstTrade }) {
                       className="text-xs"
                       style={{ color: "rgba(153, 0, 255, 1)" }}
                     >
-                      {formatDateTime(trade.formData.entryTime)}
+                      {formatDateTime(trade.entries.initialEntryTime)}
                     </td>
-                    <td>{trade.formData.risk}</td>
+                    <td>{trade.stats.avgRisk}</td>
                     <td
                       style={{
                         fontSize: "0.9rem",
                         fontWeight: 600,
-                        color: trade.pnl >= 0 ? "green" : "red",
+                        color: trade.stats.pnl >= 0 ? "green" : "red",
                       }}
                     >
                       {" "}
-                      {trade.pnl > 0 && "+"}
+                      {trade.stats.pnl > 0 && "+"}
                       {trade.formData.status === "Open"
                         ? "-"
-                        : Number(trade.pnl).toLocaleString("en-IN", {
+                        : Number(trade.stats.pnl).toLocaleString("en-IN", {
                             minimumFractionDigits: 2,
                             maximumFractionDigits: 2,
                           })}
@@ -152,7 +160,7 @@ export default function TradesTable({ currentTrades, indexOfFirstTrade }) {
                     <td style={{ fontWeight: 600 }}>
                       {trade.formData.status === "Open"
                         ? "-"
-                        : Number(trade.rrRatio).toFixed(1)}
+                        : Number(trade.stats.avgRR).toFixed(1)}
                       {trade.formData.status === "Open" ? "-" : "X"}
                     </td>
                     <td>{trade.formData.rating}</td>

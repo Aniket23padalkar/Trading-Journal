@@ -23,7 +23,7 @@ export default function TradesHeader() {
   let monthList = [];
 
   trades.forEach((trade) => {
-    const date = new Date(trade.formData.entryTime);
+    const date = new Date(trade.entries.initialEntryTime);
     const year = date.getFullYear();
     let month = date.toLocaleString("en-IN", { month: "short" });
 

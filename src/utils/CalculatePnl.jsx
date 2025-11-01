@@ -1,7 +1,7 @@
-export default function calculatePnL(buyPrice, sellPrice, quantity) {
-  const b = Number(buyPrice);
-  const s = Number(sellPrice);
-  const q = Number(quantity);
+export default function calculatePnL(avgBuy, avgSell, totalQty) {
+  const b = Number(avgBuy);
+  const s = Number(avgSell);
+  const q = Number(totalQty);
 
   if (!b || !s) return 0;
 

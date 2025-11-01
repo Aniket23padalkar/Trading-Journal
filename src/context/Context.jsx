@@ -1,17 +1,29 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import FilterTrades from "../utils/FilterTrades.jsx";
+import useLocalStorage from "../hooks/useLocalStorage.jsx";
+import useTradesData from "../hooks/useTradesData.jsx";
 
 export const GlobalContext = createContext(null);
 
 export default function GlobalStateContext({ children }) {
-  const [trades, setTrades] = useState(() => loadFromLocalStorage());
+  const [trades, setTrades] = useTradesData("tradesV2", []);
   const [addModal, setAddModal] = useState(false);
   const [currentEditId, setCurrentEditId] = useState(null);
   const [viewModal, setViewModal] = useState(false);
   const [currentViewTrade, setCurrentViewTrade] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [viewFilters, setViewFilters] = useState(false);
-  const [isDragging, setIsDragging] = useState(false);
+  const [filteredTrades, setFilteredTrades] = useState([]);
+  const [addQtyModal, setAddQtyModal] = useState(false);
+  const [entries, setEntries] = useState({
+    addedEntries: [],
+    initialBuy: "",
+    initialSell: "",
+    initialQty: "",
+    initialRisk: "",
+    initialEntryTime: "",
+    initialExitTime: "",
+  });
   const [filterValue, setFilterValue] = useState({
     order: "",
     status: "",
@@ -22,35 +34,15 @@ export default function GlobalStateContext({ children }) {
     year: "",
     month: "",
   });
-  const [filteredTrades, setFilteredTrades] = useState([]);
   const [formData, setFormData] = useState({
     symbol: "",
     order: "",
     status: "",
-    buyPrice: "",
-    sellPrice: "",
     marketType: "",
-    quantity: "",
-    risk: "",
     position: "",
-    entryTime: "",
-    exitTime: "",
     rating: "",
     description: "",
   });
-
-  function loadFromLocalStorage() {
-    const stored = localStorage.getItem("trades");
-    if (stored) {
-      return JSON.parse(stored);
-    }
-
-    return [];
-  }
-
-  useEffect(() => {
-    localStorage.setItem("trades", JSON.stringify(trades));
-  }, [trades]);
 
   useEffect(() => {
     const result = FilterTrades(trades, filterValue);
@@ -84,8 +76,10 @@ export default function GlobalStateContext({ children }) {
         setFilterValue,
         filteredTrades,
         setFilteredTrades,
-        isDragging,
-        setIsDragging,
+        entries,
+        setEntries,
+        addQtyModal,
+        setAddQtyModal,
       }}
     >
       {children}
