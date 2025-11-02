@@ -8,9 +8,6 @@ export default function useTradesData(key, initialValue) {
     return stored ? JSON.parse(stored) : initialValue;
   });
 
-  console.log("Old", oldTrades);
-  console.log("New", tradesV2);
-
   useEffect(() => {
     if (tradesV2 !== initialValue) return;
     if (!Array.isArray(oldTrades) || oldTrades.length === 0) return;
@@ -18,8 +15,6 @@ export default function useTradesData(key, initialValue) {
     const needsUpdate = oldTrades.some((t) => !t.entries);
 
     if (!needsUpdate) return;
-
-    console.log("not retured");
 
     const updated = oldTrades.map((t) => {
       if (t.entries) return t;

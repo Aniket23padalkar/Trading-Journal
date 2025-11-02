@@ -33,3 +33,20 @@
     @apply bg-violet-50 text-sm py-1 pl-3 w-full rounded text-violet-500 outline-none shadow shadow-gray-300;
   }
 }
+
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+::-webkit-scrollbar-track {
+  background: #ffffff;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #bebebe;
+  border-radius: 8px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #8b8b8b;
+}

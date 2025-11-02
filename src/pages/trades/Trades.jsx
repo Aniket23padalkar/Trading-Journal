@@ -2,11 +2,11 @@ import { useContext } from "react";
 import { GlobalContext } from "../../context/Context";
 import AddModal from "../../components/addmodal/AddModal";
 import ViewModal from "../../components/viewmodal/ViewModal";
-import Pagination from "../../components/pagination/Pagination";
-import TradesTable from "../../components/trades-table/TradesTable";
+import Pagination from "../../components/tradesPageComponents/Pagination";
+import TradesTable from "../../components/tradesPageComponents/TradesTable";
 import usePagination from "../../hooks/usePagination";
-import TableFooter from "../../components/table-footer/TableFooter";
-import TradesHeader from "../../components/tradesheader/TradesHeader";
+import TableFooter from "../../components/tradesPageComponents/TableFooter";
+import TradesHeader from "../../components/tradesPageComponents/TradesHeader";
 
 export default function Trades() {
   const { addModal, viewModal, currentPage, filteredTrades } =

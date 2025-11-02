@@ -1,7 +1,7 @@
 import { useContext } from "react";
 import { GlobalContext } from "../../context/Context";
 import { FaFilter } from "react-icons/fa";
-import Filters from "../../components/filters/Filters";
+import Filters from "./Filters";
 
 export default function TradesHeader() {
   const {
@@ -11,7 +11,6 @@ export default function TradesHeader() {
     setViewFilters,
     filterValue,
     setFilterValue,
-    filteredTrades,
   } = useContext(GlobalContext);
 
   function handleChange(e) {
