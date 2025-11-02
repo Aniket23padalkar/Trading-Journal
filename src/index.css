@@ -1,6 +1,7 @@
 @import url("https://fonts.googleapis.com/css2?family=Epunda+Sans:ital,wght@0,300..900;1,300..900&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Manrope:wght@200..800&family=Outfit:wght@100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto+Slab:wght@100..900&family=Roboto:ital,wght@0,100..900;1,100..900&family=Rubik:ital,wght@0,300..900;1,300..900&display=swap");
 @import "./styles/variables.css";
 @import "tailwindcss";
+@plugin "@tailwindcss/typography";
 
 @layer base {
   html {
@@ -32,6 +33,29 @@
   .add-modal-select {
     @apply bg-violet-50 text-sm py-1 pl-3 w-full rounded text-violet-500 outline-none shadow shadow-gray-300;
   }
+
+  .view-modal-section {
+    @apply flex-1 text-center border-l border-gray-400;
+  }
+
+  .view-modal-span {
+    @apply text-gray-400 text-[0.8rem];
+  }
+
+  .view-modal-h1 {
+    @apply text-[0.9rem] font-bold;
+  }
+}
+
+.prose {
+  --tw-prose-body: #000000;
+  --tw-prose-headings: rgb(13, 152, 233);
+  --tw-prose-lead: black;
+  --tw-prose-links: blue;
+  --tw-prose-bold: black;
+  --tw-prose-quotes: black;
+  --tw-prose-bullets: black;
+  --tw-prose-counters: black;
 }
 
 ::-webkit-scrollbar {

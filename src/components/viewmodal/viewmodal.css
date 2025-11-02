@@ -56,16 +56,6 @@
   align-items: center;
 }
 
-.section {
-  flex: 1;
-  text-align: center;
-}
-
-.section > span {
-  color: var(--grey-text);
-  font-size: 0.8rem;
-}
-
 .section > h1 {
   font-size: 0.9rem;
   font-weight: 600;

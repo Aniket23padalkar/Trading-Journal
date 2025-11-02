@@ -4,6 +4,7 @@ import calculatePnL from "../../utils/CalculatePnl";
 import useDrag from "../../hooks/useDrag";
 import AddQtyModal from "../AddQtyModal";
 import useCalculateStats from "../../hooks/useCalculateStats";
+import { FaExclamation } from "react-icons/fa6";
 
 export default function AddModal() {
   const { modalRef, handleMouseDown } = useDrag();
@@ -130,11 +131,11 @@ export default function AddModal() {
 
   return (
     <div
-      className="flex flex-col overflow-visible fixed inset-0 top-1/4 left-1/3 h-100 w-120 z-10 bg-white rounded-xl shadow shadow-gray-500"
+      className="flex flex-col overflow-visible fixed inset-0 top-1/4 left-1/3 h-110 w-120 z-10 bg-white rounded-xl shadow-2xl"
       ref={modalRef}
     >
       <div
-        className="w-full px-4 py-2 bg-teal-700 shadow select-none rounded-tl-2xl rounded-tr-2xl"
+        className="w-full px-4 py-2 bg-teal-700 shadow select-none rounded-tl-xl rounded-tr-xl"
         onMouseDown={handleMouseDown}
       >
         <h1 className="text-white font-medium text-shadow-lg cursor-move">
@@ -313,13 +314,19 @@ export default function AddModal() {
             </select>
           </div>
 
-          <textarea
-            value={formData.description}
-            name="description"
-            placeholder="Describe this Trade...."
-            onChange={handleChange}
-            className="flex-1 text-black bg-violet-50 p-2 outline-none text-xs rounded shadow shadow-gray-300"
-          ></textarea>
+          <div className=" flex-1 relative">
+            <p className="flex items-center absolute right-0 text-xs font-medium text-gray-500">
+              <FaExclamation className="text-red-500 text-sm" />
+              To style use #, **Bold** - List item {">"} Quote
+            </p>
+            <textarea
+              value={formData.description}
+              name="description"
+              placeholder="Describe this Trade...."
+              onChange={handleChange}
+              className="h-full w-full text-black pt-4  bg-violet-50 p-2 outline-none text-sm rounded shadow shadow-gray-300"
+            ></textarea>
+          </div>
         </div>
         <div className="flex items-center justify-around gap-4 h-12 bg-transperant">
           <button

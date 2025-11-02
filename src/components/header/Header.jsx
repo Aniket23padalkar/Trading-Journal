@@ -9,11 +9,11 @@ export default function Header() {
         <div className="text-xl cursor-pointer">
           <FaBars />
         </div>
-        <Link to="/">
-          <div className="h-full w-40">
+        <div className="h-full w-40">
+          <Link to="/">
             <img className="h-full w-full object-cover" src={logo} alt="Logo" />
-          </div>
-        </Link>
+          </Link>
+        </div>
       </div>
       <div className="flex items-center h-full">
         <div className="flex items-center">
