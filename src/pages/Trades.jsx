@@ -1,12 +1,12 @@
 import { useContext } from "react";
-import { GlobalContext } from "../../context/Context";
-import AddModal from "../../components/addmodal/AddModal";
-import ViewModal from "../../components/viewmodal/ViewModal";
-import Pagination from "../../components/tradesPageComponents/Pagination";
-import TradesTable from "../../components/tradesPageComponents/TradesTable";
-import usePagination from "../../hooks/usePagination";
-import TableFooter from "../../components/tradesPageComponents/TableFooter";
-import TradesHeader from "../../components/tradesPageComponents/TradesHeader";
+import { GlobalContext } from "../context/Context";
+import AddModal from "../components/AddModal";
+import ViewModal from "../components/ViewModal";
+import Pagination from "../components/tradesPageComponents/Pagination";
+import TradesTable from "../components/tradesPageComponents/TradesTable";
+import usePagination from "../hooks/usePagination";
+import TableFooter from "../components/tradesPageComponents/TableFooter";
+import TradesHeader from "../components/tradesPageComponents/TradesHeader";
 
 export default function Trades() {
   const { addModal, viewModal, currentPage, filteredTrades } =

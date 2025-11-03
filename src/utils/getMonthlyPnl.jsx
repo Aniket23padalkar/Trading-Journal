@@ -2,13 +2,13 @@ export default function GetMonthlyPnl(trades, selectedYear) {
   const months = Array(12).fill(0);
 
   trades.forEach((trade) => {
-    if (!trade.formData.exitTime || !trade.pnl) return;
-    const date = new Date(trade.formData.exitTime);
+    if (!trade.entries.initialExitTime || !trade.stats.pnl) return;
+    const date = new Date(trade.entries.initialExitTime);
     const year = date.getFullYear();
     const month = date.getMonth();
 
     if (year === selectedYear) {
-      months[month] += Number(trade.pnl);
+      months[month] += Number(trade.stats.pnl);
     }
   });
 

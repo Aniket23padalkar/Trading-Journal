@@ -1,6 +1,6 @@
 import { NavLink } from "react-router-dom";
-import { MdDashboard } from "react-icons/md";
-import { BiBarChartAlt2 } from "react-icons/bi";
+import { MdContacts, MdDashboard } from "react-icons/md";
+import { BiBarChartAlt2, BiCalendar, BiChart } from "react-icons/bi";
 
 export default function Aside() {
   return (
@@ -49,6 +49,78 @@ export default function Aside() {
                 />
               </span>
               <h1 className="pl-2">Trades</h1>
+            </li>
+          )}
+        </NavLink>
+
+        <NavLink
+          to="/charts"
+          className={({ isActive }) =>
+            `flex items-center py-2 rounded font-medium ${
+              isActive
+                ? "border-l-8 border-green-500 shadow shadow-gray-400"
+                : "border-l-8 border-transparent text-gray-400"
+            }`
+          }
+        >
+          {({ isActive }) => (
+            <li className="flex items-center pl-2">
+              <span>
+                <BiChart
+                  className={`text-xl ${
+                    isActive ? "text-green-600" : "text-gray-400"
+                  }`}
+                />
+              </span>
+              <h1 className="pl-2">Charts</h1>
+            </li>
+          )}
+        </NavLink>
+
+        <NavLink
+          to="/calender"
+          className={({ isActive }) =>
+            `flex items-center py-2 rounded font-medium ${
+              isActive
+                ? "border-l-8 border-green-500 shadow shadow-gray-400"
+                : "border-l-8 border-transparent text-gray-400"
+            }`
+          }
+        >
+          {({ isActive }) => (
+            <li className="flex items-center pl-2">
+              <span>
+                <BiCalendar
+                  className={`text-xl ${
+                    isActive ? "text-green-600" : "text-gray-400"
+                  }`}
+                />
+              </span>
+              <h1 className="pl-2">Calender</h1>
+            </li>
+          )}
+        </NavLink>
+
+        <NavLink
+          to="/contact-us"
+          className={({ isActive }) =>
+            `flex items-center py-2 rounded font-medium ${
+              isActive
+                ? "border-l-8 border-green-500 shadow shadow-gray-400"
+                : "border-l-8 border-transparent text-gray-400"
+            }`
+          }
+        >
+          {({ isActive }) => (
+            <li className="flex items-center pl-2">
+              <span>
+                <MdContacts
+                  className={`text-xl ${
+                    isActive ? "text-green-600" : "text-gray-400"
+                  }`}
+                />
+              </span>
+              <h1 className="pl-2">Contact Us</h1>
             </li>
           )}
         </NavLink>

@@ -1,9 +1,9 @@
 import { useContext, useMemo } from "react";
-import { GlobalContext } from "../../context/Context";
-import calculatePnL from "../../utils/CalculatePnl";
-import useDrag from "../../hooks/useDrag";
-import AddQtyModal from "../AddQtyModal";
-import useCalculateStats from "../../hooks/useCalculateStats";
+import { GlobalContext } from "../context/Context";
+import calculatePnL from "../utils/CalculatePnl";
+import useDrag from "../hooks/useDrag";
+import AddQtyModal from "./AddQtyModal";
+import useCalculateStats from "../hooks/useCalculateStats";
 import { FaExclamation } from "react-icons/fa6";
 
 export default function AddModal() {

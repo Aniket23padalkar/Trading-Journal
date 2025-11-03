@@ -1,8 +1,11 @@
 import Aside from "./components/aside/Aside";
 import Header from "./components/header/Header";
-import { Routes, Route, Navigate } from "react-router-dom";
-import Trades from "./pages/trades/Trades";
-import Dashboard from "./pages/dashboard/Dashboard";
+import { Routes, Route } from "react-router-dom";
+import Trades from "./pages/Trades";
+import Dashboard from "./pages/Dashboard";
+import Charts from "./pages/Charts";
+import Calender from "./pages/Calender";
+import ContactUs from "./pages/ContactUs";
 
 export default function App() {
   return (
@@ -16,6 +19,9 @@ export default function App() {
           <Routes>
             <Route path="/" element={<Dashboard />} />
             <Route path="/trades" element={<Trades />} />
+            <Route path="/charts" element={<Charts />} />
+            <Route path="/calender" element={<Calender />} />
+            <Route path="/contact-us" element={<ContactUs />} />
           </Routes>
         </div>
       </main>

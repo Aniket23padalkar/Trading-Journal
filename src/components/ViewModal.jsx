@@ -1,12 +1,11 @@
-import { useContext, useRef, useState } from "react";
-import "./viewmodal.css";
-import { GlobalContext } from "../../context/Context";
-import formatDateTime from "../../utils/formatDateTime";
-import useDrag from "../../hooks/useDrag";
+import { useContext, useState } from "react";
+import { GlobalContext } from "../context/Context";
+import formatDateTime from "../utils/formatDateTime";
+import useDrag from "../hooks/useDrag";
 import { FaIndianRupeeSign } from "react-icons/fa6";
 import ReactMarkdown from "react-markdown";
-import calculatePnL from "../../utils/CalculatePnl";
-import FormatPnL from "../../utils/FormatPnL";
+import calculatePnL from "../utils/CalculatePnl";
+import FormatPnL from "../utils/FormatPnL";
 
 export default function ViewModal() {
   const { setViewModal, currentViewTrade, trades } = useContext(GlobalContext);
@@ -117,7 +116,10 @@ export default function ViewModal() {
               }}
             >
               <FaIndianRupeeSign />
-              {Number(currentViewTrade.stats.pnl).toFixed(2)}
+              {Number(currentViewTrade.stats.pnl).toLocaleString("en-IN", {
+                maximumFractionDigits: 2,
+                minimumFractionDigits: 2,
+              })}
             </h1>
           </div>
 
@@ -178,43 +180,45 @@ export default function ViewModal() {
             <div className="flex w-full">
               <h1 className="font-medium pb-2 pl-2">Added Qty Details :</h1>
             </div>
-            <div className="overflow-y-auto">
-              <table className="shadow border-collapse">
+            <div className="overflow-y-auto w-full">
+              <table className="shadow border-collapse w-full">
                 <thead>
-                  <tr className="bg-blue-100">
-                    <th className="">#</th>
-                    <th className="">Buy</th>
-                    <th className="">Sell</th>
-                    <th className="">Qty</th>
-                    <th className="">Risk</th>
-                    <th className="">Enter</th>
-                    <th className="">Exit</th>
-                    <th className="">Label</th>
-                    <th className="">Pnl</th>
+                  <tr className="bg-gray-100">
+                    <th className="font-bold text-xs">#</th>
+                    <th className="font-bold text-xs">Buy</th>
+                    <th className="font-bold text-xs">Sell</th>
+                    <th className="font-bold text-xs">Qty</th>
+                    <th className="font-bold text-xs">Risk</th>
+                    <th className="font-bold text-xs">Enter</th>
+                    <th className="font-bold text-xs">Exit</th>
+                    <th className="font-bold text-xs">Label</th>
+                    <th className="font-bold text-xs">Pnl</th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr className="bg-gray-200">
-                    <td className="text-xs">1</td>
+                  <tr className="">
+                    <td className="text-xs bg-gray-100">1</td>
                     <td className="text-xs text-green-700">
-                      {currentViewTrade.entries.initialBuy}
+                      {currentViewTrade.entries.initialBuy || "--"}
                     </td>
                     <td className="text-xs text-red-500">
-                      {currentViewTrade.entries.initialSell}
+                      {currentViewTrade.entries.initialSell || "--"}
                     </td>
                     <td className="text-xs">
-                      {currentViewTrade.entries.initialQty}
+                      {currentViewTrade.entries.initialQty || "--"}
                     </td>
                     <td className="text-xs">
-                      {currentViewTrade.entries.initialRisk}
+                      {currentViewTrade.entries.initialRisk || "--"}
                     </td>
                     <td className="text-xs text-blue-700">
                       {formatDateTime(
                         currentViewTrade.entries.initialEntryTime
-                      )}
+                      ) || "--"}
                     </td>
                     <td className="text-xs text-blue-700">
-                      {formatDateTime(currentViewTrade.entries.initialExitTime)}
+                      {formatDateTime(
+                        currentViewTrade.entries.initialExitTime
+                      ) || "--"}
                     </td>
                     <td>
                       <p className="bg-violet-300 px-2 text-violet-800 rounded">
@@ -240,27 +244,27 @@ export default function ViewModal() {
                           currentViewTrade.entries.initialSell,
                           currentViewTrade.entries.initialQty
                         )
-                      )}
+                      ) || "--"}
                     </td>
                   </tr>
                   {currentViewTrade?.entries?.addedEntries?.map(
                     (entry, index) => {
                       return (
-                        <tr className="odd:bg-gray-200" key={entry.id}>
-                          <td className="text-xs">{index + 2}</td>
+                        <tr className="" key={entry.id}>
+                          <td className="text-xs bg-gray-100">{index + 2}</td>
                           <td className="text-xs text-green-700">
-                            {entry.buyPrice}
+                            {entry.buyPrice || "--"}
                           </td>
                           <td className="text-xs text-red-500">
-                            {entry.sellPrice}
+                            {entry.sellPrice || "--"}
                           </td>
-                          <td className="text-xs">{entry.quantity}</td>
-                          <td className="text-xs">{entry.risk}</td>
+                          <td className="text-xs">{entry.quantity || "--"}</td>
+                          <td className="text-xs">{entry.risk || "--"}</td>
                           <td className="text-xs text-blue-700">
-                            {formatDateTime(entry.entryTime)}
+                            {formatDateTime(entry.entryTime) || "--"}
                           </td>
                           <td className="text-xs text-blue-700">
-                            {formatDateTime(entry.exitTime)}
+                            {formatDateTime(entry.exitTime) || "--"}
                           </td>
                           <td>
                             <p className="bg-violet-300 text-violet-800 px-1 rounded">
@@ -286,7 +290,7 @@ export default function ViewModal() {
                                 entry.sellPrice,
                                 entry.quantity
                               )
-                            )}
+                            ) || "--"}
                           </td>
                         </tr>
                       );

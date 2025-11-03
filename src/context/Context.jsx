@@ -1,6 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import FilterTrades from "../utils/FilterTrades.jsx";
-import useLocalStorage from "../hooks/useLocalStorage.jsx";
 import useTradesData from "../hooks/useTradesData.jsx";
 
 export const GlobalContext = createContext(null);
@@ -15,6 +14,7 @@ export default function GlobalStateContext({ children }) {
   const [viewFilters, setViewFilters] = useState(false);
   const [filteredTrades, setFilteredTrades] = useState([]);
   const [addQtyModal, setAddQtyModal] = useState(false);
+  const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
   const [entries, setEntries] = useState({
     addedEntries: [],
     initialBuy: "",
@@ -80,6 +80,8 @@ export default function GlobalStateContext({ children }) {
         setEntries,
         addQtyModal,
         setAddQtyModal,
+        selectedYear,
+        setSelectedYear,
       }}
     >
       {children}

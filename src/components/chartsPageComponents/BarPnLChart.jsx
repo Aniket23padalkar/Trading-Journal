@@ -1,6 +1,6 @@
 import { useContext, useState } from "react";
 import { GlobalContext } from "../../context/Context";
-import "./pnlchart.css";
+import { BiBarChartAlt2, BiTrendingDown, BiTrendingUp } from "react-icons/bi";
 import {
   BarChart,
   Bar,
@@ -13,46 +13,25 @@ import {
   Cell,
 } from "recharts";
 import GetMonthlyPnl from "../../utils/getMonthlyPnl";
+import FormatPnL from "../../utils/FormatPnL";
 
-export default function PnlChart() {
-  const { trades } = useContext(GlobalContext);
-  const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
-  let yearsList = [];
-
-  trades.forEach((trade) => {
-    if (!trade.formData.exitTime) return;
-    const date = new Date(trade.formData.exitTime);
-    const years = date.getFullYear();
-
-    yearsList.push(years);
-  });
+export default function BarPnlChart() {
+  const { trades, selectedYear } = useContext(GlobalContext);
 
   const data = GetMonthlyPnl(trades, selectedYear);
 
-  const uniqueYears = Array.from(new Set(yearsList));
-  uniqueYears.sort();
-  const years = uniqueYears;
-
   return (
-    <div className="pnl-chart-container">
-      <div className="yearly-pnl">
-        <h2>Yearly PnL {selectedYear}</h2>
-        <div className="year-btns-container">
-          {years.map((year) => (
-            <button
-              className={
-                selectedYear === year ? "year-btns active" : "year-btns"
-              }
-              key={year}
-              onClick={() => setSelectedYear(year)}
-            >
-              {year}
-            </button>
-          ))}
+    <div className="col-start-1 col-end-5 h-110 p-4 pr-6 bg-linear-to-b from-cyan-300 rounded-2xl shadow shadow-gray-400 to-white">
+      <div className="flex w-full justify-between items-center h-10 mb-4">
+        <div className="flex items-center  gap-2">
+          <div className="flex items-center justify-center h-10 w-10 bg-cyan-600 rounded-xl shadow shadow-gray-400">
+            <BiBarChartAlt2 className="text-white text-xl" />{" "}
+          </div>
+          <h1 className="font-medium text-lg text-shadow-lg">Bar Chart</h1>
         </div>
       </div>
 
-      <ResponsiveContainer width="100%" height={300}>
+      <ResponsiveContainer width="100%" height="80%">
         <BarChart data={data} barSize={40}>
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis
