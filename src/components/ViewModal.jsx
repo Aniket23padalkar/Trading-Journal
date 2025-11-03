@@ -126,7 +126,7 @@ export default function ViewModal() {
           <div className="view-modal-section">
             <span className="view-modal-span">R:R Ratio</span>
             <h1 className="view-modal-h1 pt-1">
-              {Number(currentViewTrade.stats.avgRR)}X
+              {Number(currentViewTrade.stats.avgRR).toFixed(2)}X
             </h1>
           </div>
 
@@ -236,12 +236,10 @@ export default function ViewModal() {
                         fontWeight: "bold",
                       }}
                     >
-                      {FormatPnL(
-                        calculatePnL(
-                          currentViewTrade.entries.initialBuy,
-                          currentViewTrade.entries.initialSell,
-                          currentViewTrade.entries.initialQty
-                        )
+                      {calculatePnL(
+                        currentViewTrade.entries.initialBuy,
+                        currentViewTrade.entries.initialSell,
+                        currentViewTrade.entries.initialQty
                       )}
                     </td>
                   </tr>
@@ -282,12 +280,10 @@ export default function ViewModal() {
                               fontWeight: "bold",
                             }}
                           >
-                            {FormatPnL(
-                              calculatePnL(
-                                entry.buyPrice,
-                                entry.sellPrice,
-                                entry.quantity
-                              )
+                            {calculatePnL(
+                              entry.buyPrice,
+                              entry.sellPrice,
+                              entry.quantity
                             )}
                           </td>
                         </tr>
