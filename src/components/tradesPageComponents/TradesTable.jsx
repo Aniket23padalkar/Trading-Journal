@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { GlobalContext } from "../../context/Context";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import formatDateTime from "../../utils/formatDateTime";
@@ -12,12 +12,25 @@ export default function TradesTable({ currentTrades, indexOfFirstTrade }) {
     setFormData,
     setAddModal,
     setEntries,
+    setFilterValue,
   } = useContext(GlobalContext);
 
   function orderColor(order) {
     if (order === "BUY") return "#03c988";
     if (order === "SELL") return "#ff7779ff";
     return "#fff";
+  }
+
+  function handleFilterChange() {
+    setFilterValue((prev) => ({
+      ...prev,
+      pnlSort:
+        prev.pnlSort === "Desc"
+          ? "Asc"
+          : prev.pnlSort === "Asc"
+          ? "Desc"
+          : "Desc",
+    }));
   }
 
   function handleViewModal(trade) {
@@ -91,7 +104,7 @@ export default function TradesTable({ currentTrades, indexOfFirstTrade }) {
               <th>position</th>
               <th>entry Time</th>
               <th>risk/trade</th>
-              <th>P&L (₹)</th>
+              <th onClick={handleFilterChange}>P&L (₹)</th>
               <th>R:R Ratio</th>
               <th>rating</th>
               <th></th>

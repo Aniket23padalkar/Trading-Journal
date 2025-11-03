@@ -51,5 +51,13 @@ export default function FilterTrades(trades, filterValue) {
     });
   }
 
+  if (filterValue.pnlSort !== "") {
+    filtered = filtered.sort((a, b) =>
+      filterValue.pnlSort === "Desc"
+        ? Number(b.pnl) - Number(a.pnl)
+        : Number(a.pnl) - Number(b.pnl)
+    );
+  }
+
   return filtered;
 }

@@ -8,7 +8,7 @@ import calculatePnL from "../utils/CalculatePnl";
 import FormatPnL from "../utils/FormatPnL";
 
 export default function ViewModal() {
-  const { setViewModal, currentViewTrade, trades } = useContext(GlobalContext);
+  const { setViewModal, currentViewTrade } = useContext(GlobalContext);
   const [description, setDescription] = useState(false);
 
   const { modalRef, handleMouseDown } = useDrag();
@@ -126,7 +126,7 @@ export default function ViewModal() {
           <div className="view-modal-section">
             <span className="view-modal-span">R:R Ratio</span>
             <h1 className="view-modal-h1 pt-1">
-              {Number(currentViewTrade.stats.avgRR).toFixed(2)}X
+              {Number(currentViewTrade.stats.avgRR)}X
             </h1>
           </div>
 
@@ -213,12 +213,10 @@ export default function ViewModal() {
                     <td className="text-xs text-blue-700">
                       {formatDateTime(
                         currentViewTrade.entries.initialEntryTime
-                      ) || "--"}
+                      )}
                     </td>
                     <td className="text-xs text-blue-700">
-                      {formatDateTime(
-                        currentViewTrade.entries.initialExitTime
-                      ) || "--"}
+                      {formatDateTime(currentViewTrade.entries.initialExitTime)}
                     </td>
                     <td>
                       <p className="bg-violet-300 px-2 text-violet-800 rounded">
@@ -244,7 +242,7 @@ export default function ViewModal() {
                           currentViewTrade.entries.initialSell,
                           currentViewTrade.entries.initialQty
                         )
-                      ) || "--"}
+                      )}
                     </td>
                   </tr>
                   {currentViewTrade?.entries?.addedEntries?.map(
@@ -253,18 +251,18 @@ export default function ViewModal() {
                         <tr className="" key={entry.id}>
                           <td className="text-xs bg-gray-100">{index + 2}</td>
                           <td className="text-xs text-green-700">
-                            {entry.buyPrice || "--"}
+                            {entry.buyPrice}
                           </td>
                           <td className="text-xs text-red-500">
-                            {entry.sellPrice || "--"}
+                            {entry.sellPrice}
                           </td>
-                          <td className="text-xs">{entry.quantity || "--"}</td>
-                          <td className="text-xs">{entry.risk || "--"}</td>
+                          <td className="text-xs">{entry.quantity}</td>
+                          <td className="text-xs">{entry.risk}</td>
                           <td className="text-xs text-blue-700">
-                            {formatDateTime(entry.entryTime) || "--"}
+                            {formatDateTime(entry.entryTime)}
                           </td>
                           <td className="text-xs text-blue-700">
-                            {formatDateTime(entry.exitTime) || "--"}
+                            {formatDateTime(entry.exitTime)}
                           </td>
                           <td>
                             <p className="bg-violet-300 text-violet-800 px-1 rounded">
@@ -290,7 +288,7 @@ export default function ViewModal() {
                                 entry.sellPrice,
                                 entry.quantity
                               )
-                            ) || "--"}
+                            )}
                           </td>
                         </tr>
                       );
