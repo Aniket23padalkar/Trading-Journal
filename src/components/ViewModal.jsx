@@ -236,10 +236,12 @@ export default function ViewModal() {
                         fontWeight: "bold",
                       }}
                     >
-                      {calculatePnL(
-                        currentViewTrade.entries.initialBuy,
-                        currentViewTrade.entries.initialSell,
-                        currentViewTrade.entries.initialQty
+                      {FormatPnL(
+                        calculatePnL(
+                          currentViewTrade.entries.initialBuy,
+                          currentViewTrade.entries.initialSell,
+                          currentViewTrade.entries.initialQty
+                        )
                       )}
                     </td>
                   </tr>
@@ -280,10 +282,12 @@ export default function ViewModal() {
                               fontWeight: "bold",
                             }}
                           >
-                            {calculatePnL(
-                              entry.buyPrice,
-                              entry.sellPrice,
-                              entry.quantity
+                            {FormatPnL(
+                              calculatePnL(
+                                entry.buyPrice,
+                                entry.sellPrice,
+                                entry.quantity
+                              )
                             )}
                           </td>
                         </tr>

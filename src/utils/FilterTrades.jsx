@@ -1,5 +1,5 @@
 export default function FilterTrades(trades, filterValue) {
-  let filtered = trades;
+  let filtered = [...trades];
 
   if (filterValue.order !== "") {
     filtered = filtered.filter(
@@ -54,10 +54,22 @@ export default function FilterTrades(trades, filterValue) {
   if (filterValue.pnlSort !== "") {
     filtered = filtered.sort((a, b) =>
       filterValue.pnlSort === "Desc"
-        ? Number(b.pnl) - Number(a.pnl)
-        : Number(a.pnl) - Number(b.pnl)
+        ? Number(b.stats.pnl) - Number(a.stats.pnl)
+        : Number(a.stats.pnl) - Number(b.stats.pnl)
     );
   }
+
+  if (filterValue.dateTimeSort !== "") {
+    filtered = filtered.sort((a, b) =>
+      filterValue.dateTimeSort === "Desc"
+        ? new Date(a.entries.initialEntryTime) -
+          new Date(b.entries.initialEntryTime)
+        : new Date(b.entries.initialEntryTime) -
+          new Date(a.entries.initialEntryTime)
+    );
+  }
+
+  console.log(filtered);
 
   return filtered;
 }

@@ -18,6 +18,21 @@ export default function TradesHeader() {
     setFilterValue((prev) => ({ ...prev, [name]: value }));
   }
 
+  function handleClearFilters() {
+    setFilterValue({
+      order: "",
+      status: "",
+      marketType: "",
+      position: "",
+      fromDate: "",
+      toDate: "",
+      year: "",
+      month: "",
+      pnlSort: "",
+      dateTimeSort: "",
+    });
+  }
+
   let yearList = [];
   let monthList = [];
 
@@ -88,6 +103,12 @@ export default function TradesHeader() {
       </div>
       {viewFilters && <Filters />}
       <div className="flex items-center gap-2">
+        <button
+          onClick={handleClearFilters}
+          className="py-1 px-3 rounded-md cursor-pointer hover:bg-red-300 text-sm bg-red-200 text-red-500"
+        >
+          Clear
+        </button>
         <button
           className={
             viewFilters

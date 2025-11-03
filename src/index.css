@@ -17,7 +17,7 @@
   }
 
   th {
-    @apply p-2 text-sm capitalize border-gray-400 border-b;
+    @apply p-2 text-sm capitalize;
   }
 
   td {

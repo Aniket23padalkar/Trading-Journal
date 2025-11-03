@@ -2,6 +2,7 @@ import { useContext, useState } from "react";
 import { GlobalContext } from "../../context/Context";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import formatDateTime from "../../utils/formatDateTime";
+import { FaArrowDown, FaArrowUp } from "react-icons/fa6";
 
 export default function TradesTable({ currentTrades, indexOfFirstTrade }) {
   const {
@@ -13,6 +14,7 @@ export default function TradesTable({ currentTrades, indexOfFirstTrade }) {
     setAddModal,
     setEntries,
     setFilterValue,
+    filterValue,
   } = useContext(GlobalContext);
 
   function orderColor(order) {
@@ -30,6 +32,20 @@ export default function TradesTable({ currentTrades, indexOfFirstTrade }) {
           : prev.pnlSort === "Asc"
           ? "Desc"
           : "Desc",
+      dateTimeSort: "",
+    }));
+  }
+
+  function handleDateTimeSort() {
+    setFilterValue((prev) => ({
+      ...prev,
+      dateTimeSort:
+        prev.dateTimeSort === "Desc"
+          ? "Asc"
+          : prev.dateTimeSort === "Asc"
+          ? "Desc"
+          : "Desc",
+      pnlSort: "",
     }));
   }
 
@@ -94,7 +110,7 @@ export default function TradesTable({ currentTrades, indexOfFirstTrade }) {
       <div className="w-full min-h-102 h shadow-md shadow-gray-400">
         <table className="w-full border-collapse bg-white">
           <thead>
-            <tr className="text-center bg-gray-50">
+            <tr className="text-center bg-gray-50 ">
               <th className="w-8 bg-gray-100">#</th>
               <th className="text-left">symbol</th>
               <th>order</th>
@@ -102,9 +118,33 @@ export default function TradesTable({ currentTrades, indexOfFirstTrade }) {
               <th>market-type</th>
               <th>quantity</th>
               <th>position</th>
-              <th>entry Time</th>
+              <th
+                className="flex items-center gap-1 justify-center cursor-pointer select-none"
+                onClick={handleDateTimeSort}
+              >
+                {filterValue.dateTimeSort === "Desc" ? (
+                  <FaArrowDown />
+                ) : filterValue.dateTimeSort === "Asc" ? (
+                  <FaArrowUp />
+                ) : (
+                  <FaArrowDown />
+                )}{" "}
+                <p>Entry Time</p>
+              </th>
               <th>risk/trade</th>
-              <th onClick={handleFilterChange}>P&L (₹)</th>
+              <th
+                className="flex items-center gap-3 justify-center cursor-pointer select-none"
+                onClick={handleFilterChange}
+              >
+                {filterValue.pnlSort === "Desc" ? (
+                  <FaArrowDown />
+                ) : filterValue.pnlSort === "Asc" ? (
+                  <FaArrowUp />
+                ) : (
+                  <FaArrowDown />
+                )}{" "}
+                <p>P&L (₹)</p>
+              </th>
               <th>R:R Ratio</th>
               <th>rating</th>
               <th></th>

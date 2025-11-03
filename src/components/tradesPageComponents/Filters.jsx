@@ -12,21 +12,8 @@ export default function Filters() {
     }));
   }
 
-  function handleClearFilters() {
-    setFilterValue({
-      order: "",
-      status: "",
-      marketType: "",
-      position: "",
-      fromDate: "",
-      toDate: "",
-      year: "",
-      month: "",
-    });
-  }
-
   return (
-    <div className="flex items-center gap-2 absolute h-full w-9/12 pr-2 bg-white">
+    <div className="flex items-center gap-2 absolute h-full w-100 pr-2 bg-white">
       <select
         className="filter-select"
         name="order"
@@ -90,13 +77,6 @@ export default function Filters() {
           value={filterValue.toDate}
         />
       </div>
-
-      <button
-        onClick={handleClearFilters}
-        className="py-1 px-3 rounded-md cursor-pointer hover:bg-red-300 text-sm bg-red-200 text-red-500"
-      >
-        Clear
-      </button>
     </div>
   );
 }

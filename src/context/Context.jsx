@@ -34,6 +34,7 @@ export default function GlobalStateContext({ children }) {
     year: "",
     month: "",
     pnlSort: "",
+    dateTimeSort: "",
   });
   const [formData, setFormData] = useState({
     symbol: "",

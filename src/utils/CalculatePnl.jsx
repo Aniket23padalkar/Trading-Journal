@@ -7,5 +7,5 @@ export default function calculatePnL(avgBuy, avgSell, totalQty) {
 
   let pnl = (s - b) * q;
 
-  return pnl.toFixed(2);
+  return pnl;
 }
