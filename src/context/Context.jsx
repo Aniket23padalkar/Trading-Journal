@@ -45,7 +45,6 @@ export default function GlobalStateContext({ children }) {
     rating: "",
     description: "",
   });
-  console.log(filterValue);
 
   useEffect(() => {
     const result = FilterTrades(trades, filterValue);

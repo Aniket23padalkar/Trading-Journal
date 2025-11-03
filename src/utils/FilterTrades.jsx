@@ -69,7 +69,5 @@ export default function FilterTrades(trades, filterValue) {
     );
   }
 
-  console.log(filtered);
-
   return filtered;
 }
