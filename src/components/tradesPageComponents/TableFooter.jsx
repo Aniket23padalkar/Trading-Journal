@@ -36,30 +36,41 @@ export default function TableFooter() {
   });
 
   return (
-    <div className="flex items-center justify-between w-full py-2 px-6 bg-white rounded-xl shadow shadow-gray-400">
+    <div className="flex items-center justify-between w-full py-2 px-6 bg-white dark:bg-gray-950 dark:shadow-none rounded-xl shadow shadow-gray-400">
       <div className="flex gap-3">
         <div className="flex items-center gap-2">
-          <p className="text-md text-shadow-lg font-medium">Trades Count :</p>
+          <p className="text-md text-shadow-lg font-medium dark:text-white">
+            Trades Count :
+          </p>
           <h1 className="font-medium text-blue-500">{filteredTrades.length}</h1>
         </div>
         <div className="flex items-center gap-2">
-          <p className="text-md text-shadow-lg font-medium">Win Rate :</p>
+          <p className="text-md text-shadow-lg font-medium dark:text-white">
+            Win Rate :
+          </p>
           <h1 className="font-bold text-blue-500">{winRate} %</h1>
         </div>
       </div>
       <div className="flex items-center gap-3">
         <div className="flex items-center gap-2">
-          <p className="text-md font-medium text-shadow-lg">Total PnL :</p>
+          <p className="text-md font-medium text-shadow-lg dark:text-white">
+            Total PnL :
+          </p>
           <h1
-            className="font-bold text-xl"
-            style={{ color: totalPnL >= 0 ? "green" : "red" }}
+            className={`font-bold text-xl ${
+              totalPnL >= 0
+                ? "text-green-600 dark:text-green-500"
+                : "text-red-500 dark:text-red-400"
+            }`}
           >
             {totalPnL > 0 ? "+" : ""}
             {FormatPnL(totalPnL)}
           </h1>
         </div>
         <div className="flex items-center gap-2">
-          <p className="text-md font-medium text-shadow-lg">Total RR :</p>
+          <p className="text-md font-medium text-shadow-lg dark:text-white">
+            Total RR :
+          </p>
           <h1 className="font-bold text-lg text-blue-500">{totalRRratio}X</h1>
         </div>
       </div>

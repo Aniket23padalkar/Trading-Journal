@@ -13,7 +13,7 @@ export default function Filters() {
   }
 
   return (
-    <div className="flex items-center gap-2 absolute h-full w-100 pr-2 bg-white">
+    <div className="flex items-center gap-2 absolute h-full w-180 dark:bg-gray-950 pr-2 bg-white">
       <select
         className="filter-select"
         name="order"
@@ -59,12 +59,12 @@ export default function Filters() {
         <option value="Positional">Positional</option>
         <option value="Long-Term">Long-Term</option>
       </select>
-      <div className="flex py-1 items-center ml-1 text-violet-400 bg-violet-50 rounded-md">
+      <div className="flex py-1 items-center ml-1 text-violet-400 dark:text-blue-300 bg-violet-50 dark:bg-blue-900 rounded-md">
         {/* <label>Date Range:</label> */}
         <input
           type="date"
           name="fromDate"
-          className="px-2 outline-none text-xs text-violet-400 uppercase"
+          className="px-2 outline-none text-xs text-violet-400 dark:text-blue-300 uppercase"
           onChange={handleChange}
           value={filterValue.fromDate}
         />
@@ -72,7 +72,7 @@ export default function Filters() {
         <input
           type="date"
           name="toDate"
-          className="px-2 outline-none text-xs text-violet-400 uppercase"
+          className="px-2 outline-none text-xs text-violet-400 dark:text-blue-300 uppercase"
           onChange={handleChange}
           value={filterValue.toDate}
         />

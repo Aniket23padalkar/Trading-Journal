@@ -105,15 +105,15 @@ export default function TradesHeader() {
       <div className="flex items-center gap-2">
         <button
           onClick={handleClearFilters}
-          className="py-1 px-3 rounded-md cursor-pointer hover:bg-red-300 text-sm bg-red-200 text-red-500"
+          className="py-1 px-3 rounded-md cursor-pointer hover:bg-red-300 text-sm bg-red-200 text-red-500 dark:bg-red-900 dark:text-red-200 dark:hover:bg-red-700"
         >
           Clear
         </button>
         <button
           className={
             viewFilters
-              ? "flex items-center px-4 py-0 gap-1 cursor-pointer rounded-md bg-blue-100 text-blue-400 border border-blue-300"
-              : "flex items-center px-4 py-0 gap-1 cursor-pointer rounded-md bg-blue-100 text-blue-500 border border-blue-500"
+              ? "flex items-center px-4 py-0 gap-1 cursor-pointer rounded-md bg-blue-100 dark:bg-blue-500  text-blue-400 dark:text-blue-100 border border-blue-300 dark:border-none dark:py-0.5"
+              : "flex items-center px-4 py-0 gap-1 cursor-pointer rounded-md bg-blue-100 dark:bg-blue-900 text-blue-500 dark:text-blue-200 border border-blue-500 dark:border-none dark:py-0.5"
           }
           onClick={() => setViewFilters(!viewFilters)}
         >
@@ -122,7 +122,7 @@ export default function TradesHeader() {
 
         <button
           onClick={() => setAddModal(true)}
-          className="h-full py-1 px-5 font-bold cursor-pointer hover:scale-105 text-green-700 text-sm rounded-lg bg-green-200 border border-green-700"
+          className="h-full py-1 px-5 font-bold cursor-pointer hover:scale-105 text-green-700 text-sm rounded-lg bg-green-200 border border-green-700 dark:bg-teal-500 dark:text-green-800 dark:border-none"
         >
           + Add
         </button>

@@ -107,11 +107,11 @@ export default function TradesTable({ currentTrades, indexOfFirstTrade }) {
 
   return (
     <div className="flex h-full w-full items-center bg-transparent relative">
-      <div className="w-full min-h-102 h shadow-md shadow-gray-400">
-        <table className="w-full border-collapse bg-white dark:bg-gray-950">
+      <div className="w-full min-h-102 h shadow-md shadow-gray-400 dark:shadow-none">
+        <table className="w-full border-collapse bg-white dark:bg-sky-950 dark:text-white">
           <thead>
-            <tr className="text-center bg-gray-50 ">
-              <th className="w-8 bg-gray-100">#</th>
+            <tr className="text-center bg-gray-100 dark:bg-gray-800 dark:text-gray-300">
+              <th className="w-8 bg-gray-200 dark:bg-gray-950">#</th>
               <th className="text-left">symbol</th>
               <th>order</th>
               <th>status</th>
@@ -155,10 +155,10 @@ export default function TradesTable({ currentTrades, indexOfFirstTrade }) {
               currentTrades.map((trade, index) => {
                 return (
                   <tr key={trade.id} onClick={() => handleViewModal(trade)}>
-                    <td className="bg-gray-100">
+                    <td className="bg-gray-200 dark:bg-gray-900">
                       {indexOfFirstTrade + index + 1}
                     </td>
-                    <td className="text-left w-30 font-medium text-base capitalize px-1 bg-gray-50">
+                    <td className="text-left w-30 font-medium text-base capitalize px-1 bg-gray-100 dark:bg-gray-800">
                       {trade.formData.symbol}
                     </td>
                     <td>
@@ -177,28 +177,29 @@ export default function TradesTable({ currentTrades, indexOfFirstTrade }) {
                         {trade.formData.order}
                       </p>
                     </td>
-                    <td className="text-xs">{trade.formData.status}</td>
-                    <td>{trade.formData.marketType}</td>
+                    <td className="text-xs dark:text-gray-300">
+                      {trade.formData.status}
+                    </td>
+                    <td className="dark:text-gray-300">
+                      {trade.formData.marketType}
+                    </td>
                     <td>{trade.stats.totalQty}</td>
 
                     <td>
-                      <p className="text-xs bg-blue-100 rounded">
+                      <p className="text-xs bg-blue-100 dark:text-black dark:bg-blue-400 rounded">
                         {trade.formData.position}
                       </p>
                     </td>
-                    <td
-                      className="text-xs"
-                      style={{ color: "rgba(153, 0, 255, 1)" }}
-                    >
+                    <td className="text-xs text-blue-700 dark:text-sky-500">
                       {formatDateTime(trade.entries.initialEntryTime)}
                     </td>
                     <td>{trade.stats.avgRisk}</td>
                     <td
-                      style={{
-                        fontSize: "0.9rem",
-                        fontWeight: 600,
-                        color: trade.stats.pnl >= 0 ? "green" : "red",
-                      }}
+                      className={`text-sm font-bold ${
+                        trade.stats.pnl >= 0
+                          ? "text-green-600 dark:text-green-500"
+                          : "text-red-500 dark:text-red-400"
+                      }`}
                     >
                       {" "}
                       {trade.stats.pnl > 0 && "+"}

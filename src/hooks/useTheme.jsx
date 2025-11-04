@@ -7,7 +7,12 @@ export default function useTheme(key, initialValue) {
 
   useEffect(() => {
     localStorage.setItem(key, theme);
-    document.documentElement.classList.toggle("dark");
+
+    if (theme === "dark") {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
   }, [key, theme]);
 
   return [theme, setTheme];
