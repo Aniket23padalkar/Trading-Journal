@@ -44,7 +44,7 @@ export default function AddQtyModal() {
   }
 
   return (
-    <div className="flex flex-col rounded-2xl absolute overflow-hidden -right-90 z-10 h-full w-85 bg-white shadow shadow-gray-500">
+    <div className="flex flex-col rounded-2xl absolute overflow-hidden -right-90 z-10 h-full w-85 bg-white dark:shadow-none dark:bg-gray-800 shadow shadow-gray-500">
       <div className="flex items-center px-4 justify-between h-10 bg-teal-700">
         <h1 className="text-white text-shadow-lg">Add Quantity</h1>
         <button
@@ -60,7 +60,7 @@ export default function AddQtyModal() {
             return (
               <div
                 key={entry.id}
-                className="flex flex-col h-28 gap-2 border-b border-gray-300"
+                className="flex flex-col h-28 gap-2 border-b border-gray-300 dark:border-none"
               >
                 <div className="flex justify-between items-center px-4 rounded bg-teal-800 w-full h-5">
                   <h1 className="text-white">{index + 1}</h1>
@@ -79,7 +79,7 @@ export default function AddQtyModal() {
                     }
                     type="number"
                     name="buyPrice"
-                    className="add-modal-select h-6 placeholder:text-gray-400 disabled:bg-gray-300"
+                    className="add-modal-select h-6 placeholder:text-green-500 disabled:bg-gray-300 dark:disabled:bg-gray-500"
                     placeholder="Buy Price"
                     onChange={(e) =>
                       handleAddEntries(entry.id, "buyPrice", e.target.value)
@@ -92,7 +92,7 @@ export default function AddQtyModal() {
                     }
                     type="number"
                     name="sellPrice"
-                    className="add-modal-select h-6 placeholder:text-gray-400 disabled:bg-gray-300"
+                    className="add-modal-select h-6 placeholder:text-red-500 disabled:bg-gray-300 dark:disabled:bg-gray-500"
                     placeholder="Sell Price"
                     onChange={(e) =>
                       handleAddEntries(entry.id, "sellPrice", e.target.value)
@@ -123,7 +123,7 @@ export default function AddQtyModal() {
                     }
                   />
                   <div className="flex relative">
-                    <label className="absolute text-xs z-10 top-0 left-0 text-gray-600">
+                    <label className="absolute text-xs z-10 top-0 left-0 text-gray-600 dark:text-gray-400">
                       Entry Time:
                     </label>
                     <input
@@ -137,7 +137,7 @@ export default function AddQtyModal() {
                     />
                   </div>
                   <div className="flex relative">
-                    <label className="absolute text-xs z-10 top-0 left-0 text-gray-600">
+                    <label className="absolute text-xs z-10 top-0 left-0 text-gray-600 dark:text-gray-400">
                       Exit Time:
                     </label>
                     <input
@@ -146,7 +146,7 @@ export default function AddQtyModal() {
                       value={entry.exitTime}
                       name="exitTime"
                       type="datetime-local"
-                      className="add-modal-select h-6 mt-4 w-28 pl-1 text-xs uppercase disabled:bg-gray-300"
+                      className="add-modal-select h-6 mt-4 w-28 pl-1 text-xs uppercase disabled:bg-gray-300 dark:disabled:bg-gray-500"
                       onChange={(e) =>
                         handleAddEntries(entry.id, "exitTime", e.target.value)
                       }

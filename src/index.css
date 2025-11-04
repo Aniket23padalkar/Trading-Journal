@@ -32,7 +32,7 @@
   }
 
   .add-modal-select {
-    @apply bg-violet-50 text-sm py-1 pl-3 w-full rounded text-violet-500 outline-none shadow shadow-gray-300;
+    @apply bg-violet-50 dark:border-teal-900 dark:border dark:text-white dark:bg-gray-800 dark:shadow-none text-sm py-1 pl-3 w-full rounded text-violet-500 outline-none shadow shadow-gray-300;
   }
 
   .view-modal-section {
@@ -59,6 +59,17 @@
   --tw-prose-counters: black;
 }
 
+.dark .prose {
+  --tw-prose-body: #ffff;
+  --tw-prose-headings: rgb(13, 152, 233);
+  --tw-prose-lead: #ffff;
+  --tw-prose-links: blue;
+  --tw-prose-bold: #ffff;
+  --tw-prose-quotes: #fff;
+  --tw-prose-bullets: #ffff;
+  --tw-prose-counters: #ffff;
+}
+
 ::-webkit-scrollbar {
   width: 5px;
 }
@@ -67,8 +78,17 @@
   background: #ffffff;
 }
 
+.dark ::-webkit-scrollbar-track {
+  background: rgba(0, 0, 255, 0.034);
+}
+
 ::-webkit-scrollbar-thumb {
   background: #bebebe;
+  border-radius: 8px;
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: #4b4b4b;
   border-radius: 8px;
 }
 

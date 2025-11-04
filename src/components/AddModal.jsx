@@ -25,12 +25,6 @@ export default function AddModal() {
     formData
   );
 
-  const orderSideColor = () => {
-    if (formData.order === "BUY") return "#03c988";
-    if (formData.order === "SELL") return "#ff7779ff";
-    return "oklch(96.9% 0.016 293.756)";
-  };
-
   function handleChange(e) {
     const { name, value } = e.target;
     setFormData((prev) => ({
@@ -131,7 +125,7 @@ export default function AddModal() {
 
   return (
     <div
-      className="flex flex-col overflow-visible fixed inset-0 top-1/4 left-1/3 h-110 w-120 z-10 bg-white rounded-xl shadow-2xl"
+      className="flex flex-col overflow-visible fixed inset-0 top-1/4 left-1/3 h-110 w-120 z-10 bg-white dark:bg-gray-800 rounded-xl shadow-2xl"
       ref={modalRef}
     >
       <div
@@ -142,14 +136,17 @@ export default function AddModal() {
           Input Trade Details
         </h1>
       </div>
-      <form onSubmit={handleSubmit} className="flex flex-1 flex-col">
+      <form
+        onSubmit={handleSubmit}
+        className="flex flex-1 flex-col dark:border dark:border-gray-700 rounded-b-2xl "
+      >
         <div className="flex flex-1 flex-col p-4 pb-0 gap-2">
           <div className="flex justify-between gap-2">
             <input
               name="symbol"
               value={formData.symbol}
               required
-              className="add-modal-select flex-1 text-black"
+              className="add-modal-select flex-1 text-black dark:text-white"
               type="text"
               placeholder="Symbol"
               onChange={handleChange}
@@ -159,12 +156,14 @@ export default function AddModal() {
                 required
                 value={formData.order}
                 name="order"
-                className="add-modal-select w-25"
+                className={`add-modal-select w-25  dark:border dark:border-teal-900 ${
+                  formData.order === "BUY"
+                    ? "bg-green-400 text-white dark:bg-green-400"
+                    : formData.order === "SELL"
+                    ? "bg-red-400 text-white dark:bg-red-400"
+                    : "bg-violet-50 dark:bg-gray-800"
+                }`}
                 onChange={handleChange}
-                style={{
-                  backgroundColor: orderSideColor(),
-                  color: formData.order && "#fff",
-                }}
               >
                 <option value="">Order</option>
                 <option value="BUY">BUY</option>
@@ -193,7 +192,7 @@ export default function AddModal() {
                 disabled={
                   formData.status === "Open" && formData.order === "SELL"
                 }
-                className="add-modal-select w-30 disabled:bg-gray-300 text-green-600"
+                className="add-modal-select w-30 disabled:bg-gray-300 dark:disabled:bg-gray-500 placeholder:text-green-500 placeholder:font-bold"
                 type="number"
                 placeholder="Buy Price"
                 onChange={handleInitialEntries}
@@ -205,7 +204,7 @@ export default function AddModal() {
                 disabled={
                   formData.status === "Open" && formData.order === "BUY"
                 }
-                className="add-modal-select w-30 disabled:bg-gray-300 text-red-500"
+                className="add-modal-select w-30 disabled:bg-gray-300 placeholder:text-red-500 dark:disabled:bg-gray-500 placeholder:font-bold"
                 type="number"
                 placeholder="Sell Price"
                 onChange={handleInitialEntries}
@@ -217,13 +216,13 @@ export default function AddModal() {
               name="initialQty"
               type="number"
               placeholder="Quantity"
-              className="add-modal-select text-black"
+              className="add-modal-select text-black dark:text-white"
               onChange={handleInitialEntries}
             />
             <button
               type="button"
               onClick={() => setAddQtyModal(true)}
-              className="text-sm text-green-800 font-bold shadow shadow-gray-300 hover:bg-green-400 whitespace-nowrap bg-green-300 px-2 cursor-pointer rounded"
+              className="text-sm text-green-800 font-bold dark:shadow-none shadow shadow-gray-300 hover:bg-green-400 whitespace-nowrap bg-green-300 px-2 cursor-pointer rounded"
             >
               Add Qty
             </button>
@@ -236,11 +235,11 @@ export default function AddModal() {
               name="initialRisk"
               type="number"
               placeholder="Risk"
-              className="add-modal-select text-black mt-4"
+              className="add-modal-select text-black mt-4 dark:text-white"
               onChange={handleInitialEntries}
             />
             <div className="flex relative">
-              <label className="absolute text-xs z-10 top-0 left-0 text-gray-600">
+              <label className="absolute text-xs z-10 top-0 left-0 text-gray-600 dark:text-gray-400">
                 Entry Time:
               </label>
               <input
@@ -248,12 +247,12 @@ export default function AddModal() {
                 name="initialEntryTime"
                 required
                 type="datetime-local"
-                className="add-modal-select h-8 mt-4 w-36"
+                className="add-modal-select h-8 mt-4 w-36 uppercase"
                 onChange={handleInitialEntries}
               />
             </div>
             <div className="flex relative">
-              <label className="absolute text-xs z-10 top-0 left-0 text-gray-600">
+              <label className="absolute text-xs z-10 top-0 left-0 text-gray-600 dark:text-gray-400">
                 Exit Time:
               </label>
               <input
@@ -262,7 +261,7 @@ export default function AddModal() {
                 required
                 disabled={formData.status === "Open"}
                 type="datetime-local"
-                className="add-modal-select h-8 mt-4 w-36 disabled:bg-gray-300"
+                className="add-modal-select h-8 mt-4 w-36 disabled:bg-gray-300 dark:disabled:bg-gray-500 uppercase"
                 onChange={handleInitialEntries}
               />
             </div>
@@ -324,7 +323,7 @@ export default function AddModal() {
               name="description"
               placeholder="Describe this Trade...."
               onChange={handleChange}
-              className="h-full w-full text-black pt-4  bg-violet-50 p-2 outline-none text-sm rounded shadow shadow-gray-300"
+              className="h-full w-full text-black pt-4  bg-violet-50 dark:bg-transparent dark:border dark:border-teal-900 dark:text-white dark:shadow-none p-2 outline-none text-sm rounded shadow shadow-gray-300"
             ></textarea>
           </div>
         </div>

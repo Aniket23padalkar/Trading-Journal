@@ -8,7 +8,7 @@ import calculatePnL from "../utils/CalculatePnl";
 import FormatPnL from "../utils/FormatPnL";
 
 export default function ViewModal() {
-  const { setViewModal, currentViewTrade } = useContext(GlobalContext);
+  const { setViewModal, currentViewTrade, theme } = useContext(GlobalContext);
   const [description, setDescription] = useState(false);
 
   const { modalRef, handleMouseDown } = useDrag();
@@ -22,7 +22,8 @@ export default function ViewModal() {
   function handleRatingColor() {
     if (currentViewTrade.formData.rating === "Worst") return "red";
     if (currentViewTrade.formData.rating === "Poor") return "#ff787aff";
-    if (currentViewTrade.formData.rating === "Average") return "#000000ff";
+    if (currentViewTrade.formData.rating === "Average")
+      return theme === "dark" ? "gray" : "#000000";
     if (currentViewTrade.formData.rating === "Good") return "#66c43bff";
     if (currentViewTrade.formData.rating === "Best") return "green";
     return "black";
@@ -30,7 +31,7 @@ export default function ViewModal() {
 
   return (
     <div
-      className="flex flex-col fixed top-1/5 left-1/6 w-3/4 bg-white h-120 rounded-xl overflow-hidden shadow-xl shadow-gray-400 "
+      className="flex flex-col fixed top-1/5 left-1/6 w-3/4 bg-white dark:bg-gray-800 dark:text-white dark:shadow-none h-120 rounded-xl overflow-hidden shadow-xl shadow-gray-400 "
       ref={modalRef}
     >
       <div
@@ -98,10 +99,7 @@ export default function ViewModal() {
 
           <div className="view-modal-section">
             <span className="view-modal-span">Entry-Time</span>
-            <h1
-              className="view-modal-h1 font-light text-sm pt-1"
-              style={{ color: "blue" }}
-            >
+            <h1 className="view-modal-h1 font-light text-sm pt-1 text-indigo-600 dark:text-blue-400">
               {formatDateTime(currentViewTrade.entries.initialEntryTime)}
             </h1>
           </div>
@@ -109,11 +107,11 @@ export default function ViewModal() {
           <div className="view-modal-section">
             <span className="view-modal-span">Total PnL</span>
             <h1
-              className="view-modal-h1 flex items-center justify-center gap-1"
-              style={{
-                color: currentViewTrade.stats.pnl >= 0 ? "green" : "red",
-                fontSize: "1rem",
-              }}
+              className={`view-modal-h1 flex items-center justify-center gap-1 ${
+                currentViewTrade.stats.pnl > 0
+                  ? "text-green-500"
+                  : "text-red-400"
+              }`}
             >
               <FaIndianRupeeSign />
               {Number(currentViewTrade.stats.pnl).toLocaleString("en-IN", {
@@ -132,10 +130,7 @@ export default function ViewModal() {
 
           <div className="view-modal-section">
             <span className="view-modal-span">Exit-Time</span>
-            <h1
-              className="view-modal-h1 font-light pt-1"
-              style={{ color: "blue" }}
-            >
+            <h1 className="view-modal-h1 font-light pt-1 text-indigo-600 dark:text-blue-400">
               {formatDateTime(currentViewTrade.entries.initialExitTime)}
             </h1>
           </div>
@@ -155,7 +150,7 @@ export default function ViewModal() {
           <div
             className={`flex flex-col flex-1 overflow-y-auto p-2 ${
               description
-                ? "absolute h-full p-4 transition ease-in-out bg-white left-0 top-0 w-full z-10"
+                ? "absolute h-full p-4 transition ease-in-out bg-white dark:bg-gray-800 left-0 top-0 w-full z-10"
                 : ""
             }`}
           >
@@ -176,14 +171,14 @@ export default function ViewModal() {
               </ReactMarkdown>
             </div>
           </div>
-          <div className="flex items-center h-[254px] flex-col w-[610px] border-l border-blue-300 p-2">
+          <div className="flex items-center h-[254px] flex-col w-[610px] border-l border-blue-300 dark:border-blue-600 p-2">
             <div className="flex w-full">
               <h1 className="font-medium pb-2 pl-2">Added Qty Details :</h1>
             </div>
             <div className="overflow-y-auto w-full">
               <table className="shadow border-collapse w-full">
                 <thead>
-                  <tr className="bg-gray-100">
+                  <tr className="bg-gray-100 dark:bg-gray-900">
                     <th className="font-bold text-xs">#</th>
                     <th className="font-bold text-xs">Buy</th>
                     <th className="font-bold text-xs">Sell</th>
@@ -197,7 +192,7 @@ export default function ViewModal() {
                 </thead>
                 <tbody>
                   <tr className="">
-                    <td className="text-xs bg-gray-100">1</td>
+                    <td className="text-xs bg-gray-100 dark:bg-gray-900">1</td>
                     <td className="text-xs text-green-700">
                       {currentViewTrade.entries.initialBuy || "--"}
                     </td>
@@ -210,12 +205,12 @@ export default function ViewModal() {
                     <td className="text-xs">
                       {currentViewTrade.entries.initialRisk || "--"}
                     </td>
-                    <td className="text-xs text-blue-700">
+                    <td className="text-xs text-blue-700 dark:text-blue-400">
                       {formatDateTime(
                         currentViewTrade.entries.initialEntryTime
                       )}
                     </td>
-                    <td className="text-xs text-blue-700">
+                    <td className="text-xs text-blue-700 dark:text-blue-400">
                       {formatDateTime(currentViewTrade.entries.initialExitTime)}
                     </td>
                     <td>
@@ -249,7 +244,9 @@ export default function ViewModal() {
                     (entry, index) => {
                       return (
                         <tr className="" key={entry.id}>
-                          <td className="text-xs bg-gray-100">{index + 2}</td>
+                          <td className="text-xs bg-gray-100 dark:bg-gray-900">
+                            {index + 2}
+                          </td>
                           <td className="text-xs text-green-700">
                             {entry.buyPrice}
                           </td>
@@ -258,10 +255,10 @@ export default function ViewModal() {
                           </td>
                           <td className="text-xs">{entry.quantity}</td>
                           <td className="text-xs">{entry.risk}</td>
-                          <td className="text-xs text-blue-700">
+                          <td className="text-xs text-blue-700 dark:text-blue-400">
                             {formatDateTime(entry.entryTime)}
                           </td>
-                          <td className="text-xs text-blue-700">
+                          <td className="text-xs text-blue-700 dark:text-blue-400">
                             {formatDateTime(entry.exitTime)}
                           </td>
                           <td>
