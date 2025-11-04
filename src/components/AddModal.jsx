@@ -193,7 +193,7 @@ export default function AddModal() {
                 disabled={
                   formData.status === "Open" && formData.order === "SELL"
                 }
-                className="add-modal-select w-30 text-black disabled:bg-gray-300"
+                className="add-modal-select w-30 disabled:bg-gray-300 text-green-600"
                 type="number"
                 placeholder="Buy Price"
                 onChange={handleInitialEntries}
@@ -205,7 +205,7 @@ export default function AddModal() {
                 disabled={
                   formData.status === "Open" && formData.order === "BUY"
                 }
-                className="add-modal-select w-30 text-black disabled:bg-gray-300 "
+                className="add-modal-select w-30 disabled:bg-gray-300 text-red-500"
                 type="number"
                 placeholder="Sell Price"
                 onChange={handleInitialEntries}

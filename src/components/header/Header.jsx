@@ -3,10 +3,11 @@ import logo from "../../assets/TradeLens-Logo2.png";
 import logoDark from "../../assets/TradeLens-Dark.png";
 import { FaBars } from "react-icons/fa6";
 import { BiMoon, BiSun } from "react-icons/bi";
-import useTheme from "../../hooks/useTheme";
+import { useContext } from "react";
+import { GlobalContext } from "../../context/Context";
 
 export default function Header() {
-  const [theme, setTheme] = useTheme("theme", "light");
+  const { theme, setTheme } = useContext(GlobalContext);
 
   function handleTheme() {
     setTheme((prev) => (prev === "light" ? "dark" : "light"));

@@ -15,6 +15,7 @@ export default function GlobalStateContext({ children }) {
   const [filteredTrades, setFilteredTrades] = useState([]);
   const [addQtyModal, setAddQtyModal] = useState(false);
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
+  const [theme, setTheme] = useState(localStorage.getItem("theme") || "light");
   const [entries, setEntries] = useState({
     addedEntries: [],
     initialBuy: "",
@@ -55,6 +56,13 @@ export default function GlobalStateContext({ children }) {
     setCurrentPage(1);
   }, [filterValue]);
 
+  useEffect(() => {
+    localStorage.setItem("theme", theme);
+
+    if (theme === "dark") document.documentElement.classList.add("dark");
+    else document.documentElement.classList.remove("dark");
+  }, [theme]);
+
   return (
     <GlobalContext.Provider
       value={{
@@ -84,6 +92,8 @@ export default function GlobalStateContext({ children }) {
         setAddQtyModal,
         selectedYear,
         setSelectedYear,
+        theme,
+        setTheme,
       }}
     >
       {children}

@@ -13,7 +13,7 @@ import {
 import GetMonthlyPnl from "../../utils/getMonthlyPnl";
 
 export default function AreaChartFillValue() {
-  const { trades, selectedYear } = useContext(GlobalContext);
+  const { trades, selectedYear, theme } = useContext(GlobalContext);
 
   const data = GetMonthlyPnl(trades, selectedYear);
 
@@ -34,13 +34,13 @@ export default function AreaChartFillValue() {
   const off = gradientOffset();
 
   return (
-    <div className="col-start-5 col-end-9 bg-white h-110 p-4 rounded-2xl bg-linear-to-b from-blue-300 to-blue-0 shadow shadow-gray-400">
+    <div className="col-start-5 col-end-9 bg-white h-110 p-4 rounded-2xl bg-linear-to-b from-blue-300 to-blue-0 shadow shadow-gray-400 dark:from-sky-800 dark:to-sky-400 dark:shadow-none">
       <div className="flex w-full justify-between items-center h-10 mb-4">
         <div className="flex items-center  gap-2">
-          <div className="flex items-center justify-center h-10 w-10 bg-blue-500 rounded-xl shadow shadow-gray-400">
+          <div className="flex items-center justify-center h-10 w-10 bg-blue-500 dark:bg-teal-600 dark:shadow-none rounded-xl shadow shadow-gray-400">
             <FaChartArea className="text-white text-xl" />{" "}
           </div>
-          <h1 className="font-medium text-shadow-lg text-lg">
+          <h1 className="font-medium text-shadow-lg text-lg dark:text-white">
             Area Fill by Value Chart
           </h1>
         </div>
@@ -48,15 +48,21 @@ export default function AreaChartFillValue() {
 
       <ResponsiveContainer width="100%" height={340}>
         <AreaChart data={data}>
-          <CartesianGrid strokeDasharray="3 3" />
+          <CartesianGrid strokeDasharray="3 3" stroke="" />
           <XAxis
             dataKey="month"
-            tick={{ fill: "#415effff", fontSize: "0.8rem" }}
+            tick={{
+              fill: theme === "dark" ? "#ffffff" : "#415effff",
+              fontSize: 12,
+            }}
             stroke="#000000ff"
           />
           <YAxis
             width={50}
-            tick={{ fill: "#415effff", fontSize: 12 }}
+            tick={{
+              fill: theme === "dark" ? "#ffffff" : "#415effff",
+              fontSize: 12,
+            }}
             stroke="#000000ff"
           />
           <Tooltip
@@ -70,10 +76,26 @@ export default function AreaChartFillValue() {
           />
           <defs>
             <linearGradient id="splitcolor" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0" stopColor="green" stopOpacity={1} />
-              <stop offset={off} stopColor="green" stopOpacity={0.2} />
-              <stop offset={off} stopColor="red" stopOpacity={0.2} />
-              <stop offset="1" stopColor="red" stopOpacity={1} />
+              <stop
+                offset="0"
+                stopColor="oklch(79.2% 0.209 151.711)"
+                stopOpacity={1}
+              />
+              <stop
+                offset={off}
+                stopColor="oklch(79.2% 0.209 151.711)"
+                stopOpacity={0.2}
+              />
+              <stop
+                offset={off}
+                stopColor="oklch(63.7% 0.237 25.331)"
+                stopOpacity={0.2}
+              />
+              <stop
+                offset="1"
+                stopColor="oklch(63.7% 0.237 25.331)"
+                stopOpacity={1}
+              />
             </linearGradient>
           </defs>
           <Area

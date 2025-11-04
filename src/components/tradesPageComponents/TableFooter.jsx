@@ -42,13 +42,17 @@ export default function TableFooter() {
           <p className="text-md text-shadow-lg font-medium dark:text-white">
             Trades Count :
           </p>
-          <h1 className="font-medium text-blue-500">{filteredTrades.length}</h1>
+          <h1 className="font-medium text-blue-500 dark:text-blue-400">
+            {filteredTrades.length}
+          </h1>
         </div>
         <div className="flex items-center gap-2">
           <p className="text-md text-shadow-lg font-medium dark:text-white">
             Win Rate :
           </p>
-          <h1 className="font-bold text-blue-500">{winRate} %</h1>
+          <h1 className="font-bold text-blue-500 dark:text-blue-400">
+            {winRate} %
+          </h1>
         </div>
       </div>
       <div className="flex items-center gap-3">
@@ -71,7 +75,9 @@ export default function TableFooter() {
           <p className="text-md font-medium text-shadow-lg dark:text-white">
             Total RR :
           </p>
-          <h1 className="font-bold text-lg text-blue-500">{totalRRratio}X</h1>
+          <h1 className="font-bold text-lg text-blue-500 dark:text-blue-400">
+            {totalRRratio}X
+          </h1>
         </div>
       </div>
     </div>

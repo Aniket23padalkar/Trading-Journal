@@ -1,6 +1,6 @@
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import { GlobalContext } from "../../context/Context";
-import { BiBarChartAlt2, BiTrendingDown, BiTrendingUp } from "react-icons/bi";
+import { BiBarChartAlt2 } from "react-icons/bi";
 import {
   BarChart,
   Bar,
@@ -13,34 +13,41 @@ import {
   Cell,
 } from "recharts";
 import GetMonthlyPnl from "../../utils/getMonthlyPnl";
-import FormatPnL from "../../utils/FormatPnL";
 
 export default function BarPnlChart() {
-  const { trades, selectedYear } = useContext(GlobalContext);
+  const { trades, selectedYear, theme } = useContext(GlobalContext);
 
   const data = GetMonthlyPnl(trades, selectedYear);
 
   return (
-    <div className="col-start-1 col-end-5 h-110 p-4 pr-6 bg-linear-to-b from-cyan-300 rounded-2xl shadow shadow-gray-400 to-white">
+    <div className="col-start-1 col-end-5 h-110 p-4 pr-6 bg-linear-to-b from-cyan-300 dark:from-teal-900 dark:to-teal-700 rounded-2xl shadow dark:shadow-none shadow-gray-400 to-white">
       <div className="flex w-full justify-between items-center h-10 mb-4">
         <div className="flex items-center  gap-2">
-          <div className="flex items-center justify-center h-10 w-10 bg-cyan-600 rounded-xl shadow shadow-gray-400">
+          <div className="flex items-center justify-center h-10 w-10 bg-cyan-600 dark:bg-blue-500 dark:shadow-none rounded-xl shadow shadow-gray-400">
             <BiBarChartAlt2 className="text-white text-xl" />{" "}
           </div>
-          <h1 className="font-medium text-lg text-shadow-lg">Bar Chart</h1>
+          <h1 className="font-medium text-lg text-shadow-lg dark:text-white">
+            Bar Chart
+          </h1>
         </div>
       </div>
 
-      <ResponsiveContainer width="100%" height={340}>
+      <ResponsiveContainer width="100%" height={340} key={theme}>
         <BarChart data={data} barSize={40}>
-          <CartesianGrid strokeDasharray="3 3" />
+          <CartesianGrid strokeDasharray="3 3" stroke="" />
           <XAxis
             dataKey="month"
-            tick={{ fill: "#415effff", fontSize: "0.8rem" }}
+            tick={{
+              fill: theme === "dark" ? "#ffffff" : "#415effff",
+              fontSize: "0.8rem",
+            }}
             stroke="#000000ff"
           />
           <YAxis
-            tick={{ fill: "#415effff", fontSize: 12 }}
+            tick={{
+              fill: theme === "dark" ? "#ffffff" : "#415effff",
+              fontSize: 12,
+            }}
             stroke="#000000ff"
           />
           <Tooltip
@@ -56,7 +63,11 @@ export default function BarPnlChart() {
             {data.map((entry, index) => (
               <Cell
                 key={index}
-                fill={entry.pnl > 0 ? "#03c988" : "#ff5454ff"}
+                fill={
+                  entry.pnl > 0
+                    ? "oklch(79.2% 0.209 151.711)"
+                    : "oklch(63.7% 0.237 25.331)"
+                }
               />
             ))}
           </Bar>
