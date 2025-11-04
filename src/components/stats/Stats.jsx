@@ -101,7 +101,7 @@ export default function Stats() {
 
   return (
     <>
-      <div className="flex col-start-1 col-end-5 h-65 rounded-2xl shadow shadow-gray-400 bg-green-500 dark:bg-teal-600 dark:shadow-none p-8">
+      <div className="flex col-start-1 col-end-5 h-65 rounded-2xl shadow shadow-gray-400 bg-teal-500 dark:bg-teal-600 dark:shadow-none p-8">
         <div className="flex flex-col gap-4">
           <div className="flex gap-4 h-15">
             <div className="flex items-center justify-center h-15 w-15 bg-white rounded-2xl">

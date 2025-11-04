@@ -11,7 +11,7 @@ export default function Aside() {
           className={({ isActive }) =>
             `flex items-center py-2 rounded font-medium ${
               isActive
-                ? "border-l-8 border-green-500 shadow shadow-gray-400 dark:text-white dark:shadow-green-400"
+                ? "border-l-8 border-teal-500 shadow shadow-gray-400 dark:text-white dark:shadow-teal-500"
                 : "border-l-8 border-transparent text-gray-400"
             }`
           }
@@ -21,7 +21,7 @@ export default function Aside() {
               <span>
                 <MdDashboard
                   className={`text-xl ${
-                    isActive ? "text-green-600" : "text-gray-400"
+                    isActive ? "text-teal-600" : "text-gray-400"
                   }`}
                 />
               </span>
@@ -34,7 +34,7 @@ export default function Aside() {
           className={({ isActive }) =>
             `flex items-center py-2 rounded font-medium ${
               isActive
-                ? "border-l-8 border-green-500 shadow shadow-gray-400 dark:text-white dark:shadow-green-500"
+                ? "border-l-8 border-teal-500 shadow shadow-gray-400 dark:text-white dark:shadow-teal-500"
                 : "border-l-8 border-transparent text-gray-400"
             }`
           }
@@ -44,7 +44,7 @@ export default function Aside() {
               <span>
                 <BiBarChartAlt2
                   className={`text-xl ${
-                    isActive ? "text-green-600" : "text-gray-400"
+                    isActive ? "text-teal-600" : "text-gray-400"
                   }`}
                 />
               </span>
@@ -58,7 +58,7 @@ export default function Aside() {
           className={({ isActive }) =>
             `flex items-center py-2 rounded font-medium ${
               isActive
-                ? "border-l-8 border-green-500 shadow shadow-gray-400 dark:text-white dark:shadow-green-500"
+                ? "border-l-8 border-teal-500 shadow shadow-gray-400 dark:text-white dark:shadow-teal-500"
                 : "border-l-8 border-transparent text-gray-400"
             }`
           }
@@ -68,7 +68,7 @@ export default function Aside() {
               <span>
                 <BiChart
                   className={`text-xl ${
-                    isActive ? "text-green-600" : "text-gray-400"
+                    isActive ? "text-teal-600" : "text-gray-400"
                   }`}
                 />
               </span>
@@ -82,7 +82,7 @@ export default function Aside() {
           className={({ isActive }) =>
             `flex items-center py-2 rounded font-medium ${
               isActive
-                ? "border-l-8 border-green-500 shadow shadow-gray-400 dark:text-white dark:shadow-green-500"
+                ? "border-l-8 border-teal-500 shadow shadow-gray-400 dark:text-white dark:shadow-teal-500"
                 : "border-l-8 border-transparent text-gray-400"
             }`
           }
@@ -92,7 +92,7 @@ export default function Aside() {
               <span>
                 <BiCalendar
                   className={`text-xl ${
-                    isActive ? "text-green-600" : "text-gray-400"
+                    isActive ? "text-teal-600" : "text-gray-400"
                   }`}
                 />
               </span>
@@ -106,7 +106,7 @@ export default function Aside() {
           className={({ isActive }) =>
             `flex items-center py-2 rounded font-medium ${
               isActive
-                ? "border-l-8 border-green-500 shadow shadow-gray-400 dark:text-white dark:shadow-green-500"
+                ? "border-l-8 border-teal-500 shadow shadow-gray-400 dark:text-white dark:shadow-teal-500"
                 : "border-l-8 border-transparent text-gray-400"
             }`
           }
@@ -116,7 +116,7 @@ export default function Aside() {
               <span>
                 <MdContacts
                   className={`text-xl ${
-                    isActive ? "text-green-600" : "text-gray-400"
+                    isActive ? "text-teal-600" : "text-gray-400"
                   }`}
                 />
               </span>
