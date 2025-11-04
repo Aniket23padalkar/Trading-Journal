@@ -4,14 +4,14 @@ import { BiBarChartAlt2, BiCalendar, BiChart } from "react-icons/bi";
 
 export default function Aside() {
   return (
-    <aside className="col-start-1 col-end-2 row-start-2 row-end-3 flex h-full w-full px-4">
+    <aside className="col-start-1 col-end-2 row-start-2 row-end-3 flex h-full w-full px-4 bg-white dark:bg-gray-950 border-t border-gray-200 dark:border-gray-700">
       <ul className="flex grow flex-col mt-4 gap-2">
         <NavLink
           to="/"
           className={({ isActive }) =>
             `flex items-center py-2 rounded font-medium ${
               isActive
-                ? "border-l-8 border-green-500 shadow shadow-gray-400"
+                ? "border-l-8 border-green-500 shadow shadow-gray-400 dark:text-white dark:shadow-green-400"
                 : "border-l-8 border-transparent text-gray-400"
             }`
           }
@@ -34,7 +34,7 @@ export default function Aside() {
           className={({ isActive }) =>
             `flex items-center py-2 rounded font-medium ${
               isActive
-                ? "border-l-8 border-green-500 shadow shadow-gray-400"
+                ? "border-l-8 border-green-500 shadow shadow-gray-400 dark:text-white dark:shadow-green-500"
                 : "border-l-8 border-transparent text-gray-400"
             }`
           }
@@ -58,7 +58,7 @@ export default function Aside() {
           className={({ isActive }) =>
             `flex items-center py-2 rounded font-medium ${
               isActive
-                ? "border-l-8 border-green-500 shadow shadow-gray-400"
+                ? "border-l-8 border-green-500 shadow shadow-gray-400 dark:text-white dark:shadow-green-500"
                 : "border-l-8 border-transparent text-gray-400"
             }`
           }
@@ -82,7 +82,7 @@ export default function Aside() {
           className={({ isActive }) =>
             `flex items-center py-2 rounded font-medium ${
               isActive
-                ? "border-l-8 border-green-500 shadow shadow-gray-400"
+                ? "border-l-8 border-green-500 shadow shadow-gray-400 dark:text-white dark:shadow-green-500"
                 : "border-l-8 border-transparent text-gray-400"
             }`
           }
@@ -106,7 +106,7 @@ export default function Aside() {
           className={({ isActive }) =>
             `flex items-center py-2 rounded font-medium ${
               isActive
-                ? "border-l-8 border-green-500 shadow shadow-gray-400"
+                ? "border-l-8 border-green-500 shadow shadow-gray-400 dark:text-white dark:shadow-green-500"
                 : "border-l-8 border-transparent text-gray-400"
             }`
           }

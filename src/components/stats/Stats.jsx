@@ -9,7 +9,6 @@ import {
   FaArrowDown,
   FaIndianRupeeSign,
 } from "react-icons/fa6";
-import FormatPnL from "../../utils/FormatPnL";
 import { FaBullseye, FaChartLine, FaExclamation } from "react-icons/fa";
 import { BiBarChartAlt2 } from "react-icons/bi";
 
@@ -102,7 +101,7 @@ export default function Stats() {
 
   return (
     <>
-      <div className="flex col-start-1 col-end-5 h-65 rounded-2xl shadow shadow-gray-400 bg-green-500 p-8">
+      <div className="flex col-start-1 col-end-5 h-65 rounded-2xl shadow shadow-gray-400 bg-green-500 dark:bg-teal-600 dark:shadow-none p-8">
         <div className="flex flex-col gap-4">
           <div className="flex gap-4 h-15">
             <div className="flex items-center justify-center h-15 w-15 bg-white rounded-2xl">
@@ -137,15 +136,15 @@ export default function Stats() {
         </div>
       </div>
 
-      <div className="flex flex-col justify-between col-start-5 col-end-7 p-8  rounded-2xl shadow shadow-gray-400 bg-white">
+      <div className="flex flex-col justify-between col-start-5 col-end-7 p-8  rounded-2xl shadow shadow-gray-400 bg-white dark:bg-gray-950 dark:shadow-none">
         <div>
           <div className="flex items-center h-10">
             <div className="h-5 w-5 bg-green-500 rounded-xl"></div>
-            <h1 className="font-medium pl-2 text-lg text-gray-600">
+            <h1 className="font-medium pl-2 text-lg text-gray-600 dark:text-gray-400">
               Max-Profit
             </h1>
           </div>
-          <h1 className="flex mt-2 gap-2 items-center text-xl font-bold">
+          <h1 className="flex mt-2 gap-2 items-center text-xl font-bold dark:text-white">
             <FaIndianRupeeSign />
             {Number(maxProfit).toLocaleString("en-IN", {
               minimumFractionDigits: 2,
@@ -156,9 +155,11 @@ export default function Stats() {
         <div>
           <div className="flex items-center h-10">
             <div className="h-5 w-5 bg-red-500 rounded-xl"></div>
-            <h1 className="font-medium pl-2 text-lg text-gray-600">Max-Loss</h1>
+            <h1 className="font-medium pl-2 text-lg text-gray-600 dark:text-gray-400">
+              Max-Loss
+            </h1>
           </div>
-          <h1 className="flex mt-2 font-bold gap-2 items-center text-xl">
+          <h1 className="flex mt-2 font-bold gap-2 items-center text-xl dark:text-white">
             <FaIndianRupeeSign />
             {Number(maxLoss).toLocaleString("en-IN", {
               minimumFractionDigits: 2,
@@ -168,26 +169,26 @@ export default function Stats() {
         </div>
       </div>
 
-      <div className="flex flex-col gap-4 items-center justify-center p-8 col-start-7 col-end-9 rounded-2xl shadow shadow-gray-400 bg-linear-to-b from-blue-200 to-blue-50 ">
+      <div className="flex flex-col gap-4 items-center justify-center p-8 col-start-7 col-end-9 rounded-2xl shadow shadow-gray-400 dark:shadow-none bg-linear-to-b from-blue-300 to-blue-50 dark:from-blue-950 dark:to-blue-400">
         <div className="flex items-center justify-center h-12 w-12 rounded-md bg-green-500 shadow">
           <FaChartLine className="text-white text-3xl" />
         </div>
-        <p>Win Rate</p>
-        <h1 className="flex items-center gap-2 text-3xl font-medium">
+        <p className="dark:text-gray-300">Win Rate</p>
+        <h1 className="flex items-center gap-2 text-3xl font-medium dark:text-white">
           <FaArrowUp className="text-xl" />
           {winRate}%
         </h1>
       </div>
 
-      <div className="flex flex-col justify-between p-8 col-start-1 col-end-3 rounded-2xl shadow shadow-gray-400 h-60 bg-white">
+      <div className="flex flex-col justify-between p-8 col-start-1 col-end-3 rounded-2xl shadow shadow-gray-400 dark:shadow-none h-60 bg-white dark:bg-gray-950">
         <div>
           <div className="flex items-center h-10">
             <div className="h-5 w-5 bg-green-500 rounded-xl"></div>
-            <h1 className="font-medium pl-2 text-lg text-gray-600">
+            <h1 className="font-medium pl-2 text-lg text-gray-600 dark:text-gray-400">
               Total-Profit
             </h1>
           </div>
-          <h1 className="flex mt-2 gap-2 items-center text-xl font-bold">
+          <h1 className="flex mt-2 gap-2 items-center text-xl font-bold dark:text-white">
             <FaIndianRupeeSign />
             {Number(totalProfit).toLocaleString("en-IN", {
               minimumFractionDigits: 2,
@@ -198,11 +199,11 @@ export default function Stats() {
         <div>
           <div className="flex items-center h-10">
             <div className="h-5 w-5 bg-red-500 rounded-xl"></div>
-            <h1 className="font-medium pl-2 text-lg text-gray-600">
+            <h1 className="font-medium pl-2 text-lg text-gray-600 dark:text-gray-400">
               Total-Loss
             </h1>
           </div>
-          <h1 className="flex mt-2 gap-2 items-center text-xl font-bold">
+          <h1 className="flex mt-2 gap-2 items-center text-xl font-bold dark:text-white">
             <FaIndianRupeeSign />
             {Number(totalLoss).toLocaleString("en-IN", {
               minimumFractionDigits: 2,
@@ -212,17 +213,17 @@ export default function Stats() {
         </div>
       </div>
 
-      <div className="flex flex-col justify-between col-start-3 col-end-5 p-8 rounded-2xl shadow shadow-gray-400 h-60 bg-white">
+      <div className="flex flex-col justify-between col-start-3 col-end-5 p-8 rounded-2xl shadow shadow-gray-400 h-60 bg-white dark:shadow-none dark:bg-gray-950">
         <div className="flex flex-col gap-3">
           <div className="flex items-center gap-2">
             <div className="flex items-center justify-center h-8 w-8 bg-red-200 rounded-md">
               <FaBullseye className="text-xl text-red-500" />
             </div>
-            <h1 className="font-medium pl-2 text-lg text-gray-600">
+            <h1 className="font-medium pl-2 text-lg text-gray-600 dark:text-gray-400">
               OverAll RR
             </h1>
           </div>
-          <h1 className="flex items-center gap-2 pl-2 text-xl font-bold">
+          <h1 className="flex items-center gap-2 pl-2 text-xl font-bold dark:text-white">
             {overallRR > 0 ? (
               <FaArrowUp className="text-lg" />
             ) : (
@@ -236,42 +237,46 @@ export default function Stats() {
             <div className="flex items-center justify-center h-8 w-8 bg-emerald-200 shadow rounded-md">
               <FaExclamation className="text-xl text-emerald-600" />
             </div>
-            <h1 className="font-medium pl-2 text-lg text-gray-600">
+            <h1 className="font-medium pl-2 text-lg text-gray-600 dark:text-gray-400">
               Average Risk
             </h1>
           </div>
-          <h1 className="flex items-center gap-2 pl-2 text-xl font-bold">
+          <h1 className="flex items-center gap-2 pl-2 text-xl font-bold dark:text-white">
             <FaIndianRupeeSign />
             {averageRiskPerTrade}
           </h1>
         </div>
       </div>
 
-      <div className="flex flex-col h-60 p-8 col-start-5 col-end-9 rounded-2xl shadow shadow-gray-400  bg-linear-to-b from-violet-300 to-violet-50">
+      <div className="flex flex-col h-60 p-8 col-start-5 col-end-9 rounded-2xl shadow shadow-gray-400  bg-linear-to-b from-violet-400 to-violet-50 dark:from-violet-950 dark:to-violet-400 dark:shadow-none">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <div className="flex items-center justify-center h-12 w-12 bg-violet-500 rounded-xl">
+            <div className="flex items-center justify-center h-12 w-12 bg-violet-500 dark:bg-purple-600 rounded-xl">
               <BiBarChartAlt2 className="text-white text-2xl" />
             </div>
-            <h1 className="text-xl font-medium">Total Trades</h1>
+            <h1 className="text-xl font-medium dark:text-white  ">
+              Total Trades
+            </h1>
           </div>
-          <h1 className="text-2xl font-bold">+{trades.length}</h1>
+          <h1 className="text-2xl font-bold dark:text-white">
+            +{trades.length}
+          </h1>
         </div>
         <div className="flex flex-1 items-end text-center">
           <div className="flex-1">
-            <p>Profit-Trades</p>
-            <h1 className="text-2xl font-medium text-green-600 ">
+            <p className="dark:text-white">Profit-Trades</p>
+            <h1 className="text-2xl font-medium text-green-600 dark:text-green-400">
               {totalProfitTrades}
             </h1>
           </div>
           <div className="flex-1 border-l-gray-400 border-l">
-            <p>Loss-Trades</p>
-            <h1 className="text-2xl font-medium text-red-500">
+            <p className="dark:text-white">Loss-Trades</p>
+            <h1 className="text-2xl font-medium text-red-500 dark:text-red-600">
               {totalLossTrades}
             </h1>
           </div>
           <div className="flex-1 border-l-gray-400 border-l">
-            <p>Open-Trades</p>
+            <p className="dark:text-white">Open-Trades</p>
             <h1 className="text-2xl font-medium">{openTrades}</h1>
           </div>
         </div>

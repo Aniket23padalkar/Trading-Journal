@@ -1,12 +1,5 @@
 import { useContext } from "react";
 import { GlobalContext } from "../../context/Context";
-import {
-  BiBarChartAlt2,
-  BiSolidArea,
-  BiTrendingDown,
-  BiTrendingUp,
-} from "react-icons/bi";
-import { BsGraphUp } from "react-icons/bs";
 import { FaChartArea } from "react-icons/fa";
 import {
   AreaChart,
@@ -18,7 +11,6 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import GetMonthlyPnl from "../../utils/getMonthlyPnl";
-import FormatPnL from "../../utils/FormatPnL";
 
 export default function AreaChartFillValue() {
   const { trades, selectedYear } = useContext(GlobalContext);
@@ -79,15 +71,15 @@ export default function AreaChartFillValue() {
           <defs>
             <linearGradient id="splitcolor" x1="0" y1="0" x2="0" y2="1">
               <stop offset="0" stopColor="green" stopOpacity={1} />
-              <stop offset={off} stopColor="green" stopOpacity={0.1} />
-              <stop offset={off} stopColor="red" stopOpacity={0.1} />
+              <stop offset={off} stopColor="green" stopOpacity={0.2} />
+              <stop offset={off} stopColor="red" stopOpacity={0.2} />
               <stop offset="1" stopColor="red" stopOpacity={1} />
             </linearGradient>
           </defs>
           <Area
             type="monotone"
             dataKey="pnl"
-            stroke="#000"
+            stroke="blue"
             fill="url(#splitcolor)"
           />
         </AreaChart>

@@ -108,7 +108,7 @@ export default function TradesTable({ currentTrades, indexOfFirstTrade }) {
   return (
     <div className="flex h-full w-full items-center bg-transparent relative">
       <div className="w-full min-h-102 h shadow-md shadow-gray-400">
-        <table className="w-full border-collapse bg-white">
+        <table className="w-full border-collapse bg-white dark:bg-gray-950">
           <thead>
             <tr className="text-center bg-gray-50 ">
               <th className="w-8 bg-gray-100">#</th>

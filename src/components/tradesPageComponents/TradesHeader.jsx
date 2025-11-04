@@ -73,7 +73,7 @@ export default function TradesHeader() {
   uniqueMonth.sort((a, b) => monthOrder.indexOf(a) - monthOrder.indexOf(b));
   const months = uniqueMonth;
   return (
-    <div className="flex w-full justify-between items-center py-2 px-6 relative rounded-xl shadow shadow-gray-400 bg-white">
+    <div className="flex w-full justify-between items-center py-2 px-6 relative rounded-xl shadow shadow-gray-400 bg-white dark:bg-gray-950 dark:shadow-none dark:text-white">
       <div className="flex items-center">
         <p className="drop-shadow-lg font-medium mr-2">
           Yearly/Monthly Trades :
