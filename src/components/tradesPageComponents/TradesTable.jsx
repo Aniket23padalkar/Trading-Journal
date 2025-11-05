@@ -233,7 +233,7 @@ export default function TradesTable({ currentTrades, indexOfFirstTrade }) {
                           e.stopPropagation();
                           handleDeleteTrade(trade.id);
                         }}
-                        className="cursor-pointer bg-transparent lg:pl-2"
+                        className="cursor-pointer bg-transparent xl:pl-2"
                       >
                         <FaTrash className="text-red-400" />
                       </button>

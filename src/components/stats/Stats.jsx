@@ -101,7 +101,7 @@ export default function Stats() {
 
   return (
     <>
-      <div className="flex col-start-1 justify-between col-end-9 lg:col-end-5 h-65 rounded-2xl shadow shadow-gray-400 bg-teal-500 dark:bg-teal-600 dark:shadow-none p-8">
+      <div className="flex col-start-1 justify-between col-end-9 lg:col-end-5 h-50 lg:h-55 xl:h-65 rounded-2xl shadow shadow-gray-400 bg-teal-500 dark:bg-teal-600 dark:shadow-none p-8">
         <div className="flex flex-col gap-4 ">
           <div className="flex gap-4 h-15">
             <div className="flex items-center justify-center h-15 w-15 bg-white rounded-2xl">
@@ -136,7 +136,7 @@ export default function Stats() {
         </div>
       </div>
 
-      <div className="flex flex-col justify-between h-50 lg:h-65 col-start-1 col-end-5 lg:col-start-5 lg:col-end-7 px-8 py-5 lg:p-8  rounded-2xl shadow shadow-gray-400 bg-white dark:bg-gray-950 dark:shadow-none">
+      <div className="flex flex-col justify-between h-50 lg:h-55 xl:h-65 col-start-1 col-end-5 lg:col-start-5 lg:col-end-7 px-8 py-5 lg:py-6 lg:p-4 xl:p-8  rounded-2xl shadow shadow-gray-400 bg-white dark:bg-gray-950 dark:shadow-none">
         <div>
           <div className="flex items-center h-10">
             <div className="h-5 w-5 bg-green-500 rounded-xl"></div>
@@ -169,7 +169,7 @@ export default function Stats() {
         </div>
       </div>
 
-      <div className="flex flex-col gap-4 items-center h-50 lg:h-65 justify-center p-8 col-start-5 col-end-9 lg:col-start-7 lg:col-end-9 rounded-2xl shadow shadow-gray-400 dark:shadow-none bg-linear-to-b from-blue-300 to-blue-50 dark:from-blue-950 dark:to-blue-400">
+      <div className="flex flex-col gap-4 items-center h-50 lg:h-55 xl:h-65 justify-center p-8 col-start-5 col-end-9 lg:col-start-7 lg:col-end-9 rounded-2xl shadow shadow-gray-400 dark:shadow-none bg-linear-to-b from-blue-300 to-blue-50 dark:from-blue-950 dark:to-blue-400">
         <div className="flex items-center justify-center h-12 w-12 rounded-md bg-green-500 shadow">
           <FaChartLine className="text-white text-3xl" />
         </div>
@@ -180,7 +180,7 @@ export default function Stats() {
         </h1>
       </div>
 
-      <div className="flex flex-col justify-between px-8 py-5 lg:p-8 col-start-1 col-end-5 lg:col-start-1 lg:col-end-3 rounded-2xl shadow shadow-gray-400 dark:shadow-none h-50 lg:h-60 bg-white dark:bg-gray-950">
+      <div className="flex flex-col justify-between px-8 py-5 lg:py-6 lg:p-4 xl:p-8 col-start-1 col-end-5 lg:col-start-1 lg:col-end-3 rounded-2xl shadow shadow-gray-400 dark:shadow-none h-50 lg:h-55 xl:h-60 bg-white dark:bg-gray-950">
         <div>
           <div className="flex items-center h-10">
             <div className="h-5 w-5 bg-green-500 rounded-xl"></div>
@@ -213,7 +213,7 @@ export default function Stats() {
         </div>
       </div>
 
-      <div className="flex flex-col justify-between h-50 lg:h-60 col-start-5 col-end-9 lg:col-start-3 lg:col-end-5 px-8 py-5 lg:p-8 rounded-2xl shadow shadow-gray-400  bg-white dark:shadow-none dark:bg-gray-950">
+      <div className="flex flex-col justify-between h-50 lg:h-55 xl:h-60 col-start-5 col-end-9 lg:col-start-3 lg:col-end-5 px-8 py-5 lg:py-6 lg:p-4 xl:p-8 rounded-2xl shadow shadow-gray-400  bg-white dark:shadow-none dark:bg-gray-950">
         <div className="flex flex-col gap-3">
           <div className="flex items-center gap-2">
             <div className="flex items-center justify-center h-8 w-8 bg-red-200 rounded-md">
@@ -248,7 +248,7 @@ export default function Stats() {
         </div>
       </div>
 
-      <div className="flex flex-col h-60 p-8 col-start-1 lg:col-start-5 col-end-9 rounded-2xl shadow shadow-gray-400  bg-linear-to-b from-violet-400 to-violet-50 dark:from-violet-950 dark:to-violet-400 dark:shadow-none">
+      <div className="flex flex-col h-60 lg:h-55 xl:h-60 p-8 col-start-1 lg:col-start-5 col-end-9 rounded-2xl shadow shadow-gray-400  bg-linear-to-b from-violet-400 to-violet-50 dark:from-violet-950 dark:to-violet-400 dark:shadow-none">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <div className="flex items-center justify-center h-12 w-12 bg-violet-500 dark:bg-purple-600 rounded-xl">
