@@ -16,6 +16,7 @@ export default function GlobalStateContext({ children }) {
   const [addQtyModal, setAddQtyModal] = useState(false);
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
   const [theme, setTheme] = useState(localStorage.getItem("theme") || "light");
+  const [isAsideOpen, setIsAsideOpen] = useState(false);
   const [entries, setEntries] = useState({
     addedEntries: [],
     initialBuy: "",
@@ -94,6 +95,8 @@ export default function GlobalStateContext({ children }) {
         setSelectedYear,
         theme,
         setTheme,
+        isAsideOpen,
+        setIsAsideOpen,
       }}
     >
       {children}

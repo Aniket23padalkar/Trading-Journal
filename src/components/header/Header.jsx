@@ -7,7 +7,8 @@ import { useContext } from "react";
 import { GlobalContext } from "../../context/Context";
 
 export default function Header() {
-  const { theme, setTheme } = useContext(GlobalContext);
+  const { theme, setTheme, isAsideOpen, setIsAsideOpen } =
+    useContext(GlobalContext);
 
   function handleTheme() {
     setTheme((prev) => (prev === "light" ? "dark" : "light"));
@@ -16,7 +17,10 @@ export default function Header() {
   return (
     <header className="col-start-1 col-end-3 flex h-16 w-full justify-between items-center bg-white dark:bg-gray-950 grow pr-10  px-4 py-3">
       <div className="h-16 flex items-center">
-        <div className="text-xl cursor-pointer">
+        <div
+          onClick={() => setIsAsideOpen(!isAsideOpen)}
+          className="text-xl cursor-pointer dark:text-white lg:hidden"
+        >
           <FaBars />
         </div>
         <div className="h-full w-40">

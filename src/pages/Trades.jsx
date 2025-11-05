@@ -19,7 +19,7 @@ export default function Trades() {
   );
 
   return (
-    <div className="flex flex-col gap-2 items-center justify-between h-full w-full p-4 rounded-3xl bg-gray-100 dark:bg-gray-800">
+    <div className="flex flex-col gap-2 items-center justify-between h-full w-full py-4 px-2 lg:p-4 rounded-3xl bg-gray-100 dark:bg-gray-800">
       {/* Header Section */}
       <TradesHeader />
 

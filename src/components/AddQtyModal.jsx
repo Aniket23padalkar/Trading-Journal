@@ -44,7 +44,7 @@ export default function AddQtyModal() {
   }
 
   return (
-    <div className="flex flex-col rounded-2xl absolute overflow-hidden -right-90 z-10 h-full w-85 bg-white dark:shadow-none dark:bg-gray-800 shadow shadow-gray-500">
+    <div className="flex flex-col rounded-2xl absolute overflow-hidden right-14 lg:-right-90 z-10 h-full w-85 bg-white dark:shadow-none dark:bg-gray-800 shadow shadow-gray-500">
       <div className="flex items-center px-4 justify-between h-10 bg-teal-700">
         <h1 className="text-white text-shadow-lg">Add Quantity</h1>
         <button

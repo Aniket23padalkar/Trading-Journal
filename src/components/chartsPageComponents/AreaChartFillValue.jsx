@@ -34,7 +34,7 @@ export default function AreaChartFillValue() {
   const off = gradientOffset();
 
   return (
-    <div className="col-start-5 col-end-9 bg-white h-110 p-4 rounded-2xl bg-linear-to-b from-blue-300 to-blue-0 shadow shadow-gray-400 dark:from-sky-800 dark:to-sky-400 dark:shadow-none">
+    <div className="col-start-1 lg:col-start-5 col-end-9 bg-white h-110 p-4 rounded-2xl bg-linear-to-b from-blue-300 to-blue-0 shadow shadow-gray-400 dark:from-sky-800 dark:to-sky-400 dark:shadow-none">
       <div className="flex w-full justify-between items-center h-10 mb-4">
         <div className="flex items-center  gap-2">
           <div className="flex items-center justify-center h-10 w-10 bg-blue-500 dark:bg-teal-600 dark:shadow-none rounded-xl shadow shadow-gray-400">

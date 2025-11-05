@@ -1,10 +1,18 @@
 import { NavLink } from "react-router-dom";
 import { MdContacts, MdDashboard } from "react-icons/md";
 import { BiBarChartAlt2, BiCalendar, BiChart } from "react-icons/bi";
+import { useContext } from "react";
+import { GlobalContext } from "../../context/Context";
 
 export default function Aside() {
+  const { isAsideOpen } = useContext(GlobalContext);
+
   return (
-    <aside className="col-start-1 col-end-2 row-start-2 row-end-3 flex h-full w-full px-4 bg-white dark:bg-gray-950 border-t border-gray-200 dark:border-gray-700">
+    <aside
+      className={`col-start-1 col-end-2 row-start-2 transform duration-300 lg:transform-none lg:translate-x-0 ${
+        isAsideOpen ? "translate-0 z-10" : "-translate-x-full"
+      } row-end-3 lg:flex h-full w-full px-4 bg-white dark:bg-gray-950 border-t border-gray-200 dark:border-gray-700`}
+    >
       <ul className="flex grow flex-col mt-4 gap-2">
         <NavLink
           to="/"

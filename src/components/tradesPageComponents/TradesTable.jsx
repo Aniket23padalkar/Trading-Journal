@@ -107,10 +107,10 @@ export default function TradesTable({ currentTrades, indexOfFirstTrade }) {
 
   return (
     <div className="flex h-full w-full items-center bg-transparent relative">
-      <div className="w-full min-h-102 h shadow-md shadow-gray-400 dark:shadow-none">
-        <table className="w-full border-collapse bg-white dark:bg-sky-950 dark:text-white">
+      <div className="w-full min-h-102 h shadow-md shadow-gray-400 dark:shadow-none overflow-x-auto scrollbar-thin-x">
+        <table className="w-full border-collapse bg-white dark:bg-sky-950 dark:text-white ">
           <thead>
-            <tr className="text-center bg-gray-100 dark:bg-gray-800 dark:text-gray-300">
+            <tr className="text-center whitespace-nowrap bg-gray-100 dark:bg-gray-800 dark:text-gray-300">
               <th className="w-8 bg-gray-200 dark:bg-gray-950">#</th>
               <th className="text-left">symbol</th>
               <th>order</th>
@@ -158,7 +158,7 @@ export default function TradesTable({ currentTrades, indexOfFirstTrade }) {
                     <td className="bg-gray-200 dark:bg-gray-900">
                       {indexOfFirstTrade + index + 1}
                     </td>
-                    <td className="text-left w-30 font-medium text-base capitalize px-1 bg-gray-100 dark:bg-gray-800">
+                    <td className="text-left whitespace-nowrap w-30 font-medium text-base capitalize px-1 bg-gray-100 dark:bg-gray-800">
                       {trade.formData.symbol}
                     </td>
                     <td>
@@ -190,7 +190,7 @@ export default function TradesTable({ currentTrades, indexOfFirstTrade }) {
                         {trade.formData.position}
                       </p>
                     </td>
-                    <td className="text-xs text-blue-700 dark:text-sky-500">
+                    <td className="text-xs text-blue-700 dark:text-sky-500 whitespace-nowrap">
                       {formatDateTime(trade.entries.initialEntryTime)}
                     </td>
                     <td>{trade.stats.avgRisk}</td>
@@ -233,10 +233,7 @@ export default function TradesTable({ currentTrades, indexOfFirstTrade }) {
                           e.stopPropagation();
                           handleDeleteTrade(trade.id);
                         }}
-                        style={{
-                          paddingLeft: "0.5rem",
-                        }}
-                        className="cursor-pointer bg-transparent"
+                        className="cursor-pointer bg-transparent lg:pl-2"
                       >
                         <FaTrash className="text-red-400" />
                       </button>

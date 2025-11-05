@@ -31,7 +31,7 @@ export default function ViewModal() {
 
   return (
     <div
-      className="flex flex-col fixed top-1/5 left-1/6 w-3/4 bg-white dark:bg-gray-800 dark:text-white dark:shadow-none h-120 rounded-xl overflow-hidden shadow-xl shadow-gray-400 "
+      className="flex flex-col absolute lg:fixed h-full w-11/12 lg:top-1/5 lg:left-1/6 lg:w-3/4 bg-white dark:bg-gray-800 dark:text-white dark:shadow-none lg:h-120 rounded-xl overflow-hidden shadow-xl shadow-gray-400 "
       ref={modalRef}
     >
       <div
@@ -146,9 +146,9 @@ export default function ViewModal() {
           </div>
         </div>
 
-        <div className="flex flex-1 max-h-[255px] border-t pt-2 border-blue-300">
+        <div className="flex flex-col lg:flex-row flex-1 h-[255px] border-t pt-2 border-blue-300">
           <div
-            className={`flex flex-col flex-1 overflow-y-auto p-2 ${
+            className={`flex flex-col lg:flex-1 h-50 overflow-y-auto p-2 ${
               description
                 ? "absolute h-full p-4 transition ease-in-out bg-white dark:bg-gray-800 left-0 top-0 w-full z-10"
                 : ""
@@ -171,7 +171,7 @@ export default function ViewModal() {
               </ReactMarkdown>
             </div>
           </div>
-          <div className="flex items-center h-[254px] flex-col w-[610px] border-l border-blue-300 dark:border-blue-600 p-2">
+          <div className="flex items-center h-[254px] flex-col w-full lg:w-[610px] sm:border-t lg:border-t-0 lg:border-l border-blue-300 dark:border-blue-600 p-2">
             <div className="flex w-full">
               <h1 className="font-medium pb-2 pl-2">Added Qty Details :</h1>
             </div>
