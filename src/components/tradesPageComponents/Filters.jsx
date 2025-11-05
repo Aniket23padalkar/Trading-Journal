@@ -13,7 +13,7 @@ export default function Filters() {
   }
 
   return (
-    <div className="flex items-center gap-2 absolute rounded-2xl h-full w-120 lg:w-180 dark:bg-gray-950 pr-2 bg-white">
+    <div className="flex items-center gap-2 absolute rounded-2xl h-full w-86 lg:w-120 xl:w-180 dark:bg-gray-950 pr-2 bg-white">
       <select
         className="filter-select"
         name="order"
@@ -59,7 +59,7 @@ export default function Filters() {
         <option value="Positional">Positional</option>
         <option value="Long-Term">Long-Term</option>
       </select>
-      <div className="lg:flex py-1 items-center hidden ml-1 text-violet-400 dark:text-blue-300 bg-violet-50 dark:bg-blue-900 rounded-md">
+      <div className="md:flex py-1 items-center hidden ml-1 text-violet-400 dark:text-blue-300 bg-violet-50 dark:bg-blue-900 rounded-md">
         {/* <label>Date Range:</label> */}
         <input
           type="date"

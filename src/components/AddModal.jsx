@@ -125,7 +125,7 @@ export default function AddModal() {
 
   return (
     <div
-      className="flex flex-col overflow-visible fixed inset-0 top-1/6 left-1/6 lg:top-1/4 lg:left-1/3 h-110 w-120 z-10 bg-white dark:bg-gray-800 rounded-xl shadow-2xl"
+      className="flex flex-col overflow-visible fixed inset-0 top-1/5 left-1/8 sm:top-1/5 sm:left-1/5 md:top-1/5 md:left-1/4 lg:top-1/4 lg:left-1/3 h-110 w-120 z-10 bg-white dark:bg-gray-800 rounded-xl shadow-2xl"
       ref={modalRef}
     >
       <div
