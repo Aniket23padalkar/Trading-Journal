@@ -6,7 +6,7 @@ import GlobalStateContext from "./context/Context";
 import AuthProvider from "./context/AuthContext";
 
 createRoot(document.getElementById("root")).render(
-  <BrowserRouter basename="/Trading-Journal">
+  <BrowserRouter>
     <AuthProvider>
       <GlobalStateContext>
         <App />
