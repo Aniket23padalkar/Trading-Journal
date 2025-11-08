@@ -1,10 +1,20 @@
-import { useContext, useMemo } from "react";
+import { useContext } from "react";
 import { GlobalContext } from "../context/Context";
 import calculatePnL from "../utils/CalculatePnl";
 import useDrag from "../hooks/useDrag";
 import AddQtyModal from "./AddQtyModal";
 import useCalculateStats from "../hooks/useCalculateStats";
 import { FaExclamation } from "react-icons/fa6";
+import {
+  addDoc,
+  collection,
+  doc,
+  serverTimestamp,
+  updateDoc,
+} from "firebase/firestore";
+import { db } from "../firebase/firestore";
+import { AuthContext } from "../context/AuthContext";
+import { toast } from "react-toastify";
 
 export default function AddModal() {
   const { modalRef, handleMouseDown } = useDrag();
@@ -24,6 +34,7 @@ export default function AddModal() {
     entries,
     formData
   );
+  const { user } = useContext(AuthContext);
 
   function handleChange(e) {
     const { name, value } = e.target;
@@ -63,7 +74,7 @@ export default function AddModal() {
     });
   }
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
 
     const invalidEntries =
@@ -100,20 +111,33 @@ export default function AddModal() {
         avgRisk: avgRisk,
         avgRR: avgRR,
       },
-      id: currentEditId ? currentEditId : crypto.randomUUID(),
     };
 
-    if (currentEditId) {
-      setTrades((prev) =>
-        prev.map((trade) => (trade.id === currentEditId ? newTrade : trade))
-      );
-    } else {
-      setTrades((prev) => [...prev, newTrade]);
+    try {
+      if (currentEditId) {
+        const tradeRef = doc(db, "users", user.uid, "trades", currentEditId);
+        await updateDoc(tradeRef, {
+          ...newTrade,
+          updatedAt: serverTimestamp(),
+        });
+        toast.success("Trade Updated");
+      } else {
+        const tradesRef = collection(db, "users", user.uid, "trades");
+        await addDoc(tradesRef, {
+          ...newTrade,
+          createdAt: serverTimestamp(),
+          updatedAt: serverTimestamp(),
+        });
+        toast.success("Trade Added Successfully");
+      }
+      setCurrentEditId(null);
+      resetForm();
+      setAddModal(false);
+      setAddQtyModal(false);
+    } catch (err) {
+      console.log(err);
+      toast.error(err.message);
     }
-    setCurrentEditId(null);
-    resetForm();
-    setAddModal(false);
-    setAddQtyModal(false);
   }
 
   function handleCloseModal() {

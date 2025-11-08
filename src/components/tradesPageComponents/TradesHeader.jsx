@@ -75,7 +75,7 @@ export default function TradesHeader() {
   return (
     <div className="flex w-full justify-between items-center p-2 lg:py-2 lg:px-6 relative rounded-xl shadow shadow-gray-400 bg-white dark:bg-gray-950 dark:shadow-none dark:text-white">
       <div className="flex items-center">
-        <p className="drop-shadow-lg font-medium mr-2 text-sm lg:text-lg">
+        <p className="drop-shadow-lg font-medium mr-2 text-sm  xl:text-lg">
           Yearly/Monthly Trades :
         </p>
         <select

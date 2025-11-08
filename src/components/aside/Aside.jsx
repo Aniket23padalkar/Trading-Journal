@@ -15,7 +15,7 @@ export default function Aside() {
     >
       <ul className="flex grow flex-col mt-4 gap-2">
         <NavLink
-          to="/"
+          to="/dashboard"
           className={({ isActive }) =>
             `flex items-center py-2 rounded font-medium ${
               isActive

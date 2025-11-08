@@ -1,11 +1,11 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 import FilterTrades from "../utils/FilterTrades.jsx";
 import useTradesData from "../hooks/useTradesData.jsx";
 
 export const GlobalContext = createContext(null);
 
 export default function GlobalStateContext({ children }) {
-  const [trades, setTrades] = useTradesData("tradesV2", []);
+  const { trades, fetchLoading } = useTradesData();
   const [addModal, setAddModal] = useState(false);
   const [currentEditId, setCurrentEditId] = useState(null);
   const [viewModal, setViewModal] = useState(false);
@@ -68,7 +68,7 @@ export default function GlobalStateContext({ children }) {
     <GlobalContext.Provider
       value={{
         trades,
-        setTrades,
+        fetchLoading,
         addModal,
         setAddModal,
         formData,

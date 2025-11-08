@@ -3,11 +3,14 @@ import "./index.css";
 import App from "./App";
 import { BrowserRouter } from "react-router-dom";
 import GlobalStateContext from "./context/Context";
+import AuthProvider from "./context/AuthContext";
 
 createRoot(document.getElementById("root")).render(
-  <BrowserRouter>
-    <GlobalStateContext>
-      <App />
-    </GlobalStateContext>
+  <BrowserRouter basename="/Trading-Journal">
+    <AuthProvider>
+      <GlobalStateContext>
+        <App />
+      </GlobalStateContext>
+    </AuthProvider>
   </BrowserRouter>
 );

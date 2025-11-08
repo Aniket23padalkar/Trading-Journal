@@ -1,30 +1,108 @@
-import Aside from "./components/aside/Aside";
-import Header from "./components/header/Header";
-import { Routes, Route } from "react-router-dom";
+import {
+  Routes,
+  Route,
+  BrowserRouter as Router,
+  Navigate,
+} from "react-router-dom";
 import Trades from "./pages/Trades";
 import Dashboard from "./pages/Dashboard";
 import Charts from "./pages/Charts";
 import Calender from "./pages/Calender";
 import ContactUs from "./pages/ContactUs";
+import MainLayout from "./layouts/MainLayout";
+import AuthLayout from "./layouts/AuthLayout";
+import SignUp from "./pages/SignUp";
+import SignIn from "./pages/SignIn";
+import ProtectedRoute from "./layouts/ProtectedRoute";
+import { useContext } from "react";
+import { AuthContext } from "./context/AuthContext";
 
 export default function App() {
+  const { user, loading } = useContext(AuthContext);
   return (
-    <>
-      <main className="grid grid-cols-[14rem_1fr] grid-rows-[4rem_1fr] bg-white dark:bg-gray-950">
-        <Header />
+    <Routes>
+      <Route
+        path="/"
+        element={
+          user ? (
+            <Navigate to="/dashboard" replace />
+          ) : (
+            <Navigate to="/signin" replace />
+          )
+        }
+      />
+      <Route
+        path="/signup"
+        element={
+          <AuthLayout>
+            <SignUp />
+          </AuthLayout>
+        }
+      />
 
-        <Aside />
+      <Route
+        path="/signin"
+        element={
+          <AuthLayout>
+            <SignIn />
+          </AuthLayout>
+        }
+      />
 
-        <div className="lg:col-start-2 lg:col-end-3 col-start-1 col-end-3 row-start-2 mx-2 lg:mx-0 lg:mr-2 xl:mx-4 mb-4 bg-gray-100 dark:bg-gray-800 rounded-3xl">
-          <Routes>
-            <Route path="/" element={<Dashboard />} />
-            <Route path="/trades" element={<Trades />} />
-            <Route path="/charts" element={<Charts />} />
-            <Route path="/calender" element={<Calender />} />
-            <Route path="/contact-us" element={<ContactUs />} />
-          </Routes>
-        </div>
-      </main>
-    </>
+      <Route
+        path="/dashboard"
+        element={
+          <ProtectedRoute>
+            <MainLayout>
+              <Dashboard />
+            </MainLayout>
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/trades"
+        element={
+          <ProtectedRoute>
+            <MainLayout>
+              <Trades />
+            </MainLayout>
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/charts"
+        element={
+          <ProtectedRoute>
+            <MainLayout>
+              <Charts />
+            </MainLayout>
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/calender"
+        element={
+          <ProtectedRoute>
+            <MainLayout>
+              <Calender />
+            </MainLayout>
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/contact-us"
+        element={
+          <ProtectedRoute>
+            <MainLayout>
+              <ContactUs />
+            </MainLayout>
+          </ProtectedRoute>
+        }
+      />
+    </Routes>
   );
 }
