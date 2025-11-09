@@ -1,5 +1,4 @@
-import { useContext } from "react";
-import { GlobalContext } from "../context/Context";
+import { useContext, useEffect, useState } from "react";
 import calculatePnL from "../utils/CalculatePnl";
 import useDrag from "../hooks/useDrag";
 import AddQtyModal from "./AddQtyModal";
@@ -16,24 +15,32 @@ import { db } from "../firebase/firestore";
 import { AuthContext } from "../context/AuthContext";
 import { toast } from "react-toastify";
 
-export default function AddModal() {
+export default function AddModal({ editTrade, setEditTrade, setAddModal }) {
   const { modalRef, handleMouseDown } = useDrag();
-  const {
-    setTrades,
-    setAddModal,
-    formData,
-    setFormData,
-    currentEditId,
-    setCurrentEditId,
-    entries,
-    setEntries,
-    addQtyModal,
-    setAddQtyModal,
-  } = useContext(GlobalContext);
+  const [formData, setFormData] = useState({
+    symbol: "",
+    order: "",
+    status: "",
+    marketType: "",
+    position: "",
+    rating: "",
+    description: "",
+  });
+  const [entries, setEntries] = useState({
+    addedEntries: [],
+    initialBuy: "",
+    initialSell: "",
+    initialQty: "",
+    initialRisk: "",
+    initialEntryTime: "",
+    initialExitTime: "",
+  });
+  const [addQtyModal, setAddQtyModal] = useState(false);
   const { avgBuy, avgSell, totalQty, avgRisk } = useCalculateStats(
     entries,
     formData
   );
+
   const { user } = useContext(AuthContext);
 
   function handleChange(e) {
@@ -73,6 +80,15 @@ export default function AddModal() {
       initialExitTime: "",
     });
   }
+
+  useEffect(() => {
+    if (editTrade) {
+      setFormData(editTrade.formData);
+      setEntries(editTrade.entries);
+    } else {
+      resetForm();
+    }
+  }, [editTrade]);
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -114,8 +130,8 @@ export default function AddModal() {
     };
 
     try {
-      if (currentEditId) {
-        const tradeRef = doc(db, "users", user.uid, "trades", currentEditId);
+      if (editTrade) {
+        const tradeRef = doc(db, "users", user.uid, "trades", editTrade.id);
         await updateDoc(tradeRef, {
           ...newTrade,
           updatedAt: serverTimestamp(),
@@ -130,7 +146,7 @@ export default function AddModal() {
         });
         toast.success("Trade Added Successfully");
       }
-      setCurrentEditId(null);
+      setEditTrade(null);
       resetForm();
       setAddModal(false);
       setAddQtyModal(false);
@@ -143,7 +159,7 @@ export default function AddModal() {
   function handleCloseModal() {
     setAddModal(false);
     resetForm();
-    setCurrentEditId(null);
+    setEditTrade(null);
     setAddQtyModal(false);
   }
 
@@ -367,7 +383,15 @@ export default function AddModal() {
           </button>
         </div>
       </form>
-      {addQtyModal && <AddQtyModal />}
+      {addQtyModal && (
+        <AddQtyModal
+          onClose={setAddQtyModal}
+          addedEntries={entries.addedEntries}
+          setEntries={setEntries}
+          status={formData.status}
+          order={formData.order}
+        />
+      )}
     </div>
   );
 }

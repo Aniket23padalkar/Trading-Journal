@@ -1,33 +1,24 @@
-import { useContext, useState } from "react";
-import { GlobalContext } from "../../context/Context";
-import { FaEdit, FaTrash } from "react-icons/fa";
-import formatDateTime from "../../utils/formatDateTime";
+import React, { useContext } from "react";
 import { FaArrowDown, FaArrowUp } from "react-icons/fa6";
 import { deleteDoc, doc } from "firebase/firestore";
 import { db } from "../../firebase/firestore";
 import { AuthContext } from "../../context/AuthContext";
 import { ScaleLoader } from "react-spinners";
 import Swal from "sweetalert2";
+import TradeRow from "./TradeRow";
+import useTradesData from "../../hooks/useTradesData";
+import { FilterContext } from "../../context/FilterContext";
 
-export default function TradesTable({ currentTrades, indexOfFirstTrade }) {
-  const {
-    fetchLoading,
-    setCurrentViewTrade,
-    setViewModal,
-    setCurrentEditId,
-    setFormData,
-    setAddModal,
-    setEntries,
-    setFilterValue,
-    filterValue,
-  } = useContext(GlobalContext);
+function TradesTable({
+  currentTrades,
+  indexOfFirstTrade,
+  handleSetViewModal,
+  handleSetEditTrade,
+  setCurrentViewTrade,
+}) {
+  const { setFilterValue, filterValue } = useContext(FilterContext);
+  const { fetchLoading } = useTradesData();
   const { user } = useContext(AuthContext);
-
-  function orderColor(order) {
-    if (order === "BUY") return "#03c988";
-    if (order === "SELL") return "#ff7779ff";
-    return "#fff";
-  }
 
   function handleFilterChange() {
     setFilterValue((prev) => ({
@@ -53,11 +44,6 @@ export default function TradesTable({ currentTrades, indexOfFirstTrade }) {
           : "Desc",
       pnlSort: "",
     }));
-  }
-
-  function handleViewModal(trade) {
-    setCurrentViewTrade(trade);
-    setViewModal(true);
   }
 
   async function handleDeleteTrade(id) {
@@ -89,53 +75,6 @@ export default function TradesTable({ currentTrades, indexOfFirstTrade }) {
         });
       }
     }
-  }
-
-  function viewEditTradeModal(mode, trade) {
-    if (mode === "edit") {
-      setCurrentEditId(trade.id);
-      setFormData({
-        symbol: trade.formData.symbol,
-        order: trade.formData.order,
-        status: trade.formData.status,
-        marketType: trade.formData.marketType,
-        position: trade.formData.position,
-        rating: trade.formData.rating,
-        description: trade.formData.description,
-      });
-      setEntries({
-        addedEntries: trade.entries.addedEntries,
-        initialBuy: trade.entries.initialBuy,
-        initialSell: trade.entries.initialSell,
-        initialQty: trade.entries.initialQty,
-        initialRisk: trade.entries.initialRisk,
-        initialEntryTime: trade.entries.initialEntryTime,
-        initialExitTime: trade.entries.initialExitTime,
-      });
-    } else {
-      setCurrentEditId(null);
-      setFormData({
-        symbol: "",
-        order: "",
-        status: "",
-        marketType: "",
-        position: "",
-        rating: "",
-        description: "",
-      });
-
-      setEntries({
-        addedEntries: [],
-        initialBuy: "",
-        initialSell: "",
-        initialQty: "",
-        initialRisk: "",
-        initialEntryTime: "",
-        initialExitTime: "",
-      });
-    }
-
-    setAddModal(true);
   }
 
   return (
@@ -190,95 +129,18 @@ export default function TradesTable({ currentTrades, indexOfFirstTrade }) {
           </thead>
           <tbody>
             {currentTrades.length > 0 &&
-              currentTrades.map((trade, index) => {
-                return (
-                  <tr key={trade.id} onClick={() => handleViewModal(trade)}>
-                    <td className="bg-gray-200 dark:bg-gray-900">
-                      {indexOfFirstTrade + index + 1}
-                    </td>
-                    <td className="text-left whitespace-nowrap w-30 font-medium text-base capitalize px-1 bg-gray-100 dark:bg-gray-800">
-                      {trade.formData.symbol}
-                    </td>
-                    <td>
-                      <p
-                        className="text-xs px-1"
-                        style={{
-                          border: `1px solid ${orderColor(
-                            trade.formData.order
-                          )}`,
-                          color: orderColor(trade.formData.order),
-                          borderRadius: "3px",
-
-                          fontWeight: 500,
-                        }}
-                      >
-                        {trade.formData.order}
-                      </p>
-                    </td>
-                    <td className="text-xs dark:text-gray-300">
-                      {trade.formData.status}
-                    </td>
-                    <td className="dark:text-gray-300">
-                      {trade.formData.marketType}
-                    </td>
-                    <td>{trade.stats.totalQty}</td>
-
-                    <td>
-                      <p className="text-xs bg-blue-100 dark:text-black dark:bg-blue-400 rounded">
-                        {trade.formData.position}
-                      </p>
-                    </td>
-                    <td className="text-xs text-blue-700 dark:text-sky-500 whitespace-nowrap">
-                      {formatDateTime(trade.entries.initialEntryTime)}
-                    </td>
-                    <td>{trade.stats.avgRisk}</td>
-                    <td
-                      className={`text-sm font-bold ${
-                        trade.stats.pnl >= 0
-                          ? "text-green-600 dark:text-green-500"
-                          : "text-red-500 dark:text-red-400"
-                      }`}
-                    >
-                      {" "}
-                      {trade.stats.pnl > 0 && "+"}
-                      {trade.formData.status === "Open"
-                        ? "-"
-                        : Number(trade.stats.pnl).toLocaleString("en-IN", {
-                            minimumFractionDigits: 2,
-                            maximumFractionDigits: 2,
-                          })}
-                      {trade.formData.status === "Open" ? "-" : "/-"}
-                    </td>
-                    <td style={{ fontWeight: 600 }}>
-                      {trade.formData.status === "Open"
-                        ? "-"
-                        : Number(trade.stats.avgRR).toFixed(1)}
-                      {trade.formData.status === "Open" ? "-" : "X"}
-                    </td>
-                    <td>{trade.formData.rating}</td>
-                    <td>
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          viewEditTradeModal("edit", trade);
-                        }}
-                        className="cursor-pointer bg-transparent"
-                      >
-                        <FaEdit className="text-blue-400" />
-                      </button>
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleDeleteTrade(trade.id);
-                        }}
-                        className="cursor-pointer bg-transparent xl:pl-2"
-                      >
-                        <FaTrash className="text-red-400" />
-                      </button>
-                    </td>
-                  </tr>
-                );
-              })}
+              currentTrades.map((trade, index) => (
+                <TradeRow
+                  key={trade.id}
+                  trade={trade}
+                  index={index}
+                  indexOfFirstTrade={indexOfFirstTrade}
+                  handleSetEditTrade={handleSetEditTrade}
+                  setCurrentViewTrade={setCurrentViewTrade}
+                  handleSetViewModal={handleSetViewModal}
+                  handleDeleteTrade={handleDeleteTrade}
+                />
+              ))}
           </tbody>
         </table>
       </div>
@@ -290,3 +152,5 @@ export default function TradesTable({ currentTrades, indexOfFirstTrade }) {
     </div>
   );
 }
+
+export default React.memo(TradesTable);

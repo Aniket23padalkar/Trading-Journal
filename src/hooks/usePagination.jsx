@@ -1,3 +1,5 @@
+import { useMemo } from "react";
+
 export default function usePagination(
   filteredTrades,
   tradesPerPage,
@@ -8,10 +10,9 @@ export default function usePagination(
   const indexOfLastTrade = currentPage * tradesPerPage;
   const indexOfFirstTrade = indexOfLastTrade - tradesPerPage;
 
-  const currentTrades = filteredTrades.slice(
-    indexOfFirstTrade,
-    indexOfLastTrade
-  );
+  const currentTrades = useMemo(() => {
+    return filteredTrades.slice(indexOfFirstTrade, indexOfLastTrade);
+  }, [filteredTrades, indexOfFirstTrade, indexOfLastTrade]);
 
   return { totalPages, currentTrades, indexOfFirstTrade };
 }

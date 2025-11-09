@@ -1,17 +1,13 @@
-import { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { GlobalContext } from "../../context/Context";
 import { FaFilter } from "react-icons/fa";
 import Filters from "./Filters";
+import { FilterContext } from "../../context/FilterContext";
 
-export default function TradesHeader() {
-  const {
-    trades,
-    setAddModal,
-    viewFilters,
-    setViewFilters,
-    filterValue,
-    setFilterValue,
-  } = useContext(GlobalContext);
+function TradesHeader({ setAddModal }) {
+  const { trades } = useContext(GlobalContext);
+  const { filterValue, setFilterValue } = useContext(FilterContext);
+  const [viewFilters, setViewFilters] = useState(false);
 
   function handleChange(e) {
     const { name, value } = e.target;
@@ -72,6 +68,11 @@ export default function TradesHeader() {
   );
   uniqueMonth.sort((a, b) => monthOrder.indexOf(a) - monthOrder.indexOf(b));
   const months = uniqueMonth;
+
+  function handleOpen() {
+    setAddModal(true);
+  }
+
   return (
     <div className="flex w-full justify-between items-center p-2 lg:py-2 lg:px-6 relative rounded-xl shadow shadow-gray-400 bg-white dark:bg-gray-950 dark:shadow-none dark:text-white">
       <div className="flex items-center">
@@ -122,7 +123,7 @@ export default function TradesHeader() {
         </button>
 
         <button
-          onClick={() => setAddModal(true)}
+          onClick={handleOpen}
           className="h-full py-0.5 px-2 lg:py-1 lg:px-5 font-bold cursor-pointer hover:scale-105 text-green-700 text-sm rounded-lg bg-green-200 border border-green-700 dark:bg-teal-500 dark:text-green-800 dark:border-none"
         >
           + Add
@@ -131,3 +132,5 @@ export default function TradesHeader() {
     </div>
   );
 }
+
+export default React.memo(TradesHeader);

@@ -7,8 +7,8 @@ import ReactMarkdown from "react-markdown";
 import calculatePnL from "../utils/CalculatePnl";
 import FormatPnL from "../utils/FormatPnL";
 
-export default function ViewModal() {
-  const { setViewModal, currentViewTrade, theme } = useContext(GlobalContext);
+export default function ViewModal({ setViewModal, currentViewTrade }) {
+  const { theme } = useContext(GlobalContext);
   const [description, setDescription] = useState(false);
 
   const { modalRef, handleMouseDown } = useDrag();
@@ -27,6 +27,10 @@ export default function ViewModal() {
     if (currentViewTrade.formData.rating === "Good") return "#66c43bff";
     if (currentViewTrade.formData.rating === "Best") return "green";
     return "black";
+  }
+
+  function handleCloseViewModal() {
+    setViewModal(false);
   }
 
   return (
@@ -300,7 +304,7 @@ export default function ViewModal() {
       <div className="flex items-center justify-end px-6 bg-teal-800 h-10 w-full">
         <button
           className="bg-red-400 px-6 rounded text-red-800 hover:scale-105 cursor-pointer font-bold"
-          onClick={() => setViewModal(false)}
+          onClick={handleCloseViewModal}
         >
           Close
         </button>

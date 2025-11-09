@@ -1,10 +1,14 @@
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
-import { useContext } from "react";
-import { GlobalContext } from "../../context/Context";
+import React from "react";
 
-export default function Pagination({ totalPages, currentTrades }) {
-  const { currentPage, setCurrentPage } = useContext(GlobalContext);
-
+function Pagination({
+  totalPages,
+  currentTrades,
+  currentPage,
+  handleNextPage,
+  handlePrevPage,
+  handleSetPage,
+}) {
   const maxVisible = 3;
   let start = Math.max(1, currentPage - Math.floor(maxVisible / 2));
   let end = Math.min(totalPages, start + maxVisible - 1);
@@ -26,7 +30,7 @@ export default function Pagination({ totalPages, currentTrades }) {
             ? " text-gray-500"
             : "text-black hover:scale-110 cursor-pointer dark:text-white"
         }`}
-        onClick={() => setCurrentPage((prev) => Math.max(1, prev - 1))}
+        onClick={handlePrevPage}
         disabled={currentPage === 1 || currentTrades.length === 0}
       >
         <FaChevronLeft />
@@ -35,7 +39,7 @@ export default function Pagination({ totalPages, currentTrades }) {
       <div className="flex items-center justify-center gap-2 min-w-[300px]">
         {start > 1 && (
           <button
-            onClick={() => setCurrentPage(1)}
+            onClick={() => handleSetPage(1)}
             className="flex items-center justify-center text-black dark:text-white h-5 w-5 cursor-pointer hover:scale-105 rounded text-sm font-medium"
           >
             1
@@ -45,7 +49,7 @@ export default function Pagination({ totalPages, currentTrades }) {
         {pages.map((page) => (
           <button
             key={page}
-            onClick={() => setCurrentPage(page)}
+            onClick={() => handleSetPage(page)}
             className={`flex items-center justify-center h-5 w-5 cursor-pointer rounded text-sm font-medium ${
               currentPage === page
                 ? "bg-black dark:bg-white text-white dark:text-black  scale-120 border border-black dark:border-none"
@@ -60,7 +64,7 @@ export default function Pagination({ totalPages, currentTrades }) {
         )}
         {end < totalPages && (
           <button
-            onClick={() => setCurrentPage(totalPages)}
+            onClick={() => handleSetPage(totalPages)}
             className="flex items-center justify-center text-black dark:text-white h-5 w-5 cursor-pointer hover:scale-105 rounded text-sm font-medium"
           >
             {totalPages}
@@ -73,7 +77,7 @@ export default function Pagination({ totalPages, currentTrades }) {
             ? " text-gray-500"
             : "text-black dark:text-white hover:scale-110 cursor-pointer"
         }`}
-        onClick={() => setCurrentPage((prev) => Math.min(totalPages, prev + 1))}
+        onClick={handleNextPage}
         disabled={currentPage === totalPages || currentTrades.length === 0}
       >
         <p>Next</p>
@@ -82,3 +86,5 @@ export default function Pagination({ totalPages, currentTrades }) {
     </div>
   );
 }
+
+export default React.memo(Pagination);

@@ -1,8 +1,8 @@
 import { useContext } from "react";
-import { GlobalContext } from "../../context/Context";
+import { FilterContext } from "../../context/FilterContext";
 
 export default function Filters() {
-  const { filterValue, setFilterValue } = useContext(GlobalContext);
+  const { filterValue, setFilterValue } = useContext(FilterContext);
 
   function handleChange(e) {
     const { name, value } = e.target;

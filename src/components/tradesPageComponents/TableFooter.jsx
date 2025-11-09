@@ -1,10 +1,7 @@
-import { useContext, useMemo } from "react";
-import { GlobalContext } from "../../context/Context";
+import React, { useMemo } from "react";
 import FormatPnL from "../../utils/FormatPnL";
 
-export default function TableFooter() {
-  const { filteredTrades } = useContext(GlobalContext);
-
+function TableFooter({ filteredTrades }) {
   const { totalPnL, totalRRratio, winRate } = useMemo(() => {
     if (!filteredTrades || filteredTrades.length === 0) {
       return {
@@ -83,3 +80,5 @@ export default function TableFooter() {
     </div>
   );
 }
+
+export default React.memo(TableFooter);

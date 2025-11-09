@@ -1,10 +1,9 @@
 import { useContext } from "react";
 import { GlobalContext } from "../../context/Context";
 import GetMonthlyPnl from "../../utils/getMonthlyPnl";
-import { BiTrendingDown, BiTrendingUp } from "react-icons/bi";
 
-export default function ChartsHeader() {
-  const { trades, selectedYear, setSelectedYear } = useContext(GlobalContext);
+export default function ChartsHeader({ selectedYear, setSelectedYear }) {
+  const { trades } = useContext(GlobalContext);
   const data = GetMonthlyPnl(trades, selectedYear);
   const yearlyPnl = data.reduce((acc, data) => acc + Number(data.pnl), 0);
 

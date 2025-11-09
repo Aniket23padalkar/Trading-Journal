@@ -12,8 +12,8 @@ import {
 } from "recharts";
 import GetMonthlyPnl from "../../utils/getMonthlyPnl";
 
-export default function AreaChartFillValue() {
-  const { trades, selectedYear, theme } = useContext(GlobalContext);
+export default function AreaChartFillValue({ selectedYear }) {
+  const { trades, theme } = useContext(GlobalContext);
 
   const data = GetMonthlyPnl(trades, selectedYear);
 

@@ -16,9 +16,10 @@ import SignIn from "./pages/SignIn";
 import ProtectedRoute from "./layouts/ProtectedRoute";
 import { useContext } from "react";
 import { AuthContext } from "./context/AuthContext";
+import FilterContextProvider from "./context/FilterContext";
 
 export default function App() {
-  const { user, loading } = useContext(AuthContext);
+  const { user } = useContext(AuthContext);
   return (
     <Routes>
       <Route
@@ -65,7 +66,9 @@ export default function App() {
         element={
           <ProtectedRoute>
             <MainLayout>
-              <Trades />
+              <FilterContextProvider>
+                <Trades />
+              </FilterContextProvider>
             </MainLayout>
           </ProtectedRoute>
         }
