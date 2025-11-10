@@ -24,16 +24,7 @@ export default function Filters() {
         <option value="BUY">BUY</option>
         <option value="SELL">SELL</option>
       </select>
-      <select
-        name="status"
-        value={filterValue.status}
-        className="filter-select"
-        onChange={handleChange}
-      >
-        <option value="">Status</option>
-        <option value="Open">Open</option>
-        <option value="Closed">Closed</option>
-      </select>
+
       <select
         name="marketType"
         value={filterValue.marketType}

@@ -103,18 +103,10 @@ export default function Trades() {
         />
       )}
       {viewModal && (
-        <Suspense
-          fallback={
-            <div className="flex absolute h-full w-full justify-between items-center">
-              <ScaleLoader color="##20dfbc" />
-            </div>
-          }
-        >
-          <ViewModal
-            setViewModal={setViewModal}
-            currentViewTrade={currentViewTrade}
-          />
-        </Suspense>
+        <ViewModal
+          setViewModal={setViewModal}
+          currentViewTrade={currentViewTrade}
+        />
       )}
     </section>
   );

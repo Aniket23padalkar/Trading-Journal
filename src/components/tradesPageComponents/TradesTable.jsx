@@ -79,7 +79,7 @@ function TradesTable({
 
   return (
     <section className="flex h-full w-full items-center bg-transparent relative">
-      <div className="w-full min-h-102 h shadow-md shadow-gray-400 dark:shadow-none overflow-x-auto scrollbar-thin-x">
+      <div className="w-full min-h-102 h shadow shadow-gray-500 dark:shadow-none overflow-x-auto scrollbar-thin-x">
         {fetchLoading && (
           <div className="flex absolute left-0 top-0 items-center justify-center h-full w-full">
             <ScaleLoader color="#20dfbc" />

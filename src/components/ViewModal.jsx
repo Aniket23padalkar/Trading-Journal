@@ -301,7 +301,7 @@ export default function ViewModal({ setViewModal, currentViewTrade }) {
           </div>
         </div>
       </div>
-      <div className="flex items-center justify-end px-6 bg-teal-800 h-10 w-full">
+      <div className="flex items-center justify-end px-6 bg-teal-700 h-10 w-full">
         <button
           className="bg-red-400 px-6 rounded text-red-800 hover:scale-105 cursor-pointer font-bold"
           onClick={handleCloseViewModal}

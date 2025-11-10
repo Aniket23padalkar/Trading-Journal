@@ -14,7 +14,8 @@ export default function useStatsCalculations(trades) {
         averageRiskPerTrade: 0,
         totalProfitTrades: 0,
         totalLossTrades: 0,
-        openTrades: 0,
+        CTCTrades: 0,
+        closedTrades: 0,
       };
     }
 
@@ -54,9 +55,9 @@ export default function useStatsCalculations(trades) {
         ? ((winningTrades.length / closedTrades.length) * 100).toFixed(0)
         : 0;
 
-    const openTrades = trades
-      .filter((trade) => trade.formData.status === "Open")
-      .length.toFixed(0);
+    const CTCTrades = closedTrades.filter(
+      (trade) => Number(trade.stats.pnl) === 0
+    ).length;
 
     return {
       overallPnl,
@@ -69,7 +70,8 @@ export default function useStatsCalculations(trades) {
       averageRiskPerTrade,
       totalProfitTrades,
       totalLossTrades,
-      openTrades,
+      CTCTrades,
+      closedTrades,
     };
   }, [trades]);
 }

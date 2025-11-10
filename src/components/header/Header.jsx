@@ -52,18 +52,18 @@ export default function Header() {
       <div className="flex items-center h-full">
         <button
           onClick={handleTheme}
-          className="mr-4 cursor-pointer p-2 hover:bg-blue-100 dark:hover:bg-indigo-900 rounded-full"
+          className="mr-2 cursor-pointer p-2 bg-blue-50 dark:bg-gray-800 dark:text-amber-300 text-blue-800  hover:bg-blue-200 dark:hover:bg-indigo-900 rounded-full"
         >
           {theme === "light" ? (
             <BiMoon className="text-2xl" />
           ) : (
-            <BiSun className="text-2xl text-white" />
+            <BiSun className="text-2xl" />
           )}
         </button>
         <div className="flex items-center relative">
           <div
             onClick={() => setLogoutWindow(!logoutWindow)}
-            className="flex items-center justify-center  cursor-pointer text-lg font-medium capitalize text-white px-2 bg-green-600 dark:bg-teal-600 rounded"
+            className="flex items-center justify-center  cursor-pointer text-lg font-medium capitalize dark:text-white rounded"
           >
             {`Hi, ${user.displayName}` || "A"}
           </div>

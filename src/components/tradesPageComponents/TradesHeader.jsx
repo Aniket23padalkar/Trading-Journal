@@ -83,7 +83,7 @@ function TradesHeader({ setAddModal }) {
     uniqueMonth.sort((a, b) => monthOrder.indexOf(a) - monthOrder.indexOf(b));
     const months = uniqueMonth;
 
-    return { years: uniqueYear, months: uniqueMonth };
+    return { years, months };
   }, [trades, filterValue.year]);
 
   const handleOpen = useCallback(() => {
@@ -96,13 +96,13 @@ function TradesHeader({ setAddModal }) {
 
   return (
     <header className="flex w-full justify-between items-center p-2 lg:py-2 lg:px-6 relative rounded-xl shadow shadow-gray-400 bg-white dark:bg-gray-950 dark:shadow-none dark:text-white">
-      <div className="flex items-center">
+      <div className="flex items-center gap-2">
         <p className="drop-shadow-lg font-medium mr-2 text-sm  xl:text-lg">
           Yearly/Monthly Trades :
         </p>
         <select
           name="year"
-          className="filter-select mr-2"
+          className="filter-select"
           value={filterValue.year}
           onChange={handleChange}
         >
@@ -121,6 +121,16 @@ function TradesHeader({ setAddModal }) {
               {month}
             </option>
           ))}
+        </select>
+        <select
+          name="status"
+          value={filterValue.status}
+          className="filter-select"
+          onChange={handleChange}
+        >
+          <option value="">Status</option>
+          <option value="Open">Open</option>
+          <option value="Closed">Closed</option>
         </select>
       </div>
       {viewFilters && (

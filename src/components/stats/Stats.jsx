@@ -26,7 +26,8 @@ export default function Stats() {
     averageRiskPerTrade,
     totalProfitTrades,
     totalLossTrades,
-    openTrades,
+    CTCTrades,
+    closedTrades,
   } = useStatsCalculations(trades);
 
   return (
@@ -185,11 +186,11 @@ export default function Stats() {
               <BiBarChartAlt2 className="text-white text-2xl" />
             </div>
             <h1 className="text-xl font-medium dark:text-white  ">
-              Total Trades
+              Total Closed Trades
             </h1>
           </div>
           <h1 className="text-2xl font-bold dark:text-white">
-            +{trades.length}
+            +{closedTrades.length}
           </h1>
         </div>
         <div className="flex flex-1 items-end text-center">
@@ -206,8 +207,8 @@ export default function Stats() {
             </h1>
           </div>
           <div className="flex-1 border-l-gray-400 border-l">
-            <p className="dark:text-white">Open-Trades</p>
-            <h1 className="text-2xl font-medium">{openTrades}</h1>
+            <p className="dark:text-white">CTC-Trades</p>
+            <h1 className="text-2xl font-medium">{CTCTrades}</h1>
           </div>
         </div>
       </article>
