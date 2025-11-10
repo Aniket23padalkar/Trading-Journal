@@ -8,7 +8,7 @@ import React, {
 } from "react";
 import { GlobalContext } from "../context/Context";
 import AddModal from "../components/AddModal";
-const ViewModal = React.lazy(() => import("../components/ViewModal"));
+import ViewModal from "../components/ViewModal";
 import Pagination from "../components/tradesPageComponents/Pagination";
 import TradesTable from "../components/tradesPageComponents/TradesTable";
 import usePagination from "../hooks/usePagination";
@@ -16,7 +16,6 @@ import TableFooter from "../components/tradesPageComponents/TableFooter";
 import TradesHeader from "../components/tradesPageComponents/TradesHeader";
 import FilterTrades from "../utils/FilterTrades";
 import { FilterContext } from "../context/FilterContext";
-import { ScaleLoader } from "react-spinners";
 
 export default function Trades() {
   const { trades } = useContext(GlobalContext);

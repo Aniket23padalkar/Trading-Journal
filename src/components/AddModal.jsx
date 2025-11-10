@@ -108,7 +108,7 @@ export default function AddModal({ editTrade, setEditTrade, setAddModal }) {
             (entry) => !entry.quantity || !entry.risk || !entry.entryTime
           );
     if (invalidEntries) {
-      alert("Please fill all required Add Qty fields before saving");
+      toast.error("Please fill all required Add Qty fields before saving");
       return;
     }
 
