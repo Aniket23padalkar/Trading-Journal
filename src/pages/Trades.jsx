@@ -1,7 +1,14 @@
-import { useCallback, useContext, useEffect, useMemo, useState } from "react";
+import React, {
+  Suspense,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import { GlobalContext } from "../context/Context";
 import AddModal from "../components/AddModal";
-import ViewModal from "../components/ViewModal";
+const ViewModal = React.lazy(() => import("../components/ViewModal"));
 import Pagination from "../components/tradesPageComponents/Pagination";
 import TradesTable from "../components/tradesPageComponents/TradesTable";
 import usePagination from "../hooks/usePagination";
@@ -9,6 +16,7 @@ import TableFooter from "../components/tradesPageComponents/TableFooter";
 import TradesHeader from "../components/tradesPageComponents/TradesHeader";
 import FilterTrades from "../utils/FilterTrades";
 import { FilterContext } from "../context/FilterContext";
+import { ScaleLoader } from "react-spinners";
 
 export default function Trades() {
   const { trades } = useContext(GlobalContext);
@@ -60,7 +68,7 @@ export default function Trades() {
   }, []);
 
   return (
-    <div className="flex flex-col gap-2 items-center justify-between h-full w-full py-4 px-2 lg:p-4 rounded-3xl bg-gray-100 dark:bg-gray-800">
+    <section className="flex flex-col gap-2 items-center justify-between h-full w-full py-4 px-2 lg:p-4 rounded-3xl bg-gray-100 dark:bg-gray-800">
       {/* Header Section */}
       <TradesHeader setAddModal={handleSetAddModal} />
 
@@ -95,11 +103,19 @@ export default function Trades() {
         />
       )}
       {viewModal && (
-        <ViewModal
-          setViewModal={setViewModal}
-          currentViewTrade={currentViewTrade}
-        />
+        <Suspense
+          fallback={
+            <div className="flex absolute h-full w-full justify-between items-center">
+              <ScaleLoader color="##20dfbc" />
+            </div>
+          }
+        >
+          <ViewModal
+            setViewModal={setViewModal}
+            currentViewTrade={currentViewTrade}
+          />
+        </Suspense>
       )}
-    </div>
+    </section>
   );
 }

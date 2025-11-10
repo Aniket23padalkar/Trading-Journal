@@ -1,6 +1,5 @@
 import { useContext } from "react";
 import { GlobalContext } from "../../context/Context";
-import { useMemo } from "react";
 import candles from "../../assets/candles.png";
 import {
   FaArrowTrendDown,
@@ -11,6 +10,7 @@ import {
 } from "react-icons/fa6";
 import { FaBullseye, FaChartLine, FaExclamation } from "react-icons/fa";
 import { BiBarChartAlt2 } from "react-icons/bi";
+import useStatsCalculations from "../../hooks/useStatsCalculations";
 
 export default function Stats() {
   const { trades } = useContext(GlobalContext);
@@ -27,81 +27,11 @@ export default function Stats() {
     totalProfitTrades,
     totalLossTrades,
     openTrades,
-  } = useMemo(() => {
-    if (!trades || trades.length === 0) {
-      return {
-        overallPnl: 0,
-        maxProfit: 0,
-        maxLoss: 0,
-        winRate: 0,
-        totalProfit: 0,
-        totalLoss: 0,
-        overallRR: 0,
-        averageRiskPerTrade: 0,
-        totalProfitTrades: 0,
-        totalLossTrades: 0,
-        openTrades: 0,
-      };
-    }
-
-    const pnl = trades.map((trade) => Number(trade.stats.pnl));
-    const overallPnl = pnl.reduce((a, b) => a + b, 0);
-    const maxProfit = Math.max(...pnl);
-    const maxLoss = Math.min(...pnl);
-
-    const overallRR = trades
-      .reduce((a, b) => a + Number(b.stats.avgRR), 0)
-      .toFixed(2);
-
-    const averageRiskPerTrade = (
-      trades.reduce((a, b) => a + Number(b.stats.avgRisk), 0) / trades.length
-    ).toFixed(2);
-
-    const profitTrades = pnl.filter((p) => Number(p) > 0);
-    const totalProfit =
-      profitTrades.length > 0 ? profitTrades.reduce((a, b) => a + b, 0) : 0;
-
-    const totalProfitTrades = profitTrades.length > 0 ? profitTrades.length : 0;
-
-    const losingTrades = pnl.filter((p) => Number(p) < 0);
-    const totalLoss =
-      losingTrades.length > 0 ? losingTrades.reduce((a, b) => a + b, 0) : 0;
-
-    const totalLossTrades = losingTrades.length > 0 ? losingTrades.length : 0;
-
-    const closedTrades = trades.filter(
-      (trade) => trade.formData.status === "Closed"
-    );
-    const winningTrades = closedTrades.filter(
-      (trade) => Number(trade.stats.pnl) > 0
-    );
-    const winRate =
-      closedTrades.length > 0
-        ? ((winningTrades.length / closedTrades.length) * 100).toFixed(0)
-        : 0;
-
-    const openTrades = trades
-      .filter((trade) => trade.formData.status === "Open")
-      .length.toFixed(0);
-
-    return {
-      overallPnl,
-      maxProfit,
-      maxLoss,
-      winRate,
-      totalProfit,
-      totalLoss,
-      overallRR,
-      averageRiskPerTrade,
-      totalProfitTrades,
-      totalLossTrades,
-      openTrades,
-    };
-  }, [trades]);
+  } = useStatsCalculations(trades);
 
   return (
     <>
-      <div className="flex col-start-1 justify-between col-end-9 lg:col-end-5 h-50 lg:h-55 xl:h-65 rounded-2xl shadow shadow-gray-400 bg-teal-500 dark:bg-teal-600 dark:shadow-none p-8">
+      <article className="flex col-start-1 justify-between col-end-9 lg:col-end-5 h-50 lg:h-55 xl:h-65 rounded-2xl shadow shadow-gray-400 bg-teal-500 dark:bg-teal-600 dark:shadow-none p-8">
         <div className="flex flex-col gap-4 ">
           <div className="flex gap-4 h-15">
             <div className="flex items-center justify-center h-15 w-15 bg-white rounded-2xl">
@@ -134,9 +64,9 @@ export default function Stats() {
             alt="candles"
           />
         </div>
-      </div>
+      </article>
 
-      <div className="flex flex-col justify-between h-50 lg:h-55 xl:h-65 col-start-1 col-end-5 lg:col-start-5 lg:col-end-7 px-8 py-5 lg:py-6 lg:p-4 xl:p-8  rounded-2xl shadow shadow-gray-400 bg-white dark:bg-gray-950 dark:shadow-none">
+      <article className="flex flex-col justify-between h-50 lg:h-55 xl:h-65 col-start-1 col-end-5 lg:col-start-5 lg:col-end-7 px-8 py-5 lg:py-6 lg:p-4 xl:p-8  rounded-2xl shadow shadow-gray-400 bg-white dark:bg-gray-950 dark:shadow-none">
         <div>
           <div className="flex items-center h-10">
             <div className="h-5 w-5 bg-green-500 rounded-xl"></div>
@@ -167,9 +97,9 @@ export default function Stats() {
             })}
           </h1>
         </div>
-      </div>
+      </article>
 
-      <div className="flex flex-col gap-4 items-center h-50 lg:h-55 xl:h-65 justify-center p-8 col-start-5 col-end-9 lg:col-start-7 lg:col-end-9 rounded-2xl shadow shadow-gray-400 dark:shadow-none bg-linear-to-b from-blue-300 to-blue-50 dark:from-blue-950 dark:to-blue-400">
+      <article className="flex flex-col gap-4 items-center h-50 lg:h-55 xl:h-65 justify-center p-8 col-start-5 col-end-9 lg:col-start-7 lg:col-end-9 rounded-2xl shadow shadow-gray-400 dark:shadow-none bg-linear-to-b from-blue-300 to-blue-50 dark:from-blue-950 dark:to-blue-400">
         <div className="flex items-center justify-center h-12 w-12 rounded-md bg-green-500 shadow">
           <FaChartLine className="text-white text-3xl" />
         </div>
@@ -178,9 +108,9 @@ export default function Stats() {
           <FaArrowUp className="text-xl" />
           {winRate}%
         </h1>
-      </div>
+      </article>
 
-      <div className="flex flex-col justify-between px-8 py-5 lg:py-6 lg:p-4 xl:p-8 col-start-1 col-end-5 lg:col-start-1 lg:col-end-3 rounded-2xl shadow shadow-gray-400 dark:shadow-none h-50 lg:h-55 xl:h-60 bg-white dark:bg-gray-950">
+      <article className="flex flex-col justify-between px-8 py-5 lg:py-6 lg:p-4 xl:p-8 col-start-1 col-end-5 lg:col-start-1 lg:col-end-3 rounded-2xl shadow shadow-gray-400 dark:shadow-none h-50 lg:h-55 xl:h-60 bg-white dark:bg-gray-950">
         <div>
           <div className="flex items-center h-10">
             <div className="h-5 w-5 bg-green-500 rounded-xl"></div>
@@ -211,9 +141,9 @@ export default function Stats() {
             })}
           </h1>
         </div>
-      </div>
+      </article>
 
-      <div className="flex flex-col justify-between h-50 lg:h-55 xl:h-60 col-start-5 col-end-9 lg:col-start-3 lg:col-end-5 px-8 py-5 lg:py-6 lg:p-4 xl:p-8 rounded-2xl shadow shadow-gray-400  bg-white dark:shadow-none dark:bg-gray-950">
+      <article className="flex flex-col justify-between h-50 lg:h-55 xl:h-60 col-start-5 col-end-9 lg:col-start-3 lg:col-end-5 px-8 py-5 lg:py-6 lg:p-4 xl:p-8 rounded-2xl shadow shadow-gray-400  bg-white dark:shadow-none dark:bg-gray-950">
         <div className="flex flex-col gap-3">
           <div className="flex items-center gap-2">
             <div className="flex items-center justify-center h-8 w-8 bg-red-200 rounded-md">
@@ -246,9 +176,9 @@ export default function Stats() {
             {averageRiskPerTrade}
           </h1>
         </div>
-      </div>
+      </article>
 
-      <div className="flex flex-col h-60 lg:h-55 xl:h-60 p-8 col-start-1 lg:col-start-5 col-end-9 rounded-2xl shadow shadow-gray-400  bg-linear-to-b from-violet-400 to-violet-50 dark:from-violet-950 dark:to-violet-400 dark:shadow-none">
+      <article className="flex flex-col h-60 lg:h-55 xl:h-60 p-8 col-start-1 lg:col-start-5 col-end-9 rounded-2xl shadow shadow-gray-400  bg-linear-to-b from-violet-400 to-violet-50 dark:from-violet-950 dark:to-violet-400 dark:shadow-none">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <div className="flex items-center justify-center h-12 w-12 bg-violet-500 dark:bg-purple-600 rounded-xl">
@@ -280,7 +210,7 @@ export default function Stats() {
             <h1 className="text-2xl font-medium">{openTrades}</h1>
           </div>
         </div>
-      </div>
+      </article>
     </>
   );
 }

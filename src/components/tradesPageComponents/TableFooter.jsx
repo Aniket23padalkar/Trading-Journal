@@ -33,7 +33,7 @@ function TableFooter({ filteredTrades }) {
   });
 
   return (
-    <div className="flex items-center justify-between lg:h-10 w-full py-2 px-2 lg:px-6 bg-white dark:bg-gray-950 dark:shadow-none rounded-xl shadow shadow-gray-400">
+    <footer className="flex items-center justify-between lg:h-10 w-full py-2 px-2 lg:px-6 bg-white dark:bg-gray-950 dark:shadow-none rounded-xl shadow shadow-gray-400">
       <div className="flex gap-3 flex-wrap">
         <div className="flex items-center gap-2">
           <p className="lg:text-md text-sm text-shadow-lg font-medium dark:text-white">
@@ -77,7 +77,7 @@ function TableFooter({ filteredTrades }) {
           </h1>
         </div>
       </div>
-    </div>
+    </footer>
   );
 }
 

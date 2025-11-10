@@ -21,7 +21,7 @@ export default function ChartsHeader({ selectedYear, setSelectedYear }) {
   uniqueYears.sort();
   const years = uniqueYears;
   return (
-    <div className="flex items-center justify-between p-4 py-2 lg:p-4 lg:px-6 gap-4 col-start-1 col-end-9 bg-white h-12 lg:h-16 rounded-2xl shadow shadow-gray-400 dark:bg-gray-950 dark:text-white dark:shadow-none">
+    <header className="flex items-center justify-between p-4 py-2 lg:p-4 lg:px-6 gap-4 col-start-1 col-end-9 bg-white h-12 lg:h-16 rounded-2xl shadow shadow-gray-400 dark:bg-gray-950 dark:text-white dark:shadow-none">
       <div className="flex items-center gap-4">
         <h2 className="text-shadow-lg font-medium text-md lg:text-lg">
           Yearly PnL {selectedYear}
@@ -57,6 +57,6 @@ export default function ChartsHeader({ selectedYear, setSelectedYear }) {
           })}
         </h1>
       </div>
-    </div>
+    </header>
   );
 }

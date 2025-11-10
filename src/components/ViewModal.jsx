@@ -34,7 +34,7 @@ export default function ViewModal({ setViewModal, currentViewTrade }) {
   }
 
   return (
-    <div
+    <article
       className="flex flex-col absolute lg:fixed h-full w-11/12 lg:top-1/5 lg:left-1/6 lg:w-3/4 bg-white dark:bg-gray-800 dark:text-white dark:shadow-none lg:h-120 rounded-xl overflow-hidden shadow-xl shadow-gray-400 "
       ref={modalRef}
     >
@@ -309,6 +309,6 @@ export default function ViewModal({ setViewModal, currentViewTrade }) {
           Close
         </button>
       </div>
-    </div>
+    </article>
   );
 }

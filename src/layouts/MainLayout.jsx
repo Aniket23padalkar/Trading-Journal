@@ -8,7 +8,7 @@ import { GlobalContext } from "../context/Context";
 export default function MainLayout({ children }) {
   const { theme } = useContext(GlobalContext);
   return (
-    <main className="grid grid-cols-[14rem_1fr] grid-rows-[4rem_1fr] bg-white dark:bg-gray-950">
+    <main className="grid h-full w-full grid-cols-[14rem_1fr] grid-rows-[4rem_1fr] bg-white dark:bg-gray-950">
       <Header />
 
       <Aside />

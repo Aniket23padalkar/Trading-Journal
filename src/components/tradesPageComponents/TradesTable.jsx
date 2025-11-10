@@ -78,7 +78,7 @@ function TradesTable({
   }
 
   return (
-    <div className="flex h-full w-full items-center bg-transparent relative">
+    <section className="flex h-full w-full items-center bg-transparent relative">
       <div className="w-full min-h-102 h shadow-md shadow-gray-400 dark:shadow-none overflow-x-auto scrollbar-thin-x">
         {fetchLoading && (
           <div className="flex absolute left-0 top-0 items-center justify-center h-full w-full">
@@ -145,11 +145,11 @@ function TradesTable({
         </table>
       </div>
       {currentTrades.length === 0 && !fetchLoading && (
-        <div className="flex items-center justify-center top-0 left-0 absolute h-full w-full">
+        <div className="flex items-center justify-center top-0 dark:text-white left-0 absolute h-full w-full">
           <h1>Nothing To Show! Please Add Trades</h1>
         </div>
       )}
-    </div>
+    </section>
   );
 }
 

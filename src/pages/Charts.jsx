@@ -6,13 +6,13 @@ import { useState } from "react";
 export default function Charts() {
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
   return (
-    <div className="grid grid-cols-8 gap-6 h-full w-full p-6">
+    <section className="grid grid-cols-8 gap-6 h-full w-full p-6">
       <ChartsHeader
         selectedYear={selectedYear}
         setSelectedYear={setSelectedYear}
       />
       <BarPnLChart selectedYear={selectedYear} />
       <AreaChartFillValue selectedYear={selectedYear} />
-    </div>
+    </section>
   );
 }

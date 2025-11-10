@@ -1,20 +1,33 @@
-import React, { useContext, useState } from "react";
+import React, {
+  Suspense,
+  useCallback,
+  useContext,
+  useMemo,
+  useState,
+} from "react";
 import { GlobalContext } from "../../context/Context";
 import { FaFilter } from "react-icons/fa";
-import Filters from "./Filters";
+const Filters = React.lazy(() => import("./Filters"));
 import { FilterContext } from "../../context/FilterContext";
+import { ScaleLoader } from "react-spinners";
 
 function TradesHeader({ setAddModal }) {
   const { trades } = useContext(GlobalContext);
   const { filterValue, setFilterValue } = useContext(FilterContext);
   const [viewFilters, setViewFilters] = useState(false);
 
-  function handleChange(e) {
-    const { name, value } = e.target;
-    setFilterValue((prev) => ({ ...prev, [name]: value }));
-  }
+  const handleChange = useCallback(
+    (e) => {
+      const { name, value } = e.target;
+      setFilterValue((prev) => {
+        if (prev?.[name] === value) return prev;
+        return { ...prev, [name]: value };
+      });
+    },
+    [setFilterValue]
+  );
 
-  function handleClearFilters() {
+  const handleClearFilters = useCallback(() => {
     setFilterValue({
       order: "",
       status: "",
@@ -27,54 +40,62 @@ function TradesHeader({ setAddModal }) {
       pnlSort: "",
       dateTimeSort: "",
     });
-  }
+  }, [setFilterValue]);
 
-  let yearList = [];
-  let monthList = [];
+  const { years, months } = useMemo(() => {
+    let yearList = [];
+    let monthList = [];
 
-  trades.forEach((trade) => {
-    const date = new Date(trade.entries.initialEntryTime);
-    const year = date.getFullYear();
-    let month = date.toLocaleString("en-IN", { month: "short" });
+    trades.forEach((trade) => {
+      const date = new Date(trade.entries.initialEntryTime);
+      const year = date.getFullYear();
+      let month = date.toLocaleString("en-IN", { month: "short" });
 
-    if (month === "Sept") month = "Sep";
+      if (month === "Sept") month = "Sep";
 
-    if (!filterValue.year || Number(filterValue.year) === year) {
-      monthList.push(month);
-    }
-    yearList.push(year);
-  });
+      if (!filterValue.year || Number(filterValue.year) === year) {
+        monthList.push(month);
+      }
+      yearList.push(year);
+    });
 
-  const uniqueYear = Array.from(new Set(yearList));
-  uniqueYear.sort();
-  const years = uniqueYear;
+    const uniqueYear = Array.from(new Set(yearList));
+    uniqueYear.sort();
+    const years = uniqueYear;
 
-  const monthOrder = [
-    "Jan",
-    "Feb",
-    "Mar",
-    "Apr",
-    "May",
-    "Jun",
-    "Jul",
-    "Aug",
-    "Sep",
-    "Oct",
-    "Nov",
-    "Dec",
-  ];
-  const uniqueMonth = Array.from(
-    new Set(monthList.filter((m) => m && monthOrder.includes(m)))
-  );
-  uniqueMonth.sort((a, b) => monthOrder.indexOf(a) - monthOrder.indexOf(b));
-  const months = uniqueMonth;
+    const monthOrder = [
+      "Jan",
+      "Feb",
+      "Mar",
+      "Apr",
+      "May",
+      "Jun",
+      "Jul",
+      "Aug",
+      "Sep",
+      "Oct",
+      "Nov",
+      "Dec",
+    ];
+    const uniqueMonth = Array.from(
+      new Set(monthList.filter((m) => m && monthOrder.includes(m)))
+    );
+    uniqueMonth.sort((a, b) => monthOrder.indexOf(a) - monthOrder.indexOf(b));
+    const months = uniqueMonth;
 
-  function handleOpen() {
+    return { years: uniqueYear, months: uniqueMonth };
+  }, [trades, filterValue.year]);
+
+  const handleOpen = useCallback(() => {
     setAddModal(true);
-  }
+  }, [setAddModal]);
+
+  const handleViewFilter = useCallback(() => {
+    setViewFilters((prev) => !prev);
+  }, [setViewFilters]);
 
   return (
-    <div className="flex w-full justify-between items-center p-2 lg:py-2 lg:px-6 relative rounded-xl shadow shadow-gray-400 bg-white dark:bg-gray-950 dark:shadow-none dark:text-white">
+    <header className="flex w-full justify-between items-center p-2 lg:py-2 lg:px-6 relative rounded-xl shadow shadow-gray-400 bg-white dark:bg-gray-950 dark:shadow-none dark:text-white">
       <div className="flex items-center">
         <p className="drop-shadow-lg font-medium mr-2 text-sm  xl:text-lg">
           Yearly/Monthly Trades :
@@ -102,7 +123,17 @@ function TradesHeader({ setAddModal }) {
           ))}
         </select>
       </div>
-      {viewFilters && <Filters />}
+      {viewFilters && (
+        <Suspense
+          fallback={
+            <div className="flex absolute h-full w-full justify-between items-center">
+              <ScaleLoader color="##20dfbc" />
+            </div>
+          }
+        >
+          <Filters />
+        </Suspense>
+      )}
       <div className="flex items-center gap-2">
         <button
           onClick={handleClearFilters}
@@ -116,7 +147,7 @@ function TradesHeader({ setAddModal }) {
               ? "flex items-center lg:px-4 py-0 gap-1 cursor-pointer rounded-md lg:bg-blue-100 lg:dark:bg-blue-500  text-blue-400 dark:text-blue-100 lg:border lg:border-blue-300 dark:border-none dark:py-0.5"
               : "flex items-center lg:px-4 py-0 gap-1 cursor-pointer rounded-md lg:bg-blue-100 lg:dark:bg-blue-900 text-blue-500 dark:text-blue-200 lg:border lg:border-blue-500 dark:border-none dark:py-0.5"
           }
-          onClick={() => setViewFilters(!viewFilters)}
+          onClick={handleViewFilter}
         >
           <FaFilter className="text-lg lg:text-sm" />{" "}
           <span className="hidden lg:block">Filters</span>
@@ -129,7 +160,7 @@ function TradesHeader({ setAddModal }) {
           + Add
         </button>
       </div>
-    </div>
+    </header>
   );
 }
 
