@@ -19,7 +19,7 @@ export default function App() {
   return (
     <Suspense
       fallback={
-        <div className="flex h-full w-full justify-between items-center">
+        <div className="flex absolute h-full w-full justify-between items-center">
           <ScaleLoader color="##20dfbc" />
         </div>
       }

@@ -4,12 +4,10 @@ import { BiBarChartAlt2, BiCalendar, BiChart } from "react-icons/bi";
 import { useContext } from "react";
 import { GlobalContext } from "../../context/Context";
 
-export default function Aside() {
-  const { isAsideOpen } = useContext(GlobalContext);
-
+export default function Aside({ isAsideOpen }) {
   return (
     <aside
-      className={`col-start-1 col-end-2 row-start-2 transform duration-300 lg:transform-none lg:duration-0 lg:translate-x-0 ${
+      className={`col-start-1 col-end-2 row-start-2 transition-transform duration-300 lg:translate-x-0 ${
         isAsideOpen ? "translate-0 z-10" : "-translate-x-full"
       } row-end-3 lg:flex h-full w-full px-4 bg-white dark:bg-gray-950 border-t border-gray-200 dark:border-gray-700`}
     >

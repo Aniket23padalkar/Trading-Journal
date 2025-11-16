@@ -14,7 +14,7 @@
 
   #root,
   body {
-    @apply flex flex-col h-full w-full;
+    @apply flex flex-col xl:h-full w-full;
   }
 
   th {

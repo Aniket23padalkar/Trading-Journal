@@ -9,11 +9,10 @@ import { AuthContext } from "../../context/AuthContext";
 import { signOut } from "firebase/auth";
 import { auth } from "../../firebase/auth";
 
-export default function Header() {
+export default function Header({ isAsideOpen, setIsAsideOpen }) {
   const { theme, setTheme } = useContext(GlobalContext);
   const { user } = useContext(AuthContext);
   const [logoutWindow, setLogoutWindow] = useState(false);
-  const [isAsideOpen, setIsAsideOpen] = useState(false);
   const navigate = useNavigate();
 
   function handleTheme() {

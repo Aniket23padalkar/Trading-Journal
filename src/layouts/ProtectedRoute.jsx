@@ -8,7 +8,7 @@ export default function ProtectedRoute({ children }) {
 
   if (authLoading)
     return (
-      <div className="flex items-center justify-center h-full w-full">
+      <div className="flex absolute items-center justify-center h-full w-full">
         <ScaleLoader color="#20dfbc" />
       </div>
     );
