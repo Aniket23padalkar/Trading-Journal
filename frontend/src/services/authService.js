@@ -1,8 +1,8 @@
-const API = "http://localhost:5000/api/auth";
+const API = "https://tradelens-backend-hff0.onrender.com";
 
 export async function registerUser(data) {
   try {
-    const res = await fetch(`${API}/register`, {
+    const res = await fetch(`${API}/api/auth/register`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -26,7 +26,7 @@ export async function registerUser(data) {
 
 export async function loginUser(data) {
   try {
-    const res = await fetch(`${API}/login`, {
+    const res = await fetch(`${API}/api/auth/login`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -50,7 +50,7 @@ export async function loginUser(data) {
 
 export async function getCurrentUser() {
   try {
-    const res = await fetch(`${API}/me`, {
+    const res = await fetch(`${API}/api/auth/me`, {
       method: "GET",
       credentials: "include",
     });
@@ -70,7 +70,7 @@ export async function getCurrentUser() {
 
 export async function logoutUser() {
   try {
-    const res = await fetch(`${API}/logout`, {
+    const res = await fetch(`${API}/api/auth/logout`, {
       method: "POST",
       credentials: "include",
     });

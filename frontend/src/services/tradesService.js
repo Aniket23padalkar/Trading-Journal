@@ -1,8 +1,8 @@
-const API = "http://localhost:5000/api/trades";
+const API = "https://tradelens-backend-hff0.onrender.com";
 
 export async function insertTrade(formData, execution) {
   try {
-    const res = await fetch(`${API}`, {
+    const res = await fetch(`${API}/api/trades`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -28,7 +28,7 @@ export async function getTradesData(params) {
   const query = new URLSearchParams(params).toString();
 
   try {
-    const res = await fetch(`${API}?${query}`, {
+    const res = await fetch(`${API}/api/trades?${query}`, {
       method: "GET",
       credentials: "include",
     });
@@ -48,7 +48,7 @@ export async function getTradesData(params) {
 
 export async function updateTrade(id, formData, execution) {
   try {
-    const res = await fetch(`${API}/${id}`, {
+    const res = await fetch(`${API}/api/trades/${id}`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
@@ -71,7 +71,7 @@ export async function updateTrade(id, formData, execution) {
 
 export async function deleteTrade(id) {
   try {
-    const res = await fetch(`${API}/${id}`, {
+    const res = await fetch(`${API}/api/trades/${id}`, {
       method: "DELETE",
       credentials: "include",
     });
@@ -91,7 +91,7 @@ export async function deleteTrade(id) {
 
 export async function getYearAndMonth() {
   try {
-    const res = await fetch(`${API}/yearmonth`, {
+    const res = await fetch(`${API}/api/trades/yearmonth`, {
       method: "GET",
       credentials: "include",
     });
@@ -131,7 +131,7 @@ export async function getYearAndMonth() {
 
 export async function getMonthlyPnl(year) {
   try {
-    const res = await fetch(`${API}/monthly-pnl?year=${year}`, {
+    const res = await fetch(`${API}/api/trades/monthly-pnl?year=${year}`, {
       method: "GET",
       credentials: "include",
     });
@@ -152,7 +152,7 @@ export async function getMonthlyPnl(year) {
 export async function getFilterStats(params) {
   const query = new URLSearchParams(params).toString();
   try {
-    const res = await fetch(`${API}/stats?${query}`, {
+    const res = await fetch(`${API}/api/trades/stats?${query}`, {
       method: "GET",
       credentials: "include",
     });
