@@ -11,7 +11,7 @@ export default function ExecutionRow({
       <div className="flex justify-between gap-2">
         <div className="flex w-full gap-2">
           <input
-            value={execution.buy_price ?? ""}
+            value={execution.buyPrice ?? ""}
             name="buyPrice"
             required
             disabled={formData.status === "Open" && formData.order === "SELL"}
@@ -23,7 +23,7 @@ export default function ExecutionRow({
             }
           />
           <input
-            value={execution.sell_price ?? ""}
+            value={execution.sellPrice ?? ""}
             name="sellPrice"
             required
             disabled={formData.status === "Open" && formData.order === "BUY"}
@@ -65,7 +65,7 @@ export default function ExecutionRow({
             Entry Time:
           </label>
           <input
-            value={formatDateTimeLocal(execution.entry_time) ?? ""}
+            value={formatDateTimeLocal(execution.entryTime) ?? ""}
             name="entryTime"
             required
             type="datetime-local"
@@ -80,7 +80,7 @@ export default function ExecutionRow({
             Exit Time:
           </label>
           <input
-            value={formatDateTimeLocal(execution.exit_time) ?? ""}
+            value={formatDateTimeLocal(execution.exitTime) ?? ""}
             name="exitTime"
             required
             disabled={formData.status === "Open"}

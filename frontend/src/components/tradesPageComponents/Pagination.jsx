@@ -7,7 +7,7 @@ function Pagination({ handleNextPage, handlePrevPage, handleSetPage }) {
   const { pagination, currentPage, trades } = useContext(TradeContext);
   const maxVisible = 3;
   let start = Math.max(1, currentPage - Math.floor(maxVisible / 2));
-  let end = Math.min(pagination.totalPages, start + maxVisible - 1);
+  let end = Math.min(pagination?.totalPages, start + maxVisible - 1);
 
   if (end - start + 1 < maxVisible) {
     start = Math.max(1, end - maxVisible + 1);
@@ -55,26 +55,26 @@ function Pagination({ handleNextPage, handlePrevPage, handleSetPage }) {
             {page}
           </button>
         ))}
-        {end < pagination.totalPages - 1 && (
+        {end < pagination?.totalPages - 1 && (
           <span className="dark:text-gray-400">....</span>
         )}
-        {end < pagination.totalPages && (
+        {end < pagination?.totalPages && (
           <button
             onClick={() => handleSetPage(pagination.totalPages)}
             className="flex items-center justify-center text-black dark:text-white h-5 w-5 cursor-pointer hover:scale-105 rounded text-sm font-medium"
           >
-            {pagination.totalPages}
+            {pagination?.totalPages}
           </button>
         )}
       </div>
       <button
         className={`flex items-center ${
-          currentPage === pagination.totalPages || trades.length === 0
+          currentPage === pagination?.totalPages || trades.length === 0
             ? " text-gray-500"
             : "text-black dark:text-white hover:scale-110 cursor-pointer"
         }`}
         onClick={handleNextPage}
-        disabled={currentPage === pagination.totalPages || trades.length === 0}
+        disabled={currentPage === pagination?.totalPages || trades.length === 0}
       >
         <p>Next</p>
         <FaChevronRight />

@@ -32,8 +32,8 @@ export default function Trades() {
   }, []);
 
   const handleNextPage = useCallback(() => {
-    setCurrentPage((prev) => Math.min(pagination.totalPages, prev + 1));
-  }, [pagination.totalPages]);
+    setCurrentPage((prev) => Math.min(pagination?.totalPages, prev + 1));
+  }, [pagination?.totalPages]);
 
   const handlePrevPage = useCallback(() => {
     setCurrentPage((prev) => Math.max(1, prev - 1));
