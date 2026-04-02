@@ -193,7 +193,7 @@ export default function Stats() {
           </div>
           <div className="flex-1 border-l-gray-400 border-l">
             <p className="dark:text-white">CTC-Trades</p>
-            <h1 className="text-2xl font-medium">{overallStats.ctc_trades}</h1>
+            <h1 className="text-2xl font-medium">{overallStats?.ctc_trades}</h1>
           </div>
         </div>
       </article>
