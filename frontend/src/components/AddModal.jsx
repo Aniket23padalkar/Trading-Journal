@@ -137,6 +137,8 @@ export default function AddModal({ editTrade, setEditTrade, setAddModal }) {
     setExecution((prev) => prev.filter((_, i) => i !== index));
   }
 
+  console.log(editTrade);
+
   useEffect(() => {
     if (editTrade) {
       setFormData({
