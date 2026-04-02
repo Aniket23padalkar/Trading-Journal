@@ -14,7 +14,7 @@ pool.on("connect", () => {
   console.log("Connected to database");
 });
 
-pool.on("error", () => {
+pool.on("error", (err) => {
   console.log("Database error", err);
 });
 
