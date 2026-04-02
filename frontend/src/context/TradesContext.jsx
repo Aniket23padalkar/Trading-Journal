@@ -27,7 +27,7 @@ export default function TradeProvider({ children }) {
 
   const params = {
     currentPage,
-    limit: 1,
+    limit: 9,
     ...filterValue,
   };
 

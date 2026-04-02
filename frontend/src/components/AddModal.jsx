@@ -6,9 +6,11 @@ import QtyRow from "./QtyRow";
 import { insertTrade, updateTrade } from "../services/tradesService";
 import { toast } from "react-toastify";
 import { TradeContext } from "../context/TradesContext";
+import { MoonLoader } from "react-spinners";
 
 export default function AddModal({ editTrade, setEditTrade, setAddModal }) {
   const { modalRef, handleMouseDown } = useDrag();
+  const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     symbol: "",
     order: "",
@@ -84,7 +86,7 @@ export default function AddModal({ editTrade, setEditTrade, setAddModal }) {
 
   async function handleSubmit(e) {
     e.preventDefault();
-
+    setLoading(true);
     if (editTrade) {
       try {
         const res = await updateTrade(
@@ -119,6 +121,7 @@ export default function AddModal({ editTrade, setEditTrade, setAddModal }) {
       } catch (err) {
         console.log(err.message);
         toast.error(err.message);
+        setLoading(false);
       }
     }
   }
@@ -350,10 +353,11 @@ export default function AddModal({ editTrade, setEditTrade, setAddModal }) {
         </div>
         <div className="flex items-center justify-around gap-4 h-12 bg-transperant">
           <button
+            disabled={loading}
             type="submit"
             className="px-8 bg-teal-400 text-teal-800 hover:bg-teal-300 font-bold rounded"
           >
-            Save
+            {loading ? <MoonLoader /> : "Save"}
           </button>
           <button
             type="button"
