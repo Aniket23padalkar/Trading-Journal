@@ -1,5 +1,3 @@
-import formatDateTimeLocal from "../utils/formatDateTimeLocal";
-
 export default function ExecutionRow({
   execution,
   formData,
@@ -69,7 +67,7 @@ export default function ExecutionRow({
             Entry Time:
           </label>
           <input
-            value={formatDateTimeLocal(execution.entry_time) ?? ""}
+            value={execution.entry_time ?? ""}
             name="entry_time"
             required
             type="datetime-local"
@@ -84,7 +82,7 @@ export default function ExecutionRow({
             Exit Time:
           </label>
           <input
-            value={formatDateTimeLocal(execution.exit_time) ?? ""}
+            value={execution.exit_time ?? ""}
             name="exit_time"
             required
             disabled={formData.status === "Open"}

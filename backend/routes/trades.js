@@ -276,7 +276,7 @@ router.post("/", protect, async (req, res) => {
           exe.quantity,
           exe.risk,
           exe.entry_time,
-          exe.exit_time || 0,
+          exe.exit_time || null,
         ],
       );
     }
