@@ -6,7 +6,7 @@ import QtyRow from "./QtyRow";
 import { insertTrade, updateTrade } from "../services/tradesService";
 import { toast } from "react-toastify";
 import { TradeContext } from "../context/TradesContext";
-import { MoonLoader } from "react-spinners";
+import { ClipLoader, MoonLoader } from "react-spinners";
 
 export default function AddModal({ editTrade, setEditTrade, setAddModal }) {
   const { modalRef, handleMouseDown } = useDrag();
@@ -359,7 +359,7 @@ export default function AddModal({ editTrade, setEditTrade, setAddModal }) {
             type="submit"
             className="px-8 bg-teal-400 text-teal-800 hover:bg-teal-300 font-bold rounded"
           >
-            {loading ? <MoonLoader /> : "Save"}
+            {loading ? <ClipLoader size={15} color="#000000" /> : "Save"}
           </button>
           <button
             type="button"
