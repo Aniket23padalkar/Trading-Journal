@@ -39,7 +39,7 @@ function TradeRow({
       </td>
       <td className="text-xs dark:text-gray-300">{t.trade.status}</td>
       <td className="dark:text-gray-300">{t.trade.market_type}</td>
-      <td>{t.stats.totalQty}</td>
+      <td>{t.stats.total_qty}</td>
 
       <td>
         <p className="text-xs bg-blue-100 dark:text-black dark:bg-blue-400 rounded">
@@ -49,7 +49,7 @@ function TradeRow({
       <td className="text-xs text-blue-700 dark:text-sky-500 whitespace-nowrap">
         {formatDateTime(t.executions[0].entry_time)}
       </td>
-      <td>{t.stats.avgRisk}</td>
+      <td>{t.stats.avg_risk}</td>
       <td
         className={`text-sm font-bold ${
           t.stats.pnl >= 0
@@ -68,7 +68,7 @@ function TradeRow({
         {t.trade.status === "Open" ? "-" : "/-"}
       </td>
       <td style={{ fontWeight: 600 }}>
-        {t.trade.status === "Open" ? "-" : Number(t.stats.avgRR).toFixed(1)}
+        {t.trade.status === "Open" ? "-" : Number(t.stats.avg_rr).toFixed(1)}
         {t.trade.status === "Open" ? "-" : "X"}
       </td>
       <td>{t.trade.rating}</td>

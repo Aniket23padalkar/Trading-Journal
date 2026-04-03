@@ -57,26 +57,26 @@ export default function ViewModal({ setViewModal, currentViewTrade }) {
           <div className="view-modal-section border-none">
             <span className="view-modal-span">Avg-Buy-Price</span>
             <h1 className="view-modal-h1">
-              {Number(currentViewTrade.stats.avgBuy).toFixed(2)}
+              {Number(currentViewTrade.stats.avg_buy_price).toFixed(2)}
             </h1>
           </div>
           <div className="view-modal-section">
             <span className="view-modal-span">Avg-Sell-Price</span>
             <h1 className="view-modal-h1">
-              {Number(currentViewTrade.stats.avgSell).toFixed(2)}
+              {Number(currentViewTrade.stats.avg_sell_price).toFixed(2)}
             </h1>
           </div>
           <div className="view-modal-section">
             <span className="view-modal-span">Total-Quantity</span>
             <h1 className="view-modal-h1">
-              {Number(currentViewTrade.stats.totalQty).toFixed(2)}
+              {Number(currentViewTrade.stats.total_qty).toFixed(2)}
             </h1>
           </div>
           <div className="view-modal-section">
             <span className="view-modal-span">Avg-Risk</span>
             <h1 className="flex items-center justify-center view-modal-h1">
               <FaIndianRupeeSign />
-              {Number(currentViewTrade.stats.avgRisk).toFixed(2)}
+              {Number(currentViewTrade.stats.avg_risk).toFixed(2)}
             </h1>
           </div>
           <div className="view-modal-section">
@@ -124,7 +124,7 @@ export default function ViewModal({ setViewModal, currentViewTrade }) {
           <div className="view-modal-section">
             <span className="view-modal-span">R:R Ratio</span>
             <h1 className="view-modal-h1 pt-1">
-              {Number(currentViewTrade.stats.avgRR).toFixed(2)}X
+              {Number(currentViewTrade.stats.avg_rr).toFixed(2)}X
             </h1>
           </div>
 
