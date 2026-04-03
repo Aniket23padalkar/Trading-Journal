@@ -1,5 +1,6 @@
 import React from "react";
 import { FaTrash } from "react-icons/fa6";
+import formatDateTimeLocal from "../utils/formatDateTimeLocal";
 
 function QtyRow({
   index,
@@ -69,7 +70,7 @@ function QtyRow({
             Entry Time:
           </label>
           <input
-            value={execution.entry_time}
+            value={formatDateTimeLocal(execution.entry_time)}
             name="entry_time"
             type="datetime-local"
             className="add-modal-select h-6 mt-4 w-28 pl-1 uppercase text-xs"
@@ -85,7 +86,7 @@ function QtyRow({
           <input
             required
             disabled={status === "Open"}
-            value={execution.exit_time}
+            value={formatDateTimeLocal(execution.exit_time)}
             name="exit_time"
             type="datetime-local"
             className="add-modal-select h-6 mt-4 w-28 pl-1 text-xs uppercase disabled:bg-gray-300 dark:disabled:bg-gray-500"
