@@ -1,8 +1,8 @@
 export default function buildTradeFilters(query, userId) {
   const {
-    order,
+    order_type,
     status,
-    marketType,
+    market_type,
     position,
     fromDate,
     toDate,
@@ -16,9 +16,9 @@ export default function buildTradeFilters(query, userId) {
   let values = [userId];
   let index = 2;
 
-  if (order) {
+  if (order_type) {
     conditions.push(`t.order_type = $${index++}`);
-    values.push(order);
+    values.push(order_type);
   }
 
   if (status) {
@@ -26,9 +26,9 @@ export default function buildTradeFilters(query, userId) {
     values.push(status);
   }
 
-  if (marketType) {
+  if (market_type) {
     conditions.push(`t.market_type = $${index++}`);
-    values.push(marketType);
+    values.push(market_type);
   }
 
   if (position) {

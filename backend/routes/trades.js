@@ -78,8 +78,8 @@ router.get("/", protect, async (req, res) => {
         trade_id: trade.trade_id,
         symbol: trade.symbol,
         status: trade.status,
-        orderType: trade.order_type,
-        marketType: trade.market_type,
+        order_type: trade.order_type,
+        market_type: trade.market_type,
         position: trade.position,
         rating: trade.rating,
         description: trade.description,
@@ -89,11 +89,11 @@ router.get("/", protect, async (req, res) => {
       executions,
       stats: {
         pnl: trade.pnl,
-        avgBuy: trade.avg_buy_price,
-        avgSell: trade.avg_sell_price,
-        avgRisk: trade.avg_risk,
-        avgRR: trade.avg_rr,
-        totalQty: trade.total_qty,
+        avg_buy_price: trade.avg_buy_price,
+        avg_sell_price: trade.avg_sell_price,
+        avg_risk: trade.avg_risk,
+        avg_rr: trade.avg_rr,
+        total_qty: trade.total_qty,
       },
     };
   });
@@ -168,9 +168,9 @@ router.get("/stats", protect, async (req, res) => {
 
     res.status(200).json(result.rows[0]);
   } catch (err) {
-    console.error("🔥 FULL ERROR:", err.message);
-    console.error("🔥 QUERY:", whereClause);
-    console.error("🔥 VALUES:", values);
+    console.error("FULL ERROR:", err.message);
+    console.error("QUERY:", whereClause);
+    console.error("VALUES:", values);
     res.status(500).json({ message: "Server error" });
   }
 });
@@ -213,16 +213,23 @@ router.get("/monthly-pnl", protect, async (req, res) => {
 router.post("/", protect, async (req, res) => {
   const {
     symbol,
-    order,
+    order_type,
     status,
-    marketType,
+    market_type,
     position,
     rating,
     description,
     executions,
   } = req.body;
 
-  if (!symbol || !order || !status || !marketType || !position || !rating) {
+  if (
+    !symbol ||
+    !order_type ||
+    !status ||
+    !market_type ||
+    !position ||
+    !rating
+  ) {
     return res
       .status(400)
       .json({ message: "Please provide all the required fields!" });
@@ -233,7 +240,7 @@ router.post("/", protect, async (req, res) => {
   }
 
   for (const exe of executions) {
-    if (!exe.quantity || !exe.risk || !exe.entryTime) {
+    if (!exe.quantity || !exe.risk || !exe.entry_time) {
       return res.status(400).json({ message: "Invalid execution data!" });
     }
   }
@@ -249,9 +256,9 @@ router.post("/", protect, async (req, res) => {
         req.user.user_id,
         symbol,
         status,
-        order,
+        order_type,
         position,
-        marketType,
+        market_type,
         rating,
         description,
       ],
@@ -264,12 +271,12 @@ router.post("/", protect, async (req, res) => {
         "INSERT INTO trade_logs(trade_id,buy_price,sell_price,quantity,risk,entry_time,exit_time) VALUES ($1,$2,$3,$4,$5,$6,$7) RETURNING *",
         [
           tradeId,
-          exe.buyPrice || null,
-          exe.sellPrice || null,
+          exe.buy_price || 0,
+          exe.sell_price || 0,
           exe.quantity,
           exe.risk,
-          exe.entryTime,
-          exe.exitTime || null,
+          exe.entry_time,
+          exe.exit_time || 0,
         ],
       );
     }
@@ -294,9 +301,9 @@ router.patch("/:id", protect, async (req, res) => {
   const { id } = req.params;
   const {
     symbol,
-    order,
+    order_type,
     status,
-    marketType,
+    market_type,
     position,
     rating,
     description,
@@ -312,7 +319,7 @@ router.patch("/:id", protect, async (req, res) => {
     return res.status(404).json({ message: "Trade not found!" });
   }
 
-  if (!symbol || !order || !status || !marketType || !position) {
+  if (!symbol || !order_type || !status || !market_type || !position) {
     return res
       .status(400)
       .json({ message: "Please Provide all the required fields" });
@@ -323,7 +330,7 @@ router.patch("/:id", protect, async (req, res) => {
   }
 
   for (const exe of executions) {
-    if (!exe.quantity || !exe.risk || !exe.entryTime) {
+    if (!exe.quantity || !exe.risk || !exe.entry_time) {
       return res.status(400).json({ message: "Invalid Executions data" });
     }
   }
@@ -351,9 +358,9 @@ router.patch("/:id", protect, async (req, res) => {
         `,
       [
         symbol,
-        order,
+        order_type,
         status,
-        marketType,
+        market_type,
         position,
         rating,
         description,
@@ -399,12 +406,12 @@ router.patch("/:id", protect, async (req, res) => {
         RETURNING *
         `,
           [
-            exe.buyPrice,
-            exe.sellPrice,
+            exe.buy_price,
+            exe.sell_price,
             exe.quantity,
             exe.risk,
-            exe.entryTime,
-            exe.exitTime,
+            exe.entry_time,
+            exe.exit_time,
             exe.trade_logs_id,
             id,
           ],
@@ -427,12 +434,12 @@ router.patch("/:id", protect, async (req, res) => {
           `,
           [
             id,
-            exe.buyPrice,
-            exe.sellPrice,
+            exe.buy_price,
+            exe.sell_price,
             exe.quantity,
             exe.risk,
-            exe.entryTime,
-            exe.exitTime,
+            exe.entry_time,
+            exe.exit_time,
           ],
         );
       }
@@ -468,6 +475,8 @@ router.delete("/:id", protect, async (req, res) => {
 
     res.status(200).json({ message: "Trade successfully deleted!" });
   } catch (err) {
+    console.log(err);
+
     res.status(500).json({ message: "Server error" });
   }
 });

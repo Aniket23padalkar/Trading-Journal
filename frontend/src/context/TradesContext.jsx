@@ -10,9 +10,9 @@ export default function TradeProvider({ children }) {
   const [overallStats, setOverallStats] = useState();
   const [fetchLoading, setFetchLoading] = useState(false);
   const [filterValue, setFilterValue] = useState({
-    order: "",
+    order_type: "",
     status: "",
-    marketType: "",
+    market_type: "",
     position: "",
     fromDate: "",
     toDate: "",

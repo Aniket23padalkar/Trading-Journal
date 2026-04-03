@@ -16,8 +16,8 @@ export default function Filters() {
     <div className="flex items-center gap-2 absolute rounded-2xl h-full w-86 lg:w-120 xl:w-180 dark:bg-gray-950 pr-2 bg-white">
       <select
         className="filter-select"
-        name="order"
-        value={filterValue.order}
+        name="order_type"
+        value={filterValue.order_type}
         onChange={handleChange}
       >
         <option value="">Order</option>
@@ -26,8 +26,8 @@ export default function Filters() {
       </select>
 
       <select
-        name="marketType"
-        value={filterValue.marketType}
+        name="market_type"
+        value={filterValue.market_type}
         className="filter-select"
         onChange={handleChange}
       >

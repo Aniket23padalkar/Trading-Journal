@@ -11,27 +11,31 @@ export default function ExecutionRow({
       <div className="flex justify-between gap-2">
         <div className="flex w-full gap-2">
           <input
-            value={execution.buyPrice ?? ""}
-            name="buyPrice"
+            value={execution.buy_price ?? ""}
+            name="buy_price"
             required
-            disabled={formData.status === "Open" && formData.order === "SELL"}
+            disabled={
+              formData.status === "Open" && formData.order_type === "SELL"
+            }
             className="add-modal-select w-30 disabled:bg-gray-300 dark:disabled:bg-gray-500 placeholder:text-green-500 placeholder:font-bold"
             type="number"
             placeholder="Buy Price"
             onChange={(e) =>
-              handleExecutionEntries(index, "buyPrice", e.target.value)
+              handleExecutionEntries(index, "buy_price", e.target.value)
             }
           />
           <input
-            value={execution.sellPrice ?? ""}
-            name="sellPrice"
+            value={execution.sell_price ?? ""}
+            name="sell_price"
             required
-            disabled={formData.status === "Open" && formData.order === "BUY"}
+            disabled={
+              formData.status === "Open" && formData.order_type === "BUY"
+            }
             className="add-modal-select w-30 disabled:bg-gray-300 placeholder:text-red-500 dark:disabled:bg-gray-500 placeholder:font-bold"
             type="number"
             placeholder="Sell Price"
             onChange={(e) =>
-              handleExecutionEntries(index, "sellPrice", e.target.value)
+              handleExecutionEntries(index, "sell_price", e.target.value)
             }
           />
         </div>
@@ -65,13 +69,13 @@ export default function ExecutionRow({
             Entry Time:
           </label>
           <input
-            value={formatDateTimeLocal(execution.entryTime) ?? ""}
-            name="entryTime"
+            value={formatDateTimeLocal(execution.entry_time) ?? ""}
+            name="entry_time"
             required
             type="datetime-local"
             className="add-modal-select h-8 mt-4 w-36 uppercase"
             onChange={(e) =>
-              handleExecutionEntries(index, "entryTime", e.target.value)
+              handleExecutionEntries(index, "entry_time", e.target.value)
             }
           />
         </div>
@@ -80,14 +84,14 @@ export default function ExecutionRow({
             Exit Time:
           </label>
           <input
-            value={formatDateTimeLocal(execution.exitTime) ?? ""}
-            name="exitTime"
+            value={formatDateTimeLocal(execution.exit_time) ?? ""}
+            name="exit_time"
             required
             disabled={formData.status === "Open"}
             type="datetime-local"
             className="add-modal-select h-8 mt-4 w-36 disabled:bg-gray-300 dark:disabled:bg-gray-500 uppercase"
             onChange={(e) =>
-              handleExecutionEntries(index, "exitTime", e.target.value)
+              handleExecutionEntries(index, "exit_time", e.target.value)
             }
           />
         </div>

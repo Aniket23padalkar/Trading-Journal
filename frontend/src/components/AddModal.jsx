@@ -13,21 +13,21 @@ export default function AddModal({ editTrade, setEditTrade, setAddModal }) {
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     symbol: "",
-    order: "",
+    order_type_type: "",
     status: "",
-    marketType: "",
+    market_type: "",
     position: "",
     rating: "",
     description: "",
   });
   const [execution, setExecution] = useState([
     {
-      buyPrice: "",
-      sellPrice: "",
+      buy_price: "",
+      sell_price: "",
       quantity: "",
       risk: "",
-      entryTime: "",
-      exitTime: "",
+      entry_time: "",
+      exit_time: "",
     },
   ]);
   const [executionModal, setExecutionModal] = useState(false);
@@ -51,12 +51,12 @@ export default function AddModal({ editTrade, setEditTrade, setAddModal }) {
     setExecution((prev) => [
       ...prev,
       {
-        buyPrice: "",
-        sellPrice: "",
+        buy_price: "",
+        sell_price: "",
         quantity: "",
         risk: "",
-        entryTime: "",
-        exitTime: "",
+        entry_time: "",
+        exit_time: "",
       },
     ]);
   }
@@ -64,9 +64,9 @@ export default function AddModal({ editTrade, setEditTrade, setAddModal }) {
   function resetForm() {
     setFormData({
       symbol: "",
-      order: "",
+      order_type: "",
       status: "",
-      marketType: "",
+      market_type: "",
       position: "",
       rating: "",
       description: "",
@@ -74,12 +74,12 @@ export default function AddModal({ editTrade, setEditTrade, setAddModal }) {
 
     setExecution([
       {
-        buyPrice: "",
-        sellPrice: "",
+        buy_price: "",
+        sell_price: "",
         quantity: "",
         risk: "",
-        entryTime: "",
-        exitTime: "",
+        entry_time: "",
+        exit_time: "",
       },
     ]);
   }
@@ -143,9 +143,9 @@ export default function AddModal({ editTrade, setEditTrade, setAddModal }) {
     if (editTrade) {
       setFormData({
         symbol: editTrade.trade.symbol || "",
-        order: editTrade.trade.orderType || "",
+        order_type: editTrade.trade.order_type || "",
         status: editTrade.trade.status || "",
-        marketType: editTrade.trade.marketType || "",
+        market_type: editTrade.trade.market_type || "",
         position: editTrade.trade.position || "",
         rating: editTrade.trade.rating || "",
         description: editTrade.trade.description || "",
@@ -199,12 +199,12 @@ export default function AddModal({ editTrade, setEditTrade, setAddModal }) {
             <div className="gap-2 flex">
               <select
                 required
-                value={formData.order}
-                name="order"
+                value={formData.order_type}
+                name="order_type"
                 className={`add-modal-select w-25  dark:border dark:border-teal-900 ${
-                  formData.order === "BUY"
+                  formData.order_type === "BUY"
                     ? "bg-green-400 text-white dark:bg-green-400"
-                    : formData.order === "SELL"
+                    : formData.order_type === "SELL"
                       ? "bg-red-400 text-white dark:bg-red-400"
                       : "bg-violet-50 dark:bg-gray-800"
                 }`}
@@ -246,9 +246,9 @@ export default function AddModal({ editTrade, setEditTrade, setAddModal }) {
             </select>
 
             <select
-              value={formData.marketType}
+              value={formData.market_type}
               required
-              name="marketType"
+              name="market_type"
               className="add-modal-select"
               onChange={handleChange}
             >
@@ -315,7 +315,7 @@ export default function AddModal({ editTrade, setEditTrade, setAddModal }) {
                         key={i}
                         execution={exe}
                         status={formData.status}
-                        order={formData.order}
+                        order={formData.order_type}
                         index={i}
                         onDelete={onDelete}
                         handleExecutionEntries={handleExecutionEntries}

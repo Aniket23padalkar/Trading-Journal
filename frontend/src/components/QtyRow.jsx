@@ -19,25 +19,25 @@ function QtyRow({
       </div>
       <div className="flex gap-2">
         <input
-          value={execution.buyPrice}
+          value={execution.buy_price}
           disabled={status === "Open" && order === "SELL"}
           type="number"
-          name="buyPrice"
+          name="buy_price"
           className="add-modal-select h-6 placeholder:text-green-500 disabled:bg-gray-300 dark:disabled:bg-gray-500"
           placeholder="Buy Price"
           onChange={(e) =>
-            handleExecutionEntries(index, "buyPrice", e.target.value)
+            handleExecutionEntries(index, "buy_price", e.target.value)
           }
         />
         <input
-          value={execution.sellPrice}
+          value={execution.sell_price}
           disabled={status === "Open" && order === "BUY"}
           type="number"
-          name="sellPrice"
+          name="sell_price"
           className="add-modal-select h-6 placeholder:text-red-500 disabled:bg-gray-300 dark:disabled:bg-gray-500"
           placeholder="Sell Price"
           onChange={(e) =>
-            handleExecutionEntries(index, "sellPrice", e.target.value)
+            handleExecutionEntries(index, "sell_price", e.target.value)
           }
         />
         <input
@@ -69,12 +69,12 @@ function QtyRow({
             Entry Time:
           </label>
           <input
-            value={execution.entryTime}
-            name="entryTime"
+            value={execution.entry_time}
+            name="entry_time"
             type="datetime-local"
             className="add-modal-select h-6 mt-4 w-28 pl-1 uppercase text-xs"
             onChange={(e) =>
-              handleExecutionEntries(index, "entryTime", e.target.value)
+              handleExecutionEntries(index, "entry_time", e.target.value)
             }
           />
         </div>
@@ -85,12 +85,12 @@ function QtyRow({
           <input
             required
             disabled={status === "Open"}
-            value={execution.exitTime}
-            name="exitTime"
+            value={execution.exit_time}
+            name="exit_time"
             type="datetime-local"
             className="add-modal-select h-6 mt-4 w-28 pl-1 text-xs uppercase disabled:bg-gray-300 dark:disabled:bg-gray-500"
             onChange={(e) =>
-              handleExecutionEntries(index, "exitTime", e.target.value)
+              handleExecutionEntries(index, "exit_time", e.target.value)
             }
           />
         </div>

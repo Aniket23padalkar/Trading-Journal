@@ -14,8 +14,8 @@ export default function ViewModal({ setViewModal, currentViewTrade }) {
   const { modalRef, handleMouseDown } = useDrag();
 
   function handleViewOrderColor() {
-    if (currentViewTrade.trade.orderType === "BUY") return "#44ca80ff";
-    if (currentViewTrade.trade.orderType === "SELL") return "#ff7779ff";
+    if (currentViewTrade.trade.order_type === "BUY") return "#44ca80ff";
+    if (currentViewTrade.trade.order_type === "SELL") return "#ff7779ff";
     return "white";
   }
 
@@ -49,7 +49,7 @@ export default function ViewModal({ setViewModal, currentViewTrade }) {
           className="px-2 rounded shadow-sm shadow-gray-700"
           style={{ backgroundColor: handleViewOrderColor(), color: "white" }}
         >
-          {currentViewTrade.trade.orderType}
+          {currentViewTrade.trade.order_type}
         </span>
       </div>
       <div className="flex flex-1 flex-col gap-3 relative p-2">
@@ -86,7 +86,7 @@ export default function ViewModal({ setViewModal, currentViewTrade }) {
           <div className="view-modal-section">
             <span className="view-modal-span">Market-Type</span>
             <h1 className="view-modal-h1">
-              {currentViewTrade.trade.marketType}
+              {currentViewTrade.trade.market_type}
             </h1>
           </div>
         </div>

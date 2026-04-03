@@ -27,18 +27,18 @@ function TradeRow({
       <td>
         <p
           className={`text-xs px-1 border rounded font-medium ${
-            t.trade.orderType === "BUY"
+            t.trade.order_type === "BUY"
               ? "text-[#03c988] border-[#03c988]"
-              : t.trade.orderType === "SELL"
+              : t.trade.order_type === "SELL"
                 ? "text-[#ff7779ff] border-[#ff7779ff] "
                 : "text-white"
           }`}
         >
-          {t.trade.orderType}
+          {t.trade.order_type}
         </p>
       </td>
       <td className="text-xs dark:text-gray-300">{t.trade.status}</td>
-      <td className="dark:text-gray-300">{t.trade.marketType}</td>
+      <td className="dark:text-gray-300">{t.trade.market_type}</td>
       <td>{t.stats.totalQty}</td>
 
       <td>

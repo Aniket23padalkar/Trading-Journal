@@ -7,9 +7,9 @@ export default async function getTradeByID(client, tradeId) {
 					'trade_id', t.trade_id,
 					'symbol', t.symbol,
 					'status', t.status,
-					'orderType', t.order_type,
+					'order_type', t.order_type,
 					'position', t.position,
-					'marketType', t.market_type,
+					'market_type', t.market_type,
 					'rating', t.rating,
 					'description', t.description,
 					'created_at', t.created_at,
@@ -19,12 +19,12 @@ export default async function getTradeByID(client, tradeId) {
 				json_agg(
 					json_build_object(
 						'trade_logs_id', tl.trade_logs_id,
-						'buyPrice', tl.buy_price,
-						'sellPrice', tl.sell_price,
+						'buy_price', tl.buy_price,
+						'sell_price', tl.sell_price,
 						'quantity', tl.quantity,
 						'risk', tl.risk,
-						'entryTime', tl.entry_time,
-						'exitTime', tl.exit_time
+						'entry_time', tl.entry_time,
+						'exit_time', tl.exit_time
 					)
 						ORDER BY tl.entry_time DESC
 				),
@@ -32,15 +32,15 @@ export default async function getTradeByID(client, tradeId) {
 				json_build_object(
 					'pnl', t.pnl,
 
-          'totalQty',t.total_qty,
+          'total_qty',t.total_qty,
 
-          'avgRisk', t.avg_risk,
+          'avg_risk', t.avg_risk,
 
-          'avgRR', t.avg_rr,
+          'avg_rr', t.avg_rr,
           
-          'avgBuy', t.avg_buy_price,
+          'avg_buy_price', t.avg_buy_price,
 
-          'avgSell', t.avg_sell_price
+          'avg_sell_price', t.avg_sell_price
 				)
 			) AS trade_data
 		FROM trades t
