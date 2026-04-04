@@ -70,15 +70,18 @@ router.post("/login", async (req, res) => {
         .json({ message: "Please provide all the required Fields!" });
     }
 
-    const user = await pool.query("SELECT * FROM users WHERE email_id = $1", [
-      email_id,
-    ]);
+    const user = await pool.query(
+      "SELECT user_id,firstname,email_id,password_hash FROM users WHERE email_id = $1",
+      [email_id],
+    );
 
     if (user.rows.length === 0) {
       return res.status(400).json({ message: "Invalid Credentials!" });
     }
 
     const userData = user.rows[0];
+
+    console.log(userData);
 
     const isMatch = await bcrypt.compare(password, userData.password_hash);
 
