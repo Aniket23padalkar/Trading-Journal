@@ -75,7 +75,11 @@ function QtyRow({
             type="datetime-local"
             className="add-modal-select h-6 mt-4 w-28 pl-1 uppercase text-xs"
             onChange={(e) =>
-              handleExecutionEntries(index, "entry_time", e.target.value)
+              handleExecutionEntries(
+                index,
+                "entry_time",
+                new Date(e.target.value).toISOString(),
+              )
             }
           />
         </div>
@@ -91,7 +95,11 @@ function QtyRow({
             type="datetime-local"
             className="add-modal-select h-6 mt-4 w-28 pl-1 text-xs uppercase disabled:bg-gray-300 dark:disabled:bg-gray-500"
             onChange={(e) =>
-              handleExecutionEntries(index, "exit_time", e.target.value)
+              handleExecutionEntries(
+                index,
+                "exit_time",
+                new Date(e.target.value).toISOString(),
+              )
             }
           />
         </div>

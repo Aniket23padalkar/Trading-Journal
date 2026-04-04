@@ -13,10 +13,18 @@ const cookieOptions = {
   maxAge: 30 * 24 * 60 * 60 * 1000, // 30days
 };
 
-const generateToken = (id) => {
-  return jwt.sign({ id }, process.env.JWT_SECRET, {
-    expiresIn: "30d",
-  });
+const generateToken = (id, firstname, email_id) => {
+  return jwt.sign(
+    {
+      id,
+      firstname,
+      email_id,
+    },
+    process.env.JWT_SECRET,
+    {
+      expiresIn: "30d",
+    },
+  );
 };
 
 router.post("/register", async (req, res) => {
@@ -78,7 +86,11 @@ router.post("/login", async (req, res) => {
       return res.status(400).json({ message: "Invalid Credentials!" });
     }
 
-    const token = generateToken(userData.user_id);
+    const token = generateToken(
+      userData.user_id,
+      userData.firstname,
+      userData.email_id,
+    );
 
     res.cookie("token", token, cookieOptions);
 
@@ -86,7 +98,6 @@ router.post("/login", async (req, res) => {
       user: {
         user_id: userData.user_id,
         firstname: userData.firstname,
-        lastname: userData.lastname,
         email_id: userData.email_id,
       },
     });

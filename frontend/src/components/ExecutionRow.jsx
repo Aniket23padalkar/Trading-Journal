@@ -75,7 +75,11 @@ export default function ExecutionRow({
             type="datetime-local"
             className="add-modal-select h-8 mt-4 w-36 uppercase"
             onChange={(e) =>
-              handleExecutionEntries(index, "entry_time", e.target.value)
+              handleExecutionEntries(
+                index,
+                "entry_time",
+                new Date(e.target.value).toISOString(),
+              )
             }
           />
         </div>
@@ -91,7 +95,11 @@ export default function ExecutionRow({
             type="datetime-local"
             className="add-modal-select h-8 mt-4 w-36 disabled:bg-gray-300 dark:disabled:bg-gray-500 uppercase"
             onChange={(e) =>
-              handleExecutionEntries(index, "exit_time", e.target.value)
+              handleExecutionEntries(
+                index,
+                "exit_time",
+                new Date(e.target.value).toISOString(),
+              )
             }
           />
         </div>
