@@ -18,6 +18,17 @@ app.use(
 app.use(express.json());
 app.use(cookieParser());
 
+app.use((req, res, next) => {
+  const start = Date.now();
+
+  res.on("finish", () => {
+    const duration = Date.now() - start;
+    console.log(`${req.method} ${req.url} - ${req.statusCode} ${duration}ms`);
+  });
+
+  next();
+});
+
 app.get("/", (req, res) => {
   res.send("Hello");
 });
