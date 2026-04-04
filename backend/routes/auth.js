@@ -111,7 +111,11 @@ router.post("/login", async (req, res) => {
 });
 
 router.get("/me", protect, (req, res) => {
+  const start = Date.now();
   res.json(req.user);
+  const end = Date.now();
+
+  console.log("Backend Execution time: ", end - start, "ms");
 });
 
 router.post("/logout", (req, res) => {
