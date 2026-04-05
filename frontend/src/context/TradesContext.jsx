@@ -8,7 +8,7 @@ export default function TradeProvider({ children }) {
   const [pagination, setPagination] = useState();
   const [currentPage, setCurrentPage] = useState(1);
   const [overallStats, setOverallStats] = useState();
-  const [fetchLoading, setFetchLoading] = useState(false);
+  const [fetchLoading, setFetchLoading] = useState(true);
   const [filterValue, setFilterValue] = useState({
     order_type: "",
     status: "",
@@ -33,7 +33,6 @@ export default function TradeProvider({ children }) {
 
   async function fetchTrades() {
     try {
-      setFetchLoading(true);
       const data = await getTradesData(params);
 
       setTrades(data?.trades_data);

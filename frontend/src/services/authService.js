@@ -1,4 +1,4 @@
-const API = "https://tradelens-backend-hff0.onrender.com";
+const API = import.meta.env.VITE_API_URL;
 
 export async function registerUser(data) {
   try {

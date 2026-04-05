@@ -1,7 +1,7 @@
 import express from "express";
 import pool from "../config/auth.js";
 import { protect } from "../middleware/auth.js";
-import getTradeByID from "../services/tradeServices.js";
+import getTradeByID from "../services/getTradeByID.js";
 import updateTradeSummary from "../services/updateTradeSummary.js";
 import getOverallStats from "../services/getOverallStats.js";
 import buildTradeFilters from "../services/buildTradeFilters.js";
@@ -240,7 +240,7 @@ router.post("/", protect, async (req, res) => {
   }
 
   for (const exe of executions) {
-    if (!exe.quantity || !exe.risk || !exe.entry_time) {
+    if (exe.quantity == null || exe.risk == null || !exe.entry_time) {
       return res.status(400).json({ message: "Invalid execution data!" });
     }
   }
@@ -283,7 +283,7 @@ router.post("/", protect, async (req, res) => {
 
     await updateTradeSummary(client, tradeId, status);
 
-    const tradeData = await getTradeByID(client, tradeId);
+    const tradeData = await getTradeByID(client, tradeId, req.user.user_id);
     console.log(tradeData);
 
     await client.query("COMMIT");
@@ -330,7 +330,7 @@ router.patch("/:id", protect, async (req, res) => {
   }
 
   for (const exe of executions) {
-    if (!exe.quantity || !exe.risk || !exe.entry_time) {
+    if (exe.quantity == null || exe.risk == null || !exe.entry_time) {
       return res.status(400).json({ message: "Invalid Executions data" });
     }
   }
@@ -447,7 +447,7 @@ router.patch("/:id", protect, async (req, res) => {
 
     await updateTradeSummary(client, id, status);
 
-    const tradeData = await getTradeByID(client, id);
+    const tradeData = await getTradeByID(client, id, req.user.user_id);
 
     await client.query("COMMIT");
     res.status(200).json(tradeData);
