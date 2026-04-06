@@ -10,10 +10,19 @@ import {
 import { FaBullseye, FaChartLine, FaExclamation } from "react-icons/fa";
 import { BiBarChartAlt2 } from "react-icons/bi";
 import { TradeContext } from "../../context/TradesContext";
+import FormatNumbers from "../../utils/FormatNumbers";
+import { ScaleLoader } from "react-spinners";
 
 export default function Stats() {
   const { overallStats } = useContext(TradeContext);
-  console.log(overallStats);
+
+  if (!overallStats) {
+    return (
+      <div className="col-start-1 col-end-8 row-start-1 row-end-2 flex items-center justify-center h-full w-full">
+        <ScaleLoader color="#20dfbc" />
+      </div>
+    );
+  }
 
   return (
     <>
@@ -21,7 +30,7 @@ export default function Stats() {
         <div className="flex flex-col gap-4 ">
           <div className="flex gap-4 h-15">
             <div className="flex items-center justify-center h-15 w-15 bg-white rounded-2xl">
-              {overallStats?.overall_pnl >= 0 ? (
+              {overallStats.overall_pnl >= 0 ? (
                 <FaArrowTrendUp className="text-2xl text-green-500 font-extralight" />
               ) : (
                 <FaArrowTrendDown className="text-2xl text-red-500 font-extralight" />
@@ -36,10 +45,7 @@ export default function Stats() {
           <div className="flex-1 relative">
             <h1 className=" flex gap-2 items-center font-bold text-4xl absolute left-0 text-white bottom-3">
               <FaIndianRupeeSign className="text-3xl" />{" "}
-              {Number(overallStats?.overall_pnl).toLocaleString("en-IN", {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2,
-              })}
+              {FormatNumbers(overallStats.overall_pnl)}
             </h1>
           </div>
         </div>
@@ -62,10 +68,7 @@ export default function Stats() {
           </div>
           <h1 className="flex mt-2 gap-2 items-center text-xl font-bold dark:text-white">
             <FaIndianRupeeSign />
-            {Number(overallStats?.max_profit).toLocaleString("en-IN", {
-              minimumFractionDigits: 2,
-              maximumFractionDigits: 2,
-            })}
+            {FormatNumbers(overallStats.max_profit)}
           </h1>
         </div>
         <div>
@@ -77,10 +80,7 @@ export default function Stats() {
           </div>
           <h1 className="flex mt-2 font-bold gap-2 items-center text-xl dark:text-white">
             <FaIndianRupeeSign />
-            {Number(overallStats?.max_loss).toLocaleString("en-IN", {
-              minimumFractionDigits: 2,
-              maximumFractionDigits: 2,
-            })}
+            {FormatNumbers(overallStats.max_loss)}
           </h1>
         </div>
       </article>
@@ -92,7 +92,7 @@ export default function Stats() {
         <p className="dark:text-gray-300">Win Rate</p>
         <h1 className="flex items-center gap-2 text-3xl font-medium dark:text-white">
           <FaArrowUp className="text-xl" />
-          {overallStats?.win_rate}%
+          {overallStats.win_rate}%
         </h1>
       </article>
 
@@ -106,10 +106,7 @@ export default function Stats() {
           </div>
           <h1 className="flex mt-2 gap-2 items-center text-xl font-bold dark:text-white">
             <FaIndianRupeeSign />
-            {Number(overallStats?.total_profit).toLocaleString("en-IN", {
-              minimumFractionDigits: 2,
-              maximumFractionDigits: 2,
-            })}
+            {FormatNumbers(overallStats.total_profit)}
           </h1>
         </div>
         <div>
@@ -121,10 +118,7 @@ export default function Stats() {
           </div>
           <h1 className="flex mt-2 gap-2 items-center text-xl font-bold dark:text-white">
             <FaIndianRupeeSign />
-            {Number(overallStats?.total_loss).toLocaleString("en-IN", {
-              minimumFractionDigits: 2,
-              maximumFractionDigits: 2,
-            })}
+            {FormatNumbers(overallStats.total_loss)}
           </h1>
         </div>
       </article>
@@ -140,12 +134,12 @@ export default function Stats() {
             </h1>
           </div>
           <h1 className="flex items-center gap-2 pl-2 text-xl font-bold dark:text-white">
-            {overallStats?.overall_rr > 0 ? (
+            {overallStats.overall_rr > 0 ? (
               <FaArrowUp className="text-lg" />
             ) : (
               <FaArrowDown className="text-lg" />
             )}
-            {overallStats?.overall_rr} X
+            {FormatNumbers(overallStats.overall_rr)} X
           </h1>
         </div>
         <div className="flex flex-col gap-3">
@@ -159,7 +153,7 @@ export default function Stats() {
           </div>
           <h1 className="flex items-center gap-2 pl-2 text-xl font-bold dark:text-white">
             <FaIndianRupeeSign />
-            {overallStats?.average_risk_per_trade}
+            {FormatNumbers(overallStats.average_risk_per_trade)}
           </h1>
         </div>
       </article>
@@ -175,25 +169,25 @@ export default function Stats() {
             </h1>
           </div>
           <h1 className="text-2xl font-bold dark:text-white">
-            +{overallStats?.closed_trades}
+            +{overallStats.closed_trades}
           </h1>
         </div>
         <div className="flex flex-1 items-end text-center">
           <div className="flex-1">
             <p className="dark:text-white">Profit-Trades</p>
             <h1 className="text-2xl font-medium text-green-600 dark:text-green-400">
-              {overallStats?.total_profit_trades}
+              {overallStats.total_profit_trades}
             </h1>
           </div>
           <div className="flex-1 border-l-gray-400 border-l">
             <p className="dark:text-white">Loss-Trades</p>
             <h1 className="text-2xl font-medium text-red-500 dark:text-red-600">
-              {overallStats?.total_loss_trades}
+              {overallStats.total_loss_trades}
             </h1>
           </div>
           <div className="flex-1 border-l-gray-400 border-l">
             <p className="dark:text-white">CTC-Trades</p>
-            <h1 className="text-2xl font-medium">{overallStats?.ctc_trades}</h1>
+            <h1 className="text-2xl font-medium">{overallStats.ctc_trades}</h1>
           </div>
         </div>
       </article>

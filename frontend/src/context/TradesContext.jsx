@@ -4,11 +4,11 @@ import { getTradesData } from "../services/tradesService";
 export const TradeContext = createContext(null);
 
 export default function TradeProvider({ children }) {
+  const [fetchLoading, setFetchLoading] = useState(true);
   const [trades, setTrades] = useState([]);
   const [pagination, setPagination] = useState();
   const [currentPage, setCurrentPage] = useState(1);
-  const [overallStats, setOverallStats] = useState();
-  const [fetchLoading, setFetchLoading] = useState(true);
+  const [overallStats, setOverallStats] = useState(null);
   const [filterValue, setFilterValue] = useState({
     order_type: "",
     status: "",
