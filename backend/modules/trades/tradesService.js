@@ -1,4 +1,4 @@
-import pool from "../config/auth.js";
+import pool from "../../config/auth.js";
 import {
   checkTradeOwnership,
   createTradeInDB,
@@ -10,9 +10,9 @@ import {
   getTradesCountFromDB,
   getTradesWithPaginationFromDB,
   updateTradeInDB,
-} from "../repositories/tradeRepository.js";
-import buildTradeFilters from "../utils/buildTradeFilters.js";
-import getOverallStats from "../utils/getOverallStats.js";
+} from "../../repositories/tradeRepository.js";
+import buildTradeFilters from "../../utils/buildTradeFilters.js";
+import getOverallStats from "../../utils/getOverallStats.js";
 
 export const getTradesService = async (query, userId) => {
   const page = parseInt(query.currentPage) || 1;

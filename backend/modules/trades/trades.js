@@ -8,7 +8,7 @@ import {
   getTrades,
   getYearMonth,
   updateTrade,
-} from "../controllers/tradesControllers.js";
+} from "../../controllers/tradesControllers.js";
 
 const router = express.Router();
 
