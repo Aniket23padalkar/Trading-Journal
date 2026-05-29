@@ -6,7 +6,7 @@ import {
   getYearMonthService,
   tradeDeleteService,
   updateTradeService,
-} from "../services/tradesService.js";
+} from "./tradesService.js";
 
 export const getTrades = async (req, res) => {
   try {
