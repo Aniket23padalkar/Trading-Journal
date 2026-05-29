@@ -2,7 +2,7 @@ import {
   checkUserExists,
   createUser,
   getExistingUser,
-} from "../../repositories/authRepository";
+} from "./authRepository.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 

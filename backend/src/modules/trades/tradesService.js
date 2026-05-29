@@ -10,7 +10,7 @@ import {
   getTradesCountFromDB,
   getTradesWithPaginationFromDB,
   updateTradeInDB,
-} from "../../repositories/tradeRepository.js";
+} from "./tradeRepository.js";
 import buildTradeFilters from "../../utils/buildTradeFilters.js";
 import getOverallStats from "../../utils/getOverallStats.js";
 

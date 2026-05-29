@@ -1,4 +1,4 @@
-import { loginService, registerService } from "../services/authService";
+import { loginService, registerService } from "./authService.js";
 
 const cookieOptions = {
   httpOnly: true,

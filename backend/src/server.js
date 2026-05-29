@@ -1,9 +1,9 @@
 import express from "express";
 import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
-import authRoutes from "./routes/auth.js";
+import authRoutes from "./modules/auth/auth.js";
 import cors from "cors";
-import tradeRoutes from "./routes/trades.js";
+import tradeRoutes from "./modules/trades/trades.js";
 
 dotenv.config();
 

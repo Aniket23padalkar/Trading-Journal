@@ -1,5 +1,5 @@
 import express from "express";
-import { protect } from "../middleware/auth.js";
+import { protect } from "../../middleware/authMiddleware.js";
 import {
   createTrade,
   deleteTrade,
@@ -8,7 +8,7 @@ import {
   getTrades,
   getYearMonth,
   updateTrade,
-} from "../../controllers/tradesControllers.js";
+} from "./tradesControllers.js";
 
 const router = express.Router();
 
