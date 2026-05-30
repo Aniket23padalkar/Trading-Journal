@@ -4,7 +4,7 @@
 CREATE TABLE trade_logs (
     trade_logs_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     trade_id UUID REFERENCES trades(trade_id) ON DELETE CASCADE,
-    user_id UUID REFERENCES users(user_id) ON DELETE CASCADE
+    user_id UUID REFERENCES users(user_id) ON DELETE CASCADE,
 
     description TEXT,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,

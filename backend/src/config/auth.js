@@ -10,8 +10,9 @@ const pool = new Pool({
   },
 });
 
-pool.on("connect", () => {
-  console.log("Connected to database");
+pool.on("connect", async (client) => {
+  const db = await client.query("SELECT current_database()");
+  console.log("Connected to database", db.rows[0]);
 });
 
 pool.on("error", (err) => {
