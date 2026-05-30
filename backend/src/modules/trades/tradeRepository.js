@@ -1,4 +1,4 @@
-import pool from "../../config/auth.js";
+import pool from "../../config/db.js";
 
 export const getTradesWithPaginationFromDB = async ({
   whereClause,
