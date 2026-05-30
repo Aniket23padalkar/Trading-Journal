@@ -40,10 +40,6 @@ app.use((req, res, next) => {
   next();
 });
 
-app.get("/", (req, res) => {
-  res.send("Hello");
-});
-
 app.use("/api/auth", authRoutes);
 app.use("/api/trades", tradeRoutes);
 
@@ -52,5 +48,3 @@ const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
-
-console.log(process.env.DB_URL);
