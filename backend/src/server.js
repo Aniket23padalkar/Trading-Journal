@@ -4,6 +4,7 @@ import cookieParser from "cookie-parser";
 import authRoutes from "./modules/auth/auth.js";
 import cors from "cors";
 import tradeRoutes from "./modules/trades/trades.js";
+import { errorHandler } from "./middleware/error.middleware.js";
 
 dotenv.config();
 
@@ -29,21 +30,12 @@ app.use(
 app.use(express.json());
 app.use(cookieParser());
 
-app.use((req, res, next) => {
-  const start = Date.now();
-
-  res.on("finish", () => {
-    const duration = Date.now() - start;
-    console.log(`${req.method} ${req.url} - ${req.statusCode} ${duration}ms`);
-  });
-
-  next();
-});
-
 app.use("/api/auth", authRoutes);
 app.use("/api/trades", tradeRoutes);
 
 const PORT = process.env.PORT || 5000;
+
+app.use(errorHandler);
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
