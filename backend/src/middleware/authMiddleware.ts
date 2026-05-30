@@ -1,7 +1,12 @@
 import jwt from "jsonwebtoken";
-import pool from "../config/auth.js";
+import type { NextFunction, Request, Response } from "express";
+import { config } from "../config/env.js";
 
-export const protect = async (req, res, next) => {
+export const protect = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   try {
     const token = req.cookies.token;
 
@@ -9,7 +14,7 @@ export const protect = async (req, res, next) => {
       return res.status(401).json({ message: "Not authorized, no token!" });
     }
 
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const decoded = jwt.verify(token, config.jwtSecret);
 
     req.user = {
       user_id: decoded.id,
