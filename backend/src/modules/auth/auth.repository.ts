@@ -1,0 +1,37 @@
+import pool from "../../config/db.js";
+import type { BodyUserData, User } from "../../types/auth.types.js";
+
+export const getUserFromDB = async (email_id: string): Promise<User | null> => {
+  const query = `
+      SELECT 
+        user_id,
+        first_name,
+        last_name,
+        email,
+        role,
+        password_hash,
+        created_at
+      FROM users 
+      WHERE email_id = $1
+    `;
+
+  const result = await pool.query<User>(query, [email_id]);
+
+  return result.rows[0] || null;
+};
+
+export const createUser = async ({
+  firstName,
+  lastName,
+  email_id,
+  hashedPassword,
+}: BodyUserData): Promise<void> => {
+  const query = `
+      INSERT INTO users
+        (firstname, lastname, email_id, password_hash)
+      VALUES
+        ($1,$2,$3,$4)
+    `;
+
+  await pool.query(query, [firstName, lastName, email_id, hashedPassword]);
+};
