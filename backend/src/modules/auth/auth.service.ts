@@ -3,7 +3,8 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { config } from "../../config/env.js";
 import type {
-  BodyUserData,
+  LoginBodyData,
+  RegisterBodyData,
   RegisterUserResponse,
   SafeUserWithToken,
 } from "../../types/auth.types.js";
@@ -18,18 +19,15 @@ const generateToken = (user_id: number) => {
     config.jwtSecret,
     {
       expiresIn: "30d",
+      issuer: "tradelens",
     },
   );
 };
 
 export const registerService = async (
-  body: BodyUserData,
+  body: RegisterBodyData,
 ): Promise<RegisterUserResponse> => {
   const { first_name, last_name, email, password } = body;
-
-  if (!first_name || !last_name || !email || !password) {
-    throw new AppError("Please provide all the required fields", 400);
-  }
 
   const user = await getUserFromDB(email);
 
@@ -43,22 +41,18 @@ export const registerService = async (
     first_name,
     last_name,
     email,
-    hashedPassword,
+    password: hashedPassword,
   });
 
   return { message: "User Created Successfully!" };
 };
 
 export const loginService = async (
-  body: BodyUserData,
+  body: LoginBodyData,
 ): Promise<SafeUserWithToken> => {
   const { email, password } = body;
 
-  if (!email || !password) {
-    throw new AppError("Please provide all the required fields", 400);
-  }
-
-  const user = await getUserFromDB(email);
+  const user = await getUserFromDB(email.toLowerCase().trim());
 
   if (!user) {
     throw new AppError("User not found", 404);

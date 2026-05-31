@@ -1,5 +1,5 @@
 import pool from "../../config/db.js";
-import type { BodyUserData, User } from "../../types/auth.types.js";
+import type { RegisterBodyData, User } from "../../types/auth.types.js";
 
 export const getUserFromDB = async (email_id: string): Promise<User | null> => {
   const query = `
@@ -21,11 +21,11 @@ export const getUserFromDB = async (email_id: string): Promise<User | null> => {
 };
 
 export const createUser = async ({
-  firstName,
-  lastName,
-  email_id,
-  hashedPassword,
-}: BodyUserData): Promise<void> => {
+  first_name,
+  last_name,
+  email,
+  password,
+}: RegisterBodyData): Promise<void> => {
   const query = `
       INSERT INTO users
         (firstname, lastname, email_id, password_hash)
@@ -33,5 +33,5 @@ export const createUser = async ({
         ($1,$2,$3,$4)
     `;
 
-  await pool.query(query, [firstName, lastName, email_id, hashedPassword]);
+  await pool.query(query, [first_name, last_name, email, password]);
 };

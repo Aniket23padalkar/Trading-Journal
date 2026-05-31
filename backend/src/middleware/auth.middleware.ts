@@ -11,14 +11,20 @@ export const protect = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     const token = req.cookies?.token;
 
-    if (!token || typeof token === "string") {
+    if (!token || typeof token !== "string") {
       throw new AppError("Not authorized! no token", 401);
     }
 
     let decoded: MyJwtPayload;
 
     try {
-      decoded = jwt.verify(token, config.jwtSecret) as MyJwtPayload;
+      const verified = jwt.verify(token, config.jwtSecret);
+
+      if (typeof verified !== "object" || !("user_id" in verified)) {
+        throw new AppError("Invalid token payload", 401);
+      }
+
+      decoded = verified as MyJwtPayload;
     } catch (err) {
       throw new AppError("Invalid or expired token", 401);
     }
@@ -44,6 +50,6 @@ export const protect = asyncHandler(
       throw new AppError("User not found", 404);
     }
     req.user = userData;
-    next();
+    return next();
   },
 );

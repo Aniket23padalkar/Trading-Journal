@@ -10,8 +10,16 @@ export interface User {
 
 export type SafeUser = Omit<User, "password_hash">;
 
-export interface BodyUserData {
-  [key: string]: string;
+export interface RegisterBodyData {
+  first_name: string;
+  last_name: string;
+  email: string;
+  password: string;
+}
+
+export interface LoginBodyData {
+  email: string;
+  password: string;
 }
 
 export interface RegisterUserResponse {
