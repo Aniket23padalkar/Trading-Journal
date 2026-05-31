@@ -5,15 +5,14 @@ import {
 } from "./authRepository.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import { config } from "../../config/env.js";
 
-const generateToken = (id, firstname, email_id) => {
+const generateToken = (user_id: number) => {
   return jwt.sign(
     {
-      id,
-      firstname,
-      email_id,
+      user_id,
     },
-    process.env.JWT_SECRET,
+    config.jwtSecret,
     {
       expiresIn: "30d",
     },
@@ -76,11 +75,7 @@ export const loginService = async (body) => {
     throw err;
   }
 
-  const token = generateToken(
-    userData.user_id,
-    userData.firstName,
-    userData.email_id,
-  );
+  const token = generateToken(userData.user_id);
 
   return {
     token,

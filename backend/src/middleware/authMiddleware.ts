@@ -1,29 +1,22 @@
 import jwt from "jsonwebtoken";
 import type { NextFunction, Request, Response } from "express";
 import { config } from "../config/env.js";
+import type { MyJwtPayload } from "../types/jwt.types.js";
+import { AppError } from "../utils/AppError.js";
 
-export const protect = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) => {
-  try {
-    const token = req.cookies.token;
+export const protect = (req: Request, res: Response, next: NextFunction) => {
+  const token = req.cookies.token;
 
-    if (!token) {
-      return res.status(401).json({ message: "Not authorized, no token!" });
-    }
-
-    const decoded = jwt.verify(token, config.jwtSecret);
-
-    req.user = {
-      user_id: decoded.id,
-      firstname: decoded.firstname,
-      email_id: decoded.email_id,
-    };
-    next();
-  } catch (err) {
-    console.log(err);
-    res.status(401).json({ message: "Not authorized, token failed!" });
+  if (!token) {
+    throw new AppError("Not authorized! no token", 401);
   }
+
+  const decoded = jwt.verify(token, config.jwtSecret);
+
+  if (typeof decoded === "string") {
+    throw new AppError("Invalid token", 401);
+  }
+
+  req.user = decoded as MyJwtPayload;
+  next();
 };
