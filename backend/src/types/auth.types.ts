@@ -8,6 +8,8 @@ export interface User {
   created_at: Date;
 }
 
-export interface UserId {
-  user_id: number;
+export type SafeUser = Omit<User, "password_hash">;
+
+export interface BodyUserData {
+  [key: string]: string;
 }
