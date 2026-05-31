@@ -13,3 +13,12 @@ export type SafeUser = Omit<User, "password_hash">;
 export interface BodyUserData {
   [key: string]: string;
 }
+
+export interface RegisterUserResponse {
+  message: string;
+}
+
+export interface SafeUserWithToken {
+  token: string;
+  user: SafeUser;
+}

@@ -5,7 +5,7 @@ import {
   loginUser,
   logoutUser,
   registerUser,
-} from "./authControllers.js";
+} from "./auth.controllers.js";
 import { asyncHandler } from "../../utils/async.handler.js";
 import { validate } from "../../middleware/validate.js";
 import {
