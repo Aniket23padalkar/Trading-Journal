@@ -1,7 +1,7 @@
 import pool from "../../config/db.js";
 import type { RegisterBodyData, User } from "../../types/auth.types.js";
 
-export const getUserFromDB = async (email_id: string): Promise<User | null> => {
+export const getUserFromDB = async (email: string): Promise<User | null> => {
   const query = `
       SELECT 
         user_id,
@@ -15,7 +15,7 @@ export const getUserFromDB = async (email_id: string): Promise<User | null> => {
       WHERE email_id = $1
     `;
 
-  const result = await pool.query<User>(query, [email_id]);
+  const result = await pool.query<User>(query, [email]);
 
   return result.rows[0] || null;
 };
