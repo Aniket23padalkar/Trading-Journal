@@ -12,7 +12,7 @@ export const getUserFromDB = async (email: string): Promise<User | null> => {
         password_hash,
         created_at
       FROM users 
-      WHERE email_id = $1
+      WHERE email = $1
     `;
 
   const result = await pool.query<User>(query, [email]);
@@ -28,7 +28,7 @@ export const createUser = async ({
 }: RegisterBodyData): Promise<void> => {
   const query = `
       INSERT INTO users
-        (firstname, lastname, email_id, password_hash)
+        (first_name, last_name, email, password_hash)
       VALUES
         ($1,$2,$3,$4)
     `;

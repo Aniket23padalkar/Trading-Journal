@@ -8,11 +8,12 @@
   "main": "server.js",
   "scripts": {
     "start": "node src/server.js",
-    "dev": "nodemon src/server.js",
+    "dev": "tsx watch src/server.ts",
     "test": "echo \"No tests yet\" && exit 0"
   },
   "dependencies": {
     "@types/bcryptjs": "^2.4.6",
+    "@types/cookie-parser": "^1.4.10",
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.6",
     "bcryptjs": "^3.0.3",
@@ -28,6 +29,8 @@
   },
   "devDependencies": {
     "@types/node": "^25.9.1",
+    "ts-node": "^10.9.2",
+    "tsx": "^4.22.4",
     "typescript": "^6.0.3"
   }
 }
