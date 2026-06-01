@@ -8,6 +8,25 @@ export interface User {
   created_at: Date;
 }
 
-export interface UserId {
-  user_id: number;
+export type SafeUser = Omit<User, "password_hash">;
+
+export interface RegisterBodyData {
+  first_name: string;
+  last_name: string;
+  email: string;
+  password: string;
+}
+
+export interface LoginBodyData {
+  email: string;
+  password: string;
+}
+
+export interface RegisterUserResponse {
+  message: string;
+}
+
+export interface SafeUserWithToken {
+  token: string;
+  user: SafeUser;
 }
