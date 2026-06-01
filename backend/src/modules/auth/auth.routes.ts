@@ -12,15 +12,25 @@ import {
   loginUserSchema,
   registerUserSchema,
 } from "../../schemas/auth.schema.js";
+import {
+  loginLimiter,
+  registerLimiter,
+} from "../../middleware/rate.limiter.js";
 
 const router = express.Router();
 
 router.post(
   "/register",
+  registerLimiter,
   validate(registerUserSchema),
   asyncHandler(registerUser),
 );
-router.post("/login", validate(loginUserSchema), asyncHandler(loginUser));
+router.post(
+  "/login",
+  loginLimiter,
+  validate(loginUserSchema),
+  asyncHandler(loginUser),
+);
 router.get("/me", protect, asyncHandler(getUser));
 router.post("/logout", protect, asyncHandler(logoutUser));
 
