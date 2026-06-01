@@ -19,7 +19,7 @@ const generateToken = (user_id: number) => {
     config.jwtSecret,
     {
       expiresIn: "30d",
-      issuer: "tradelens",
+      issuer: config.jwtIssuer,
     },
   );
 };
@@ -27,22 +27,32 @@ const generateToken = (user_id: number) => {
 export const registerService = async (
   body: RegisterBodyData,
 ): Promise<RegisterUserResponse> => {
-  const { first_name, last_name, email, password } = body;
+  const first_name = body.first_name.trim();
+  const last_name = body.last_name.trim();
+  const email = body.email.toLowerCase().trim();
+  const password = body.password;
 
   const user = await getUserFromDB(email);
 
   if (user) {
-    throw new AppError("User already exists", 409);
+    throw new AppError("Invalid email or password", 401);
   }
 
-  const hashedPassword = await bcrypt.hash(password, 10);
+  const hashedPassword = await bcrypt.hash(password, 12);
 
-  await createUser({
-    first_name,
-    last_name,
-    email,
-    password: hashedPassword,
-  });
+  try {
+    await createUser({
+      first_name,
+      last_name,
+      email,
+      password: hashedPassword,
+    });
+  } catch (err: any) {
+    if (err.code === "23505") {
+      throw new AppError("User already exists", 409);
+    }
+    throw err;
+  }
 
   return { message: "User Created Successfully!" };
 };
@@ -50,18 +60,19 @@ export const registerService = async (
 export const loginService = async (
   body: LoginBodyData,
 ): Promise<SafeUserWithToken> => {
-  const { email, password } = body;
+  const email = body.email.toLowerCase().trim();
+  const { password } = body;
 
-  const user = await getUserFromDB(email.toLowerCase().trim());
+  const user = await getUserFromDB(email);
 
   if (!user) {
-    throw new AppError("User not found", 404);
+    throw new AppError("Invalid email or password", 401);
   }
 
   const isMatch = await bcrypt.compare(password, user.password_hash);
 
   if (!isMatch) {
-    throw new AppError("Wrong password", 400);
+    throw new AppError("Invalid email or password", 401);
   }
 
   const token = generateToken(user.user_id);
