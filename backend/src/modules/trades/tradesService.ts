@@ -13,17 +13,20 @@ import {
 } from "./tradeRepository.js";
 import buildTradeFilters from "../../utils/buildTradeFilters.js";
 import getOverallStats from "../../utils/getOverallStats.js";
+import type { createTradeData } from "../../schemas/trade.schema.js";
 
-export const createTradeService = async (body, userId) => {
+export const createTradeService = async (
+  body: createTradeData,
+  userId: number,
+) => {
   const {
     symbol,
-    order_type,
-    status,
     market_type,
+    order_status,
     position,
-    rating,
-    description,
-    executions,
+    trade_rating,
+    entry_time,
+    exit_time,
   } = body;
 
   if (
