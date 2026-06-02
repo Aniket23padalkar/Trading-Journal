@@ -1,5 +1,12 @@
 import z from "zod";
 
+const executionsSchema = z.object({
+  order_type: z.enum(["buy", "sell"]),
+  price: z.coerce.number().positive(),
+  quantity: z.coerce.number().int().min(1),
+  executed_at: z.coerce.date(),
+});
+
 export const createTradeSchema = z
   .object({
     symbol: z.string().toLowerCase().trim(),
@@ -18,6 +25,7 @@ export const createTradeSchema = z
       .optional(),
     entry_time: z.coerce.date(),
     exit_time: z.coerce.date().optional(),
+    executions: z.array(executionsSchema).min(1),
   })
   .refine(
     (data) => {
@@ -41,6 +49,25 @@ export const createTradeSchema = z
     {
       message: "Open trade should not have exit time",
       path: ["exit_time"],
+    },
+  )
+  .refine(
+    (data) => {
+      const types = new Set(data.executions.map((e) => e.order_type));
+
+      if (data.order_status === "open") {
+        return types.size === 1;
+      }
+
+      if (data.order_status === "closed") {
+        return types.has("buy") && types.has("sell");
+      }
+
+      return true;
+    },
+    {
+      message: "Invalid executions types for trade status",
+      path: ["executions"],
     },
   );
 
