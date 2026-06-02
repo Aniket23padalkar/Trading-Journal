@@ -4,7 +4,7 @@ import { AppError } from "../utils/AppError.js";
 
 export const validate =
   <T extends ZodType>(schema: T) =>
-  (req: Request<{}, {}, z.infer<T>>, res: Response, next: NextFunction) => {
+  (req: Request, res: Response, next: NextFunction) => {
     const result = schema.safeParse(req.body);
 
     if (!result.success) {

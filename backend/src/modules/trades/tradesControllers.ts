@@ -1,3 +1,4 @@
+import type { Request, Response } from "express";
 import {
   createTradeService,
   getMonthlyPnlService,
@@ -7,11 +8,13 @@ import {
   tradeDeleteService,
   updateTradeService,
 } from "./tradesService.js";
+import type { createTradeData } from "../../schemas/trade.schema.js";
 
-export const createTrade = async (req, res) => {
-  const data = await createTradeService(req.body, req.user.user_id);
+export const createTrade = async (req: Request, res: Response) => {
+  const data = req.body as createTradeData;
+  const result = await createTradeService(data, req.user?.user_id);
 
-  res.status(201).json(data);
+  return res.status(201).json(result);
 };
 
 export const updateTrade = async (req, res) => {
