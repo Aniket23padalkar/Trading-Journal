@@ -11,7 +11,7 @@ import type {
 import { AppError } from "../../utils/AppError.js";
 import { getUserFromDB } from "./auth.repository.js";
 
-const generateToken = (user_id: number) => {
+const generateToken = (user_id: string) => {
   return jwt.sign(
     {
       user_id,

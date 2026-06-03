@@ -9,7 +9,7 @@ const executionsSchema = z.object({
 
 export const createTradeSchema = z
   .object({
-    symbol: z.string().toLowerCase().trim(),
+    symbol: z.string().toLowerCase().trim().min(1),
     market_type: z.enum(["equity", "options", "futures"]),
     order_status: z.enum(["open", "closed"]),
     position: z.enum([
@@ -26,6 +26,7 @@ export const createTradeSchema = z
     entry_time: z.coerce.date(),
     exit_time: z.coerce.date().optional(),
     executions: z.array(executionsSchema).min(1),
+    description: z.string().trim(),
   })
   .refine(
     (data) => {
@@ -71,4 +72,40 @@ export const createTradeSchema = z
     },
   );
 
-export type createTradeData = z.infer<typeof createTradeSchema>;
+export type CreateTradeData = z.infer<typeof createTradeSchema>;
+
+const updateTradeSchema = createTradeSchema
+  .partial()
+  .superRefine((data, ctx) => {
+    if (data.exit_time && data.entry_time) {
+      if (data.exit_time < data.entry_time) {
+        ctx.addIssue({
+          path: ["exit_time"],
+          message: "Exit time must be after entry_time",
+          code: "custom",
+        });
+      }
+    }
+
+    if (data.order_status === "open" && data.exit_time) {
+      ctx.addIssue({
+        path: ["exit_time"],
+        message: "Open trade should not have exit time",
+        code: "custom",
+      });
+    }
+
+    if (data.executions) {
+      const types = new Set(data.executions.map((e) => e.order_type));
+
+      if (data.order_status === "open" && types.size !== 1) {
+        ctx.addIssue({
+          path: ["executions"],
+          message: "Open trade should have single execution type",
+          code: "custom",
+        });
+      }
+    }
+  });
+
+export type UpdateTradeData = z.infer<typeof updateTradeSchema>;
