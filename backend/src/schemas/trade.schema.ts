@@ -26,6 +26,7 @@ export const createTradeSchema = z
     entry_time: z.coerce.date(),
     exit_time: z.coerce.date().optional(),
     executions: z.array(executionsSchema).min(1),
+    description: z.string().trim(),
   })
   .refine(
     (data) => {

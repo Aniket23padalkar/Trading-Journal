@@ -1,4 +1,109 @@
 import pool from "../../config/db.js";
+import type {
+  CreateTradeWithUserId,
+  ExecutionsDataType,
+  ExecutionsRow,
+} from "../../types/trade.types.js";
+import { AppError } from "../../utils/AppError.js";
+
+export const createTradeInDB = async ({
+  user_id,
+  symbol,
+  order_status,
+  market_type,
+  position,
+  trade_rating,
+  entry_time,
+  exit_time,
+  executions,
+  description,
+}: CreateTradeWithUserId): Promise<void> => {
+  const client = await pool.connect();
+
+  try {
+    await client.query("BEGIN");
+
+    const newTrade = await client.query<{ trade_id: string }>(
+      `
+        INSERT INTO trades
+          (user_id, symbol, market_type, order_status, position, trade_rating, entry_time, exit_time) 
+        VALUES 
+          ($1,$2,$3,$4,$5,$6,$7,$8) 
+        RETURNING trade_id`,
+      [
+        user_id,
+        symbol,
+        order_status,
+        market_type,
+        position,
+        trade_rating,
+        entry_time,
+        exit_time,
+      ],
+    );
+
+    if (!newTrade.rows[0]?.trade_id) {
+      throw new AppError("Error while creating a trade", 500);
+    }
+
+    const tradeId: string = newTrade.rows[0].trade_id;
+
+    await client.query(
+      `
+        INSERT INTO trade_logs
+          (trade_id, user_id, description)
+        VALUES
+          ($1,$2,$3)
+      `,
+      [tradeId, user_id, description],
+    );
+
+    const values: string[] = [];
+    const rows: ExecutionsRow[] = executions.map((exe) => [
+      tradeId,
+      exe.order_type,
+      exe.price,
+      exe.quantity,
+      exe.executed_at,
+    ]);
+    const params = rows.flat();
+
+    executions.forEach((exe, i) => {
+      const base = i * 5;
+
+      values.push(
+        `($${base + 1}, $${base + 2}, $${base + 3}, $${base + 4}, $${base + 5})`,
+      );
+
+      params.push(
+        tradeId,
+        exe.order_type,
+        exe.price,
+        exe.quantity,
+        exe.executed_at,
+      );
+    });
+
+    await client.query(
+      `INSERT INTO executions
+          (trade_id, order_type, price, quantity, executed_at) 
+        VALUES 
+          ${values.join(",")} 
+        `,
+      params,
+    );
+
+    await client.query("COMMIT");
+  } catch (err: unknown) {
+    await client.query("ROLLBACK");
+    if (err instanceof AppError) {
+      console.error(err);
+      throw new AppError(err.message || "Failed to create trade", 500);
+    }
+  } finally {
+    client.release();
+  }
+};
 
 export const getTradesWithPaginationFromDB = async ({
   whereClause,
@@ -115,68 +220,6 @@ export const getMonthlyPnlFromDB = async ({ year, userId }) => {
   `;
 
   return pool.query(query, [userId, year]);
-};
-
-export const createTradeInDB = async ({
-  userId,
-  symbol,
-  order_type,
-  status,
-  market_type,
-  position,
-  rating,
-  description,
-  executions,
-}) => {
-  const client = await pool.connect();
-
-  try {
-    await client.query("BEGIN");
-
-    const newTrade = await client.query(
-      "INSERT INTO trades(user_id,symbol,status,order_type,position,market_type,rating,description) VALUES ($1,$2,$3,$4,$5,$6,$7,$8) RETURNING *",
-      [
-        userId,
-        symbol,
-        status,
-        order_type,
-        position,
-        market_type,
-        rating,
-        description,
-      ],
-    );
-
-    const tradeId = newTrade.rows[0].trade_id;
-
-    for (const exe of executions) {
-      await client.query(
-        "INSERT INTO trade_logs(trade_id,buy_price,sell_price,quantity,risk,entry_time,exit_time) VALUES ($1,$2,$3,$4,$5,$6,$7) RETURNING *",
-        [
-          tradeId,
-          exe.buy_price || 0,
-          exe.sell_price || 0,
-          exe.quantity,
-          exe.risk,
-          exe.entry_time,
-          exe.exit_time || null,
-        ],
-      );
-    }
-
-    await updateTradeSummary(client, tradeId, status);
-
-    const tradeData = await getTradeByID(client, tradeId, userId);
-
-    await client.query("COMMIT");
-
-    return tradeData;
-  } catch (err) {
-    await client.query("ROLLBACK");
-    throw err;
-  } finally {
-    client.release();
-  }
 };
 
 export const checkTradeOwnership = async (tradeId, userId) => {

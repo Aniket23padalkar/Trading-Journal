@@ -9,12 +9,16 @@ import {
   updateTradeService,
 } from "./tradesService.js";
 import type { createTradeData } from "../../schemas/trade.schema.js";
+import { AppError } from "../../utils/AppError.js";
 
 export const createTrade = async (req: Request, res: Response) => {
-  const data = req.body as createTradeData;
-  const result = await createTradeService(data, req.user?.user_id);
+  if (!req.user?.user_id) {
+    throw new AppError("Unauthorized", 401);
+  }
 
-  return res.status(201).json(result);
+  const result = await createTradeService(req.body, req.user?.user_id);
+
+  return res.status(201).json({ success: true, message: result.message });
 };
 
 export const updateTrade = async (req, res) => {

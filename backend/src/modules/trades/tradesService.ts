@@ -14,11 +14,12 @@ import {
 import buildTradeFilters from "../../utils/buildTradeFilters.js";
 import getOverallStats from "../../utils/getOverallStats.js";
 import type { createTradeData } from "../../schemas/trade.schema.js";
+import { AppError } from "../../utils/AppError.js";
 
 export const createTradeService = async (
   body: createTradeData,
-  userId: number,
-) => {
+  user_id: string,
+): Promise<{ message: string }> => {
   const {
     symbol,
     market_type,
@@ -27,48 +28,28 @@ export const createTradeService = async (
     trade_rating,
     entry_time,
     exit_time,
+    executions,
+    description,
   } = body;
 
-  if (
-    !symbol ||
-    !order_type ||
-    !status ||
-    !market_type ||
-    !position ||
-    !rating
-  ) {
-    const err = new Error("Missing required fields");
-    err.statusCode = 400;
-    throw err;
+  if (!executions || executions.length === 0) {
+    throw new AppError("Executions required", 400);
   }
 
-  if (!Array.isArray(executions) || executions.length === 0) {
-    const err = new Error("Executions required");
-    err.statusCode = 400;
-    throw err;
-  }
-
-  for (const exe of executions) {
-    if (exe.quantity == null || exe.risk == null || !exe.entry_time) {
-      const err = new Error("Missing required fields");
-      err.statusCode = 400;
-      throw err;
-    }
-  }
-
-  const tradeData = await createTradeInDB({
-    userId,
+  await createTradeInDB({
     symbol,
-    order_type,
-    status,
     market_type,
+    order_status,
     position,
-    rating,
-    description,
+    trade_rating,
+    entry_time,
+    exit_time,
     executions,
+    user_id,
+    description,
   });
 
-  return tradeData;
+  return { message: "Trade created successfully" };
 };
 
 export const updateTradeService = async ({ tradeId, body, userId }) => {
