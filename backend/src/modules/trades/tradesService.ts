@@ -13,11 +13,11 @@ import {
 } from "./tradeRepository.js";
 import buildTradeFilters from "../../utils/buildTradeFilters.js";
 import getOverallStats from "../../utils/getOverallStats.js";
-import type { createTradeData } from "../../schemas/trade.schema.js";
+import type { CreateTradeData } from "../../schemas/trade.schema.js";
 import { AppError } from "../../utils/AppError.js";
 
 export const createTradeService = async (
-  body: createTradeData,
+  body: CreateTradeData,
   user_id: string,
 ): Promise<{ message: string }> => {
   const {
@@ -45,8 +45,8 @@ export const createTradeService = async (
     entry_time,
     exit_time,
     executions,
-    user_id,
     description,
+    user_id,
   });
 
   return { message: "Trade created successfully" };

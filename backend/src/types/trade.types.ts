@@ -1,6 +1,6 @@
-import type { createTradeData } from "../schemas/trade.schema.js";
+import type { CreateTradeData } from "../schemas/trade.schema.js";
 
-export interface CreateTradeWithUserId extends createTradeData {
+export interface CreateTradeWithUserId extends CreateTradeData {
   user_id: string;
 }
 
