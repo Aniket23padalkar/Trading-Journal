@@ -9,6 +9,10 @@ import {
   updateTradeService,
 } from "./tradesService.js";
 import { AppError } from "../../utils/AppError.js";
+import type {
+  TradeParamsTradeId,
+  UpdateTradeData,
+} from "../../schemas/trade.schema.js";
 
 export const createTrade = async (req: Request, res: Response) => {
   if (!req.user?.user_id) {
@@ -21,7 +25,7 @@ export const createTrade = async (req: Request, res: Response) => {
 };
 
 export const updateTrade = async (
-  req: Request<{ trade_id: string }>,
+  req: Request<TradeParamsTradeId, {}, UpdateTradeData>,
   res: Response,
 ) => {
   const trade_id = req.params.trade_id;
@@ -40,7 +44,7 @@ export const updateTrade = async (
 };
 
 export const deleteTrade = async (
-  req: Request<{ trade_id: string }>,
+  req: Request<TradeParamsTradeId>,
   res: Response,
 ) => {
   const data = await tradeDeleteService({
@@ -51,7 +55,7 @@ export const deleteTrade = async (
   return res.status(200).json({ success: true, data: data.trade_id });
 };
 
-export const getTrades = async (req, res) => {
+export const getTrades = async (req: Request, res: Response) => {
   const data = await getTradesService(req.query, req.user.user_id);
   res.status(200).json(data);
 };
