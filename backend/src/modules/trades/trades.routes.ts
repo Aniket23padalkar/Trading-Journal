@@ -11,7 +11,10 @@ import {
 } from "./tradesControllers.js";
 import { asyncHandler } from "../../utils/async.handler.js";
 import { validate } from "../../middleware/validate.js";
-import { createTradeSchema } from "../../schemas/trade.schema.js";
+import {
+  createTradeSchema,
+  updateTradeSchema,
+} from "../../schemas/trade.schema.js";
 
 const router = express.Router();
 
@@ -21,7 +24,12 @@ router.post(
   protect,
   asyncHandler(createTrade),
 );
-router.patch("/:id", protect, asyncHandler(updateTrade));
+router.patch(
+  "/:id",
+  validate(updateTradeSchema),
+  protect,
+  asyncHandler(updateTrade),
+);
 router.delete("/:id", protect, asyncHandler(deleteTrade));
 router.get("/", protect, getTrades);
 router.get("/yearmonth", protect, getYearMonth);

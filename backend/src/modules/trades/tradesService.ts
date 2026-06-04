@@ -4,8 +4,10 @@ import {
   createTradeInDB,
   deleteTradeFromDB,
   extractYearMonthFromDB,
+  getExecutionsFromDB,
   getFilteredStatsFromDB,
   getMonthlyPnlFromDB,
+  getTradeFromDB,
   getTradeLogsByIdsFromDB,
   getTradesCountFromDB,
   getTradesWithPaginationFromDB,
@@ -13,8 +15,12 @@ import {
 } from "./tradeRepository.js";
 import buildTradeFilters from "../../utils/buildTradeFilters.js";
 import getOverallStats from "../../utils/getOverallStats.js";
-import type { CreateTradeData } from "../../schemas/trade.schema.js";
+import {
+  createTradeSchema,
+  type CreateTradeData,
+} from "../../schemas/trade.schema.js";
 import { AppError } from "../../utils/AppError.js";
+import type { UpdateTradeServiceParams } from "../../types/trade.types.js";
 
 export const createTradeService = async (
   body: CreateTradeData,
@@ -26,6 +32,7 @@ export const createTradeService = async (
     order_status,
     position,
     trade_rating,
+    risk,
     entry_time,
     exit_time,
     executions,
@@ -42,6 +49,7 @@ export const createTradeService = async (
     order_status,
     position,
     trade_rating,
+    risk,
     entry_time,
     exit_time,
     executions,
@@ -52,60 +60,36 @@ export const createTradeService = async (
   return { message: "Trade created successfully" };
 };
 
-export const updateTradeService = async ({ tradeId, body, userId }) => {
-  const {
-    symbol,
-    order_type,
-    status,
-    market_type,
-    position,
-    rating,
-    description,
+export const updateTradeService = async ({
+  trade_id,
+  body,
+  user_id,
+}: UpdateTradeServiceParams) => {
+  const trade = await getTradeFromDB({ trade_id, user_id });
+
+  if (!trade) throw new AppError("Trade not found", 404);
+  const executions = await getExecutionsFromDB(trade_id);
+
+  const description = await getTradeLogsByIdsFromDB({ user_id, trade_id });
+
+  const existingTrade = {
+    ...trade,
+    description: description,
     executions,
-  } = body;
+  };
 
-  const isMatch = await checkTradeOwnership(tradeId, userId);
+  const merged = {
+    ...existingTrade,
+    ...body,
+  };
 
-  if (isMatch.rows.length === 0) {
-    const err = new Error("Trade not found");
-    err.statusCode = 404;
-    throw err;
-  }
-
-  if (!symbol || !order_type || !status || !market_type || !position) {
-    const err = new Error("Missing required fields");
-    err.statusCode = 400;
-    throw err;
-  }
-
-  if (!Array.isArray(executions) || executions.length === 0) {
-    const err = new Error("Executions Required");
-    err.statusCode = 400;
-    throw err;
-  }
-
-  for (const exe of executions) {
-    if (exe.quantity == null || exe.risk == null || !exe.entry_time) {
-      const err = new Error("Missing required fields");
-      err.statusCode = 400;
-      throw err;
-    }
-  }
+  const validatedTrade = createTradeSchema.parse(merged);
 
   const tradeData = await updateTradeInDB({
-    tradeId,
-    symbol,
-    order_type,
-    status,
-    market_type,
-    position,
-    rating,
-    description,
-    executions,
-    userId,
+    validatedTrade,
+    trade_id,
+    user_id,
   });
-
-  return tradeData;
 };
 
 export const tradeDeleteService = async ({ tradeId, userId }) => {
