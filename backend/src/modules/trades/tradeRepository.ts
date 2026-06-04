@@ -83,6 +83,7 @@ export const createTradeInDB = async ({
   market_type,
   position,
   trade_rating,
+  risk,
   entry_time,
   exit_time,
   executions,
@@ -96,9 +97,9 @@ export const createTradeInDB = async ({
     const newTrade = await client.query<{ trade_id: string }>(
       `
         INSERT INTO trades
-          (user_id, symbol, market_type, order_status, position, trade_rating, entry_time, exit_time) 
+          (user_id, symbol, market_type, order_status, position, trade_rating,risk, entry_time, exit_time) 
         VALUES 
-          ($1,$2,$3,$4,$5,$6,$7,$8) 
+          ($1,$2,$3,$4,$5,$6,$7,$8,$9) 
         RETURNING trade_id`,
       [
         user_id,
@@ -107,6 +108,7 @@ export const createTradeInDB = async ({
         market_type,
         position,
         trade_rating,
+        risk,
         entry_time,
         exit_time,
       ],
@@ -116,7 +118,7 @@ export const createTradeInDB = async ({
       throw new AppError("Error while creating a trade", 500);
     }
 
-    const tradeId: string = newTrade.rows[0].trade_id;
+    const trade_id: string = newTrade.rows[0].trade_id;
 
     await client.query(
       `
@@ -125,12 +127,12 @@ export const createTradeInDB = async ({
         VALUES
           ($1,$2,$3)
       `,
-      [tradeId, user_id, description],
+      [trade_id, user_id, description],
     );
 
     const values: string[] = [];
     const rows: ExecutionsRow[] = executions.map((exe) => [
-      tradeId,
+      trade_id,
       exe.order_type,
       exe.price,
       exe.quantity,
@@ -146,7 +148,7 @@ export const createTradeInDB = async ({
       );
 
       params.push(
-        tradeId,
+        trade_id,
         exe.order_type,
         exe.price,
         exe.quantity,
@@ -194,11 +196,12 @@ export const updateTradeInDB = async ({
           order_status = $3,
           position = $4,
           trade_rating = $5,
-          entry_time = $6,
-          exit_time = $7,
+          risk = $6,
+          entry_time = $7,
+          exit_time = $8,
           updated_at = NOW()
         WHERE
-          trade_id = $8 AND user_id = $9
+          trade_id = $9 AND user_id = $10
         `,
       [
         validatedTrade.symbol,
@@ -206,6 +209,7 @@ export const updateTradeInDB = async ({
         validatedTrade.order_status,
         validatedTrade.position,
         validatedTrade.trade_rating,
+        validatedTrade.risk,
         validatedTrade.entry_time,
         validatedTrade.exit_time,
         trade_id,
@@ -213,13 +217,16 @@ export const updateTradeInDB = async ({
       ],
     );
 
-    const existingExecutions = await client.query(
-      `SELECT execution_id FROM trade_logs WHERE trade_id = $1`,
+    const existingExecutions = await client.query<{ execution_id: string }>(
+      `SELECT execution_id FROM executions WHERE trade_id = $1`,
       [trade_id],
     );
 
     const existingIds = existingExecutions.rows.map((r) => r.execution_id);
-    const incomingIds = validatedTrade.executions
+
+    const incoming = validatedTrade.executions || [];
+
+    const incomingIds = incoming
       .filter((e) => e.execution_id)
       .map((e) => e.execution_id);
 
@@ -232,21 +239,23 @@ export const updateTradeInDB = async ({
       );
     }
 
-    for (const exe of validatedTrade.executions) {
-      if (exe.execution_id) {
-        await client.query(
+    const updates = incoming.filter((e) => e.execution_id);
+    const inserts = incoming.filter((e) => !e.execution_id);
+
+    await Promise.all(
+      updates.map((exe) =>
+        client.query(
           `
-        UPDATE executions
-        SET
-          order_type = $1,
-          price = $2,
-          quantity = $3,
-          executed_at = $4,
-          updated_at = NOW()
-        WHERE 
+          UPDATE executions
+          SET
+            order_type = $1,
+            price = $2,
+            quantity = $3,
+            executed_at = $4,
+            updated_at = NOW()
+          WHERE 
           execution_id=$5 AND trade_id=$6
-        RETURNING *
-        `,
+          `,
           [
             exe.order_type,
             exe.price,
@@ -255,43 +264,49 @@ export const updateTradeInDB = async ({
             exe.execution_id,
             trade_id,
           ],
+        ),
+      ),
+    );
+
+    if (inserts.length) {
+      const values: string[] = [];
+      const rows: ExecutionsRow[] = inserts.map((exe) => [
+        trade_id,
+        exe.order_type,
+        exe.price,
+        exe.quantity,
+        exe.executed_at,
+      ]);
+      const params = rows.flat();
+
+      inserts.forEach((exe, i) => {
+        const base: number = i * 5;
+
+        values.push(
+          `($${base + 1}, $${base + 2}, $${base + 3}, $${base + 4}, $${base + 5})`,
         );
-      } else {
-        await client.query(
-          `
-          INSERT INTO trade_logs
-          (
-            trade_id,
-            buy_price,
-            sell_price,
-            quantity,
-            risk,
-            entry_time,
-            exit_time
-          )
-          VALUES($1,$2,$3,$4,$5,$6,$7)
-            RETURNING *
-          `,
-          [
-            tradeId,
-            exe.buy_price,
-            exe.sell_price,
-            exe.quantity,
-            exe.risk,
-            exe.entry_time,
-            exe.exit_time,
-          ],
+
+        params.push(
+          trade_id,
+          exe.order_type,
+          exe.price,
+          exe.quantity,
+          exe.executed_at,
         );
-      }
+      });
+
+      await client.query(
+        `
+          INSERT INTO executions
+            (trade_id, order_type, price, quantity, executed_at)
+          VALUES
+            ${values.join(",")}
+        `,
+        params,
+      );
     }
 
-    await updateTradeSummary(client, tradeId, status);
-
-    const tradeData = await getTradeByID(client, tradeId, userId);
-
     await client.query("COMMIT");
-
-    return tradeData;
   } catch (err) {
     await client.query("ROLLBACK");
     throw err;
@@ -336,7 +351,7 @@ export const getTradesWithPaginationFromDB = async ({
   return pool.query(query, [...values, limit, offset]);
 };
 
-export const getTradeLogsByIdsFromDB = async (tradeIds) => {
+export const getTradeLogsByIdsFromDB = async (trade_ids) => {
   const query = `
         SELECT *
         FROM trade_logs
@@ -344,7 +359,7 @@ export const getTradeLogsByIdsFromDB = async (tradeIds) => {
         ORDER BY entry_time ASC
     `;
 
-  return pool.query(query, [tradeIds]);
+  return pool.query(query, [trade_ids]);
 };
 
 export const getTradesCountFromDB = async ({ whereClause, values }) => {

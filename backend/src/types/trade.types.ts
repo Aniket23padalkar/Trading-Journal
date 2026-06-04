@@ -8,7 +8,7 @@ export interface CreateTradeWithUserId extends CreateTradeData {
 }
 
 export type ExecutionsRow = [
-  tradeId: string,
+  trade_id: string,
   order_type: string,
   price: number,
   quantity: number,

@@ -32,6 +32,7 @@ export const createTradeService = async (
     order_status,
     position,
     trade_rating,
+    risk,
     entry_time,
     exit_time,
     executions,
@@ -48,6 +49,7 @@ export const createTradeService = async (
     order_status,
     position,
     trade_rating,
+    risk,
     entry_time,
     exit_time,
     executions,
@@ -88,8 +90,6 @@ export const updateTradeService = async ({
     trade_id,
     user_id,
   });
-
-  return tradeData;
 };
 
 export const tradeDeleteService = async ({ tradeId, userId }) => {

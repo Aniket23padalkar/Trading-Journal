@@ -21,6 +21,7 @@ export const createTradeSchema = z
       "positional",
       "longterm",
     ]),
+    risk: z.coerce.number().positive(),
     trade_rating: z
       .enum(["worst", "poor", "average", "good", "best"])
       .optional(),
