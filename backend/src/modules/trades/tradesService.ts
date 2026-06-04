@@ -92,8 +92,18 @@ export const updateTradeService = async ({
   });
 };
 
-export const tradeDeleteService = async ({ tradeId, userId }) => {
-  const deleted = await deleteTradeFromDB({ tradeId, userId });
+export const tradeDeleteService = async ({
+  trade_id,
+  user_id,
+}: {
+  trade_id: string;
+  user_id: string;
+}): Promise<{ trade_id: string }> => {
+  const deleted = await deleteTradeFromDB({ trade_id, user_id });
+
+  if (!deleted) {
+    throw new AppError("Error while deleting trade", 500);
+  }
 
   return deleted;
 };
