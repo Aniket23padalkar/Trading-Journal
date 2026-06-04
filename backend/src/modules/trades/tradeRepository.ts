@@ -315,14 +315,26 @@ export const updateTradeInDB = async ({
   }
 };
 
-export const deleteTradeFromDB = async ({ id, userId }) => {
+export const deleteTradeFromDB = async ({
+  trade_id,
+  user_id,
+}: {
+  trade_id: string;
+  user_id: string;
+}): Promise<{ trade_id: string } | null> => {
   const query = `
     DELETE
     FROM trades
-    WHERE user_id = $1 AND trade_id = $2 RETURNING *
+    WHERE trade_id = $1 AND user_id = $2
+    RETURNING trade_id
   `;
 
-  return pool.query(query, [userId, id]);
+  const result = await pool.query<{ trade_id: string }>(query, [
+    trade_id,
+    user_id,
+  ]);
+
+  return result.rows[0] || null;
 };
 
 export const getTradesWithPaginationFromDB = async ({

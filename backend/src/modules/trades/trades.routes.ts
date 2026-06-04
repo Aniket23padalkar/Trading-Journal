@@ -30,7 +30,7 @@ router.patch(
   protect,
   asyncHandler(updateTrade),
 );
-router.delete("/:id", protect, asyncHandler(deleteTrade));
+router.delete("/:trade_id", protect, asyncHandler(deleteTrade));
 router.get("/", protect, getTrades);
 router.get("/yearmonth", protect, getYearMonth);
 router.get("/stats", protect, getStats);

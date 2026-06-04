@@ -20,12 +20,11 @@ export const createTrade = async (req: Request, res: Response) => {
   return res.status(201).json({ success: true, message: result.message });
 };
 
-export const updateTrade = async (req: Request, res: Response) => {
+export const updateTrade = async (
+  req: Request<{ trade_id: string }>,
+  res: Response,
+) => {
   const trade_id = req.params.trade_id;
-
-  if (!trade_id || typeof trade_id !== "string") {
-    throw new AppError("Trade id missing", 400);
-  }
 
   if (!req.user?.user_id) {
     throw new AppError("Unauthorized", 401);
@@ -40,13 +39,16 @@ export const updateTrade = async (req: Request, res: Response) => {
   return res.status(200).json(data);
 };
 
-export const deleteTrade = async (req, res) => {
+export const deleteTrade = async (
+  req: Request<{ trade_id: string }>,
+  res: Response,
+) => {
   const data = await tradeDeleteService({
-    tradeId: req.params.id,
-    userId: req.user.user_id,
+    trade_id: req.params.trade_id,
+    user_id: req.user.user_id,
   });
 
-  res.status(200).json(data);
+  return res.status(200).json({ success: true, data: data.trade_id });
 };
 
 export const getTrades = async (req, res) => {
