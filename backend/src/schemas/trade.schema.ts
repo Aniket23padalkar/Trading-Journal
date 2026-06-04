@@ -1,6 +1,7 @@
 import z from "zod";
 
 const executionsSchema = z.object({
+  execution_id: z.string().trim().optional(),
   order_type: z.enum(["buy", "sell"]),
   price: z.coerce.number().positive(),
   quantity: z.coerce.number().int().min(1),
@@ -74,7 +75,7 @@ export const createTradeSchema = z
 
 export type CreateTradeData = z.infer<typeof createTradeSchema>;
 
-const updateTradeSchema = createTradeSchema
+export const updateTradeSchema = createTradeSchema
   .partial()
   .superRefine((data, ctx) => {
     if (data.exit_time && data.entry_time) {

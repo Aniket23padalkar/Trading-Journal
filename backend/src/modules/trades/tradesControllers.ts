@@ -8,7 +8,6 @@ import {
   tradeDeleteService,
   updateTradeService,
 } from "./tradesService.js";
-import type { createTradeData } from "../../schemas/trade.schema.js";
 import { AppError } from "../../utils/AppError.js";
 
 export const createTrade = async (req: Request, res: Response) => {
@@ -21,14 +20,24 @@ export const createTrade = async (req: Request, res: Response) => {
   return res.status(201).json({ success: true, message: result.message });
 };
 
-export const updateTrade = async (req, res) => {
+export const updateTrade = async (req: Request, res: Response) => {
+  const trade_id = req.params.trade_id;
+
+  if (!trade_id || typeof trade_id !== "string") {
+    throw new AppError("Trade id missing", 400);
+  }
+
+  if (!req.user?.user_id) {
+    throw new AppError("Unauthorized", 401);
+  }
+
   const data = await updateTradeService({
-    tradeId: req.params.id,
+    trade_id,
     body: req.body,
-    userId: req.user.user_id,
+    user_id: req.user.user_id,
   });
 
-  res.status(200).json(data);
+  return res.status(200).json(data);
 };
 
 export const deleteTrade = async (req, res) => {
