@@ -24,6 +24,7 @@ export interface UpdateTradeServiceParams {
 }
 
 export interface GetTradeQueryResult {
+  trade_id: string;
   symbol: string;
   market_type: "equity" | "options" | "futures";
   order_status: "open" | "closed";
@@ -32,7 +33,9 @@ export interface GetTradeQueryResult {
   direction: "long" | "short";
   trade_rating: "worst" | "poor" | "average" | "good" | "best";
   entry_time: Date;
-  exit_time: Date;
+  exit_time?: Date;
+  created_at?: Date;
+  updated_at?: Date;
 }
 
 export interface GetExecutionsQueryResult {
@@ -73,4 +76,13 @@ export interface ValidateQuantitiesParams {
   direction: "long" | "short";
 }
 
-export type BuildFilterValues = string | Date;
+export type BuildFilterValues = string | Date | number;
+
+export interface GetTradeRepoParams {
+  whereClause: string;
+  values: BuildFilterValues[];
+  index: number;
+  orderBy: string;
+  limit: number;
+  offset: number;
+}

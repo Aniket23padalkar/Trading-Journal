@@ -4,6 +4,7 @@ import type {
   ExecutionsRow,
   GetExecutionsQueryResult,
   GetTradeQueryResult,
+  GetTradeRepoParams,
   UpdateTradeRepoParams,
 } from "../../types/trade.types.js";
 import { AppError } from "../../utils/AppError.js";
@@ -17,6 +18,7 @@ export const getTradeFromDB = async ({
 }): Promise<GetTradeQueryResult | null> => {
   const query = `
     SELECT
+      trade_id,
       symbol,
       market_type,
       order_status,
@@ -347,23 +349,34 @@ export const getTradesWithPaginationFromDB = async ({
   orderBy,
   limit,
   offset,
-}) => {
+}: GetTradeRepoParams): Promise<GetTradeQueryResult[] | null> => {
   const query = `
         SELECT
-            t.*,
-            l.first_entry
-        FROM trades t
-        JOIN(
-            SELECT trade_id, MIN(entry_time) AS first_entry
-            FROM trade_logs
-            GROUP BY trade_id
-        ) l ON t.trade_id = l.trade_id
+            trade_id,
+            symbol,
+            market_type,
+            order_status,
+            position,
+            risk,
+            direction,
+            trade_rating,
+            entry_time,
+            exit_time,
+            created_at,
+            updated_at
+        FROM trades
         WHERE ${whereClause}
         ORDER BY ${orderBy}
         LIMIT $${index} OFFSET $${index + 1}
     `;
 
-  return pool.query(query, [...values, limit, offset]);
+  const result = await pool.query<GetTradeQueryResult>(query, [
+    ...values,
+    limit,
+    offset,
+  ]);
+
+  return result.rows || null;
 };
 
 export const getTradeLogsByIdsFromDB = async (trade_ids) => {

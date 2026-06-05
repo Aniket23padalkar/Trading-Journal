@@ -170,7 +170,11 @@ export const getTradesService = async ({
     offset,
   });
 
-  const tradeIds = tradesRes.rows.map((t) => t.trade_id);
+  if (!tradesRes) {
+    throw new AppError("Trade not found", 404);
+  }
+
+  const tradeIds = tradesRes?.map((t) => t.trade_id);
 
   const logsRes = await getTradeLogsByIdsFromDB(tradeIds);
 
