@@ -1,5 +1,6 @@
 import type {
   CreateTradeData,
+  GetTradeQueryData,
   UpdateTradeData,
 } from "../schemas/trade.schema.js";
 
@@ -26,6 +27,8 @@ export interface GetTradeQueryResult {
   market_type: string;
   order_status: string;
   position: string;
+  risk: number;
+  direction: string;
   trade_rating: string;
   entry_time: Date;
   exit_time: Date;
@@ -41,5 +44,10 @@ export interface GetExecutionsQueryResult {
 export interface UpdateTradeRepoParams {
   validatedTrade: CreateTradeData;
   trade_id: string;
+  user_id: string;
+}
+
+export interface GetTradesServicesParams {
+  query: GetTradeQueryData;
   user_id: string;
 }
