@@ -7,7 +7,7 @@ import {
   getYearMonthService,
   tradeDeleteService,
   updateTradeService,
-} from "./tradesService.js";
+} from "./tradeService.js";
 import { AppError } from "../../utils/AppError.js";
 import type {
   GetTradeQueryData,

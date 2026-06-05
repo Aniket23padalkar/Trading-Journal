@@ -8,7 +8,7 @@ import {
   getTrades,
   getYearMonth,
   updateTrade,
-} from "./tradesControllers.js";
+} from "./tradeControllers.js";
 import { asyncHandler } from "../../utils/async.handler.js";
 import { validate } from "../../middleware/validate.js";
 import {

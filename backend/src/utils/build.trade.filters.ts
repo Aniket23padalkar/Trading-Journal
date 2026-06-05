@@ -1,7 +1,13 @@
-export default function buildTradeFilters(query, userId) {
+import type { GetTradeQueryData } from "../schemas/trade.schema.js";
+import type { BuildFilterValues } from "../types/trade.types.js";
+
+export default function buildTradeFilters(
+  query: GetTradeQueryData,
+  user_id: string,
+) {
   const {
-    order_type,
-    status,
+    direction,
+    order_status,
     market_type,
     position,
     fromDate,
@@ -13,17 +19,17 @@ export default function buildTradeFilters(query, userId) {
   } = query;
 
   let conditions = [`t.user_id = $1`];
-  let values = [userId];
+  let values: BuildFilterValues[] = [user_id];
   let index = 2;
 
-  if (order_type) {
-    conditions.push(`t.order_type = $${index++}`);
-    values.push(order_type);
+  if (direction) {
+    conditions.push(`t.direction = $${index++}`);
+    values.push(direction);
   }
 
-  if (status) {
-    conditions.push(`t.status = $${index++}`);
-    values.push(status);
+  if (order_status) {
+    conditions.push(`t.order_status = $${index++}`);
+    values.push(order_status);
   }
 
   if (market_type) {
