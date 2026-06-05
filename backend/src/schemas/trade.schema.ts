@@ -13,6 +13,7 @@ export const createTradeSchema = z
     symbol: z.string().toLowerCase().trim().min(1),
     market_type: z.enum(["equity", "options", "futures"]),
     order_status: z.enum(["open", "closed"]),
+    direction: z.enum(["long", "short"]),
     position: z.enum([
       "intraday",
       "btst",
@@ -71,6 +72,29 @@ export const createTradeSchema = z
     {
       message: "Invalid executions types for trade status",
       path: ["executions"],
+    },
+  )
+  .refine(
+    (data) => {
+      const first = [...data.executions].sort(
+        (a, b) => a.executed_at.getTime() - b.executed_at.getTime(),
+      )[0];
+
+      if (!first) return true;
+
+      if (data.direction === "long") {
+        return first.order_type === "buy";
+      }
+
+      if (data.direction === "short") {
+        return first.order_type === "sell";
+      }
+
+      return true;
+    },
+    {
+      message: "Direction does not match execution",
+      path: ["direction"],
     },
   );
 
@@ -151,7 +175,7 @@ const monthSchema = z
   })
   .transform((val) => monthMap[val]);
 
-export const getTradeQuery = z.object({
+export const getTradeQuerySchema = z.object({
   limit: z
     .string()
     .transform(Number)
@@ -183,4 +207,4 @@ export const getTradeQuery = z.object({
   dateTimeSort: z.enum(["asc", "desc"]).optional(),
 });
 
-export type GetTradeQueryData = z.infer<typeof getTradeQuery>;
+export type GetTradeQueryData = z.infer<typeof getTradeQuerySchema>;

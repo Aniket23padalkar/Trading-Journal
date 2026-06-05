@@ -20,7 +20,10 @@ import {
   type CreateTradeData,
 } from "../../schemas/trade.schema.js";
 import { AppError } from "../../utils/AppError.js";
-import type { UpdateTradeServiceParams } from "../../types/trade.types.js";
+import type {
+  GetTradesServicesParams,
+  UpdateTradeServiceParams,
+} from "../../types/trade.types.js";
 
 export const createTradeService = async (
   body: CreateTradeData,
@@ -33,6 +36,7 @@ export const createTradeService = async (
     position,
     trade_rating,
     risk,
+    direction,
     entry_time,
     exit_time,
     executions,
@@ -43,6 +47,47 @@ export const createTradeService = async (
     throw new AppError("Executions required", 400);
   }
 
+  if (exit_time && exit_time < entry_time) {
+    throw new AppError("Exit time must be after entry time", 400);
+  }
+
+  if (order_status === "open" && exit_time) {
+    throw new AppError("Open trade should not have exit time", 400);
+  }
+
+  const types: Set<"buy" | "sell"> = new Set(
+    executions.map((exe) => exe.order_type),
+  );
+
+  if (order_status === "open" && types.size > 1) {
+    throw new AppError("Open order can not have both order types", 400);
+  }
+
+  if (order_status === "closed" && (!types.has("buy") || !types.has("sell"))) {
+    throw new AppError("Closed order should have both order types", 400);
+  }
+  const totalBuy = executions
+    .filter((exe) => exe.order_type === "buy")
+    .reduce((sum, exe) => sum + exe.quantity, 0);
+
+  const totalSell = executions
+    .filter((exe) => exe.order_type === "sell")
+    .reduce((sum, exe) => sum + exe.quantity, 0);
+
+  if (direction === "long" && totalBuy < totalSell) {
+    throw new AppError(
+      "Direction is long so total sell quantity can not be more than total buy quantity",
+      400,
+    );
+  }
+
+  if (direction === "short" && totalBuy > totalSell) {
+    throw new AppError(
+      "Direction is short so total buy quantity can not be more than total sell quantity",
+      400,
+    );
+  }
+
   await createTradeInDB({
     symbol,
     market_type,
@@ -50,6 +95,7 @@ export const createTradeService = async (
     position,
     trade_rating,
     risk,
+    direction,
     entry_time,
     exit_time,
     executions,
@@ -108,14 +154,17 @@ export const tradeDeleteService = async ({
   return deleted;
 };
 
-export const getTradesService = async (query, userId) => {
-  const page = parseInt(query.currentPage) || 1;
-  const limit = parseInt(query.limit) || 9;
-  const offset = (page - 1) * limit;
+export const getTradesService = async ({
+  query,
+  user_id,
+}: GetTradesServicesParams) => {
+  const page: number = query.page || 1;
+  const limit: number = query.limit || 9;
+  const offset: number = (page - 1) * limit;
 
   const { whereClause, values, index, orderBy } = buildTradeFilters(
     query,
-    userId,
+    user_id,
   );
 
   const tradesRes = await getTradesWithPaginationFromDB({

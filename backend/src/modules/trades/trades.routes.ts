@@ -13,6 +13,7 @@ import { asyncHandler } from "../../utils/async.handler.js";
 import { validate } from "../../middleware/validate.js";
 import {
   createTradeSchema,
+  getTradeQuerySchema,
   tradeParamsSchema,
   updateTradeSchema,
 } from "../../schemas/trade.schema.js";
@@ -38,7 +39,12 @@ router.delete(
   protect,
   asyncHandler(deleteTrade),
 );
-router.get("/", protect, asyncHandler(getTrades));
+router.get(
+  "/",
+  validate(getTradeQuerySchema),
+  protect,
+  asyncHandler(getTrades),
+);
 router.get("/yearmonth", protect, getYearMonth);
 router.get("/stats", protect, getStats);
 router.get("/monthly-pnl", protect, getMonthlyPnl);

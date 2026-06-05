@@ -10,6 +10,7 @@ import {
 } from "./tradesService.js";
 import { AppError } from "../../utils/AppError.js";
 import type {
+  GetTradeQueryData,
   TradeParamsTradeId,
   UpdateTradeData,
 } from "../../schemas/trade.schema.js";
@@ -55,9 +56,15 @@ export const deleteTrade = async (
   return res.status(200).json({ success: true, data: data.trade_id });
 };
 
-export const getTrades = async (req: Request, res: Response) => {
-  const data = await getTradesService(req.query, req.user.user_id);
-  res.status(200).json(data);
+export const getTrades = async (
+  req: Request<{}, {}, {}, GetTradeQueryData>,
+  res: Response,
+) => {
+  const data = await getTradesService({
+    query: req.query,
+    user_id: req.user.user_id,
+  });
+  return res.status(200).json(data);
 };
 
 export const getYearMonth = async (req, res) => {

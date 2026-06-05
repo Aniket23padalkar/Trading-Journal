@@ -22,6 +22,8 @@ export const getTradeFromDB = async ({
       market_type,
       order_status,
       position,
+      risk,
+      direction,
       trade_rating,
       entry_time,
       exit_time
@@ -84,6 +86,7 @@ export const createTradeInDB = async ({
   position,
   trade_rating,
   risk,
+  direction,
   entry_time,
   exit_time,
   executions,
@@ -97,9 +100,9 @@ export const createTradeInDB = async ({
     const newTrade = await client.query<{ trade_id: string }>(
       `
         INSERT INTO trades
-          (user_id, symbol, market_type, order_status, position, trade_rating,risk, entry_time, exit_time) 
+          (user_id, symbol, market_type, order_status, position, trade_rating, risk, direction, entry_time, exit_time) 
         VALUES 
-          ($1,$2,$3,$4,$5,$6,$7,$8,$9) 
+          ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10) 
         RETURNING trade_id`,
       [
         user_id,
@@ -109,6 +112,7 @@ export const createTradeInDB = async ({
         position,
         trade_rating,
         risk,
+        direction,
         entry_time,
         exit_time,
       ],
