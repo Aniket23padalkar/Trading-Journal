@@ -13,7 +13,7 @@ import {
   getTradesWithPaginationFromDB,
   updateTradeInDB,
 } from "./tradeRepository.js";
-import buildTradeFilters from "../../utils/buildTradeFilters.js";
+import buildTradeFilters from "../../utils/build.trade.filters.js";
 import getOverallStats from "../../utils/getOverallStats.js";
 import {
   createTradeSchema,
@@ -24,6 +24,12 @@ import type {
   GetTradesServicesParams,
   UpdateTradeServiceParams,
 } from "../../types/trade.types.js";
+import {
+  validateDirection,
+  validateExecutionTime,
+  validateOrderTypes,
+  validateQuantities,
+} from "./trade.validator.js";
 
 export const createTradeService = async (
   body: CreateTradeData,
@@ -43,50 +49,13 @@ export const createTradeService = async (
     description,
   } = body;
 
-  if (!executions || executions.length === 0) {
-    throw new AppError("Executions required", 400);
-  }
+  validateDirection({ executions, direction });
 
-  if (exit_time && exit_time < entry_time) {
-    throw new AppError("Exit time must be after entry time", 400);
-  }
+  validateExecutionTime({ executions, entry_time });
 
-  if (order_status === "open" && exit_time) {
-    throw new AppError("Open trade should not have exit time", 400);
-  }
+  validateOrderTypes({ executions, order_status });
 
-  const types: Set<"buy" | "sell"> = new Set(
-    executions.map((exe) => exe.order_type),
-  );
-
-  if (order_status === "open" && types.size > 1) {
-    throw new AppError("Open order can not have both order types", 400);
-  }
-
-  if (order_status === "closed" && (!types.has("buy") || !types.has("sell"))) {
-    throw new AppError("Closed order should have both order types", 400);
-  }
-  const totalBuy = executions
-    .filter((exe) => exe.order_type === "buy")
-    .reduce((sum, exe) => sum + exe.quantity, 0);
-
-  const totalSell = executions
-    .filter((exe) => exe.order_type === "sell")
-    .reduce((sum, exe) => sum + exe.quantity, 0);
-
-  if (direction === "long" && totalBuy < totalSell) {
-    throw new AppError(
-      "Direction is long so total sell quantity can not be more than total buy quantity",
-      400,
-    );
-  }
-
-  if (direction === "short" && totalBuy > totalSell) {
-    throw new AppError(
-      "Direction is short so total buy quantity can not be more than total sell quantity",
-      400,
-    );
-  }
+  validateQuantities({ executions, direction });
 
   await createTradeInDB({
     symbol,
@@ -114,7 +83,12 @@ export const updateTradeService = async ({
   const trade = await getTradeFromDB({ trade_id, user_id });
 
   if (!trade) throw new AppError("Trade not found", 404);
+
   const executions = await getExecutionsFromDB(trade_id);
+
+  if (!executions) {
+    throw new AppError("Executions required", 400);
+  }
 
   const description = await getTradeLogsByIdsFromDB({ user_id, trade_id });
 
@@ -130,6 +104,26 @@ export const updateTradeService = async ({
   };
 
   const validatedTrade = createTradeSchema.parse(merged);
+
+  validateDirection({
+    executions: validatedTrade.executions,
+    direction: validatedTrade.direction,
+  });
+
+  validateExecutionTime({
+    executions: validatedTrade.executions,
+    entry_time: validatedTrade.entry_time,
+  });
+
+  validateOrderTypes({
+    executions: validatedTrade.executions,
+    order_status: validatedTrade.order_status,
+  });
+
+  validateQuantities({
+    executions: validatedTrade.executions,
+    direction: validatedTrade.direction,
+  });
 
   const tradeData = await updateTradeInDB({
     validatedTrade,

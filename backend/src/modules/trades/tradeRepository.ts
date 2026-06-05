@@ -1,5 +1,4 @@
 import pool from "../../config/db.js";
-import type { CreateTradeData } from "../../schemas/trade.schema.js";
 import type {
   CreateTradeWithUserId,
   ExecutionsRow,

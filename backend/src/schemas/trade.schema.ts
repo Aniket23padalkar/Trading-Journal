@@ -1,12 +1,14 @@
 import z from "zod";
 
-const executionsSchema = z.object({
+export const executionsSchema = z.object({
   execution_id: z.uuid().optional(),
   order_type: z.enum(["buy", "sell"]),
   price: z.coerce.number().positive(),
   quantity: z.coerce.number().int().min(1),
   executed_at: z.coerce.date(),
 });
+
+export type ExecutionsData = z.infer<typeof executionsSchema>;
 
 export const createTradeSchema = z
   .object({
@@ -53,48 +55,6 @@ export const createTradeSchema = z
     {
       message: "Open trade should not have exit time",
       path: ["exit_time"],
-    },
-  )
-  .refine(
-    (data) => {
-      const types = new Set(data.executions.map((e) => e.order_type));
-
-      if (data.order_status === "open") {
-        return types.size === 1;
-      }
-
-      if (data.order_status === "closed") {
-        return types.has("buy") && types.has("sell");
-      }
-
-      return true;
-    },
-    {
-      message: "Invalid executions types for trade status",
-      path: ["executions"],
-    },
-  )
-  .refine(
-    (data) => {
-      const first = [...data.executions].sort(
-        (a, b) => a.executed_at.getTime() - b.executed_at.getTime(),
-      )[0];
-
-      if (!first) return true;
-
-      if (data.direction === "long") {
-        return first.order_type === "buy";
-      }
-
-      if (data.direction === "short") {
-        return first.order_type === "sell";
-      }
-
-      return true;
-    },
-    {
-      message: "Direction does not match execution",
-      path: ["direction"],
     },
   );
 
@@ -188,6 +148,7 @@ export const getTradeQuerySchema = z.object({
     .transform(Number)
     .refine((val) => val > 0, { message: "Page must be >= 1" })
     .optional(),
+  direction: z.enum(["long", "short"]),
   order_status: z.enum(["open", "closed"]).optional(),
   market_type: z.enum(["equity", "options", "futures"]).optional(),
   position: z
