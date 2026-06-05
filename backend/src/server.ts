@@ -2,7 +2,7 @@ import express from "express";
 import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
 import authRoutes from "./modules/auth/auth.routes.js";
-import tradeRoutes from "./modules/trades/trades.js";
+import tradeRoutes from "./modules/trades/trade.routes.js";
 import { errorHandler } from "./middleware/error.middleware.js";
 import { globalLimiter } from "./middleware/rate.limiter.js";
 import { corsMiddleware } from "./middleware/cors.middleware.js";

@@ -18,7 +18,7 @@ export default function buildTradeFilters(
     dateTimeSort,
   } = query;
 
-  let conditions = [`t.user_id = $1`];
+  let conditions: string[] = [`user_id = $1`];
   let values: BuildFilterValues[] = [user_id];
   let index = 2;
 
@@ -28,45 +28,45 @@ export default function buildTradeFilters(
   }
 
   if (order_status) {
-    conditions.push(`t.order_status = $${index++}`);
+    conditions.push(`order_status = $${index++}`);
     values.push(order_status);
   }
 
   if (market_type) {
-    conditions.push(`t.market_type = $${index++}`);
+    conditions.push(`market_type = $${index++}`);
     values.push(market_type);
   }
 
   if (position) {
-    conditions.push(`t.position = $${index++}`);
+    conditions.push(`position = $${index++}`);
     values.push(position);
   }
 
   if (fromDate && toDate) {
-    conditions.push(`l.first_entry BETWEEN $${index++} AND $${index++}`);
+    conditions.push(`entry_time BETWEEN $${index++} AND $${index++}`);
     values.push(fromDate, toDate);
   }
 
   if (year) {
-    conditions.push(`EXTRACT(YEAR FROM l.first_entry) = $${index++}`);
+    conditions.push(`EXTRACT(YEAR FROM entry_time) = $${index++}`);
     values.push(year);
   }
 
   if (month) {
-    conditions.push(`EXTRACT(MONTH FROM l.first_entry) = $${index++}`);
+    conditions.push(`EXTRACT(MONTH FROM entry_time) = $${index++}`);
     values.push(month);
   }
 
   let orderByArr = [];
 
-  if (pnlSort === "ASC") orderByArr.push("t.pnl ASC");
-  if (pnlSort === "DESC") orderByArr.push("t.pnl DESC");
+  // if (pnlSort === "asc") orderByArr.push("t.pnl ASC");
+  // if (pnlSort === "desc") orderByArr.push("t.pnl DESC");
 
-  if (dateTimeSort === "ASC") orderByArr.push("l.first_entry ASC");
-  if (dateTimeSort === "DESC") orderByArr.push("l.first_entry DESC");
+  if (dateTimeSort === "asc") orderByArr.push("entry_time ASC");
+  if (dateTimeSort === "desc") orderByArr.push("entry_time DESC");
 
   if (orderByArr.length === 0) {
-    orderByArr.push("l.first_entry ASC");
+    orderByArr.push("entry_time ASC");
   }
 
   const orderBy = orderByArr.join(", ");
