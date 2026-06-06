@@ -7,6 +7,8 @@ import type {
   GetTradeLogsByIdQueryResult,
   GetTradeQueryResult,
   GetTradeRepoParams,
+  GetTradesCountFromDBParams,
+  GetTradeStatsQueryResult,
   UpdateTradeRepoParams,
 } from "../../types/trade.types.js";
 import { AppError } from "../../utils/AppError.js";
@@ -168,7 +170,7 @@ export const createTradeInDB = async ({
       `INSERT INTO executions
           (trade_id, order_type, price, quantity, executed_at) 
         VALUES 
-          ${values.join(",")} 
+          ${values.join(",")}
         `,
       params,
     );
@@ -418,82 +420,141 @@ export const getExecutionsByIdsFromDB = async (
   return result.rows || null;
 };
 
-export const getTradesCountFromDB = async ({ whereClause, values }) => {
+export const getTradeStatsFromDB = async (
+  user_id: string,
+  tradeIds: string[],
+): Promise<GetTradeStatsQueryResult[] | null> => {
+  const query = `
+    SELECT
+      t.trade_id,
+
+      AVG(e.price FILTER) (WHERE e.order_type = 'buy') AS avg_buy_price,
+      AVG(e.price FILTER) (WHERE e.order_type = 'sell') AS avg_sell_price,
+
+      SUM(e.quantity) FILTER (WHERE e.order_type = 'buy') AS total_buy_qty,
+      SUM(e.quantity) FILTER (WHERE e.order_type = 'sell') AS total_sell_qty,
+
+      CASE
+        WHEN t.order_status = 'closed' AND t.direction = 'long' THEN
+          (AVG(e.price) FILTER (WHERE e.order_type = 'sell')
+          - AVG(e.price) FILTER (WHERE e.order_type = 'buy'))
+          * SUM(e.quantity) FILTER (WHERE e.order_type = 'buy')
+
+        WHEN t.order_status = 'closed' AND t.direction = 'short' THEN
+          (AVG(e.price) FILTER (WHERE e.order_type = 'buy')
+          - AVG(e.price) FILTER (WHERE e.order_type = 'sell'))
+          * SUM(e.quantity) FILTER (WHERE e.order_type = 'sell')
+        
+        ELSE 0
+      END AS pnl,
+
+      CASE
+        WHEN t.risk = 0 THEN NULL
+        ELSE
+          (
+            CASE
+              WHEN t.order_status = 'closed' AND t.direction = 'long' THEN
+                (AVG(e.price) FILTER (WHERE e.order_type = 'sell')
+                - AVG(e.price) FILTER (WHERE e.order_type = 'buy'))
+                * SUM(e.quantity) FILTER (WHERE e.order_type = 'buy')
+
+              WHEN t.order_status = 'closed' AND t.direction = 'short' THEN
+                (AVG(e.price) FILTER (WHERE e.order_type = 'buy')
+                - AVG(e.price) FILTER (WHERE e.order_type = 'sell'))
+                * SUM(e.quantity) FILTER (WHERE e.order_type = 'sell')
+
+              ELSE 0
+            END
+          ) / t.risk
+        END AS rr_ratio
+    FROM trades t
+    LEFT JOIN executions e
+      ON t.trade_id = e.trade_id
+    WHERE t.user_id = $1 AND t.trade_id = ANY($1::uuid[])
+    GROUP BY t.trade_id
+  `;
+
+  const result = await pool.query<GetTradeStatsQueryResult>(query, [user_id]);
+
+  return result.rows || null;
+};
+
+export const getTradesCountFromDB = async ({
+  whereClause,
+  values,
+}: GetTradesCountFromDBParams): Promise<{ count: number } | null> => {
   const query = `
         SELECT COUNT(*)
-        FROM trades t
-        JOIN(
-            SELECT trade_id, MIN(entry_time) AS first_entry
-            FROM trade_logs
-            GROUP BY trade_id
-        ) l ON t.trade_id = l.trade_id
+        FROM trades
         WHERE ${whereClause}
     `;
 
-  return pool.query(query, values);
+  const result = await pool.query<{ count: number }>(query, values);
+
+  return result.rows[0] || null;
 };
 
-export const extractYearMonthFromDB = async (userId) => {
-  const query = `
-    WITH first_logs AS(
-      SELECT trade_id, MIN(entry_time) AS first_entry
-      FROM trade_logs
-      GROUP BY trade_id
-    )
-    SELECT 
-      ARRAY_AGG(DISTINCT EXTRACT(YEAR FROM first_entry)) AS years,
-      ARRAY_AGG(DISTINCT EXTRACT(MONTH FROM first_entry)) AS months
-    FROM first_logs fl
-    JOIN trades t ON t.trade_id = fl.trade_id
-    WHERE user_id = $1
-  `;
+// export const extractYearMonthFromDB = async (userId) => {
+//   const query = `
+//     WITH first_logs AS(
+//       SELECT trade_id, MIN(entry_time) AS first_entry
+//       FROM trade_logs
+//       GROUP BY trade_id
+//     )
+//     SELECT
+//       ARRAY_AGG(DISTINCT EXTRACT(YEAR FROM first_entry)) AS years,
+//       ARRAY_AGG(DISTINCT EXTRACT(MONTH FROM first_entry)) AS months
+//     FROM first_logs fl
+//     JOIN trades t ON t.trade_id = fl.trade_id
+//     WHERE user_id = $1
+//   `;
 
-  return pool.query(query, [userId]);
-};
+//   return pool.query(query, [userId]);
+// };
 
-export const getFilteredStatsFromDB = async ({ whereClause, values }) => {
-  const query = `
-    WITH first_logs AS (
-        SELECT trade_id, MIN(entry_time) AS first_entry
-        FROM trade_logs
-        GROUP BY trade_id
-      )
-      SELECT
-        COALESCE(COUNT(t.trade_id),0) AS trades_count,
-        COALESCE(SUM(t.pnl) FILTER(WHERE t.status = 'Closed'),0) AS trades_pnl,
-        COALESCE(SUM(t.avg_rr) FILTER(WHERE t.status = 'Closed'),0) AS trade_rr,
-        COALESCE(
-          CAST(
-            (COUNT(*) FILTER(WHERE t.pnl > 0 AND t.status = 'Closed') * 100.0)
-            / NULLIF(COUNT(*) FILTER(WHERE t.status = 'Closed'),0)
-          AS NUMERIC(5,2)) 
-        ,0) AS trades_win_rate
-      FROM trades t
-      JOIN first_logs l ON t.trade_id = l.trade_id
-      WHERE ${whereClause}
-  `;
+// export const getFilteredStatsFromDB = async ({ whereClause, values }) => {
+//   const query = `
+//     WITH first_logs AS (
+//         SELECT trade_id, MIN(entry_time) AS first_entry
+//         FROM trade_logs
+//         GROUP BY trade_id
+//       )
+//       SELECT
+//         COALESCE(COUNT(t.trade_id),0) AS trades_count,
+//         COALESCE(SUM(t.pnl) FILTER(WHERE t.status = 'Closed'),0) AS trades_pnl,
+//         COALESCE(SUM(t.avg_rr) FILTER(WHERE t.status = 'Closed'),0) AS trade_rr,
+//         COALESCE(
+//           CAST(
+//             (COUNT(*) FILTER(WHERE t.pnl > 0 AND t.status = 'Closed') * 100.0)
+//             / NULLIF(COUNT(*) FILTER(WHERE t.status = 'Closed'),0)
+//           AS NUMERIC(5,2))
+//         ,0) AS trades_win_rate
+//       FROM trades t
+//       JOIN first_logs l ON t.trade_id = l.trade_id
+//       WHERE ${whereClause}
+//   `;
 
-  return pool.query(query, values);
-};
+//   return pool.query(query, values);
+// };
 
-export const getMonthlyPnlFromDB = async ({ year, userId }) => {
-  const query = `
-    WITH first_logs AS (
-      SELECT trade_id, MIN(entry_time) AS first_entry
-      FROM trade_logs
-      GROUP BY trade_id
-    )
-    SELECT 
-      EXTRACT(MONTH FROM fl.first_entry) AS month,
-      SUM(t.pnl) AS total_pnl
-    FROM first_logs fl
-    JOIN trades t ON t.trade_id = fl.trade_id
-    WHERE t.user_id = $1
-      AND EXTRACT(YEAR FROM fl.first_entry) = $2
-      AND t.status = 'Closed'
-    GROUP BY month
-    ORDER BY month
-  `;
+// export const getMonthlyPnlFromDB = async ({ year, userId }) => {
+//   const query = `
+//     WITH first_logs AS (
+//       SELECT trade_id, MIN(entry_time) AS first_entry
+//       FROM trade_logs
+//       GROUP BY trade_id
+//     )
+//     SELECT
+//       EXTRACT(MONTH FROM fl.first_entry) AS month,
+//       SUM(t.pnl) AS total_pnl
+//     FROM first_logs fl
+//     JOIN trades t ON t.trade_id = fl.trade_id
+//     WHERE t.user_id = $1
+//       AND EXTRACT(YEAR FROM fl.first_entry) = $2
+//       AND t.status = 'Closed'
+//     GROUP BY month
+//     ORDER BY month
+//   `;
 
-  return pool.query(query, [userId, year]);
-};
+//   return pool.query(query, [userId, year]);
+// };

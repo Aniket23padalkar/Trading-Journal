@@ -2,27 +2,26 @@ import pool from "../../config/db.js";
 import {
   createTradeInDB,
   deleteTradeFromDB,
-  extractYearMonthFromDB,
   getExecutionsByIdsFromDB,
   getExecutionsFromDB,
-  getFilteredStatsFromDB,
-  getMonthlyPnlFromDB,
   getTradeFromDB,
   getTradeLogsByIdFromDB,
   getTradeLogsFromDB,
   getTradesCountFromDB,
+  getTradeStatsFromDB,
   getTradesWithPaginationFromDB,
   updateTradeInDB,
 } from "./tradeRepository.js";
 import buildTradeFilters from "../../utils/build.trade.filters.js";
-import getOverallStats from "../../utils/getOverallStats.js";
 import {
   createTradeSchema,
   type CreateTradeData,
 } from "../../schemas/trade.schema.js";
 import { AppError } from "../../utils/AppError.js";
 import type {
+  GetTradesResponse,
   GetTradesServicesParams,
+  TradesDataType,
   UpdateTradeServiceParams,
 } from "../../types/trade.types.js";
 import {
@@ -152,7 +151,7 @@ export const tradeDeleteService = async ({
 export const getTradesService = async ({
   query,
   user_id,
-}: GetTradesServicesParams) => {
+}: GetTradesServicesParams): Promise<GetTradesResponse> => {
   const page: number = query.page || 1;
   const limit: number = query.limit || 9;
   const offset: number = (page - 1) * limit;
@@ -216,70 +215,86 @@ export const getTradesService = async ({
     Object.create(null),
   );
 
+  const statsRes = await getTradeStatsFromDB(user_id, tradeIds);
+
+  if (!statsRes) {
+    throw new AppError("Error while getting stats", 500);
+  }
+
+  type StatsMapObj = (typeof statsRes)[number];
+
+  const statsMap = statsRes.reduce<Record<string, StatsMapObj>>((acc, stat) => {
+    const tradeId: string = stat.trade_id;
+
+    acc[tradeId] = stat;
+
+    return acc;
+  }, Object.create(null));
+
   const totalRes = await getTradesCountFromDB({ whereClause, values });
 
-  const total: number = totalRes.rows[0].count;
+  if (!totalRes) {
+    throw new AppError("Trade count not found", 404);
+  }
 
-  const totalPages = Math.ceil(total / limit);
+  const total: number = totalRes.count;
 
-  const result = tradesRes.rows.map((trade) => {
+  const totalPages: number = Math.ceil(total / limit);
+
+  const trades_data: TradesDataType[] = tradesRes.map((trade) => {
     const executions = logsMap[trade.trade_id] || [];
-    const trade_logs = tradeLogsMap[trade.trade_id] || [];
+    const trade_logs = tradeLogsMap[trade.trade_id] || null;
+    const stats = statsMap[trade.trade_id] || null;
 
     return {
       trade: {
         trade_id: trade.trade_id,
         symbol: trade.symbol,
-        status: trade.status,
-        order_type: trade.order_type,
+        order_status: trade.order_status,
         market_type: trade.market_type,
         position: trade.position,
-        rating: trade.rating,
-        description: trade.description,
+        direction: trade.direction,
+        risk: trade.risk,
+        trade_rating: trade.trade_rating,
+        entry_time: trade.entry_time,
+        exit_time: trade.exit_time,
         created_at: trade.created_at,
         updated_at: trade.updated_at,
       },
-      executions,
-      stats: {
-        pnl: trade.pnl,
-        avg_buy_price: trade.avg_buy_price,
-        avg_sell_price: trade.avg_sell_price,
-        avg_risk: trade.avg_risk,
-        avg_rr: trade.avg_rr,
-        total_qty: trade.total_qty,
-      },
+      executions: executions.map(({ trade_id, ...rest }) => rest),
+      trade_logs,
+      stats,
     };
   });
 
   return {
-    trades_data: result,
+    trades_data,
     pagination: {
       total,
       limit,
       page,
       totalPages,
     },
-    overallStats: await getOverallStats(pool, userId),
   };
 };
 
-export const getYearMonthService = async (userId) => {
-  const result = await extractYearMonthFromDB(userId);
+// export const getYearMonthService = async (userId) => {
+//   const result = await extractYearMonthFromDB(userId);
 
-  return result;
-};
+//   return result;
+// };
 
-export const getStatsService = async (query, userId) => {
-  const { whereClause, values } = buildTradeFilters(query, userId);
+// export const getStatsService = async (query, userId) => {
+//   const { whereClause, values } = buildTradeFilters(query, userId);
 
-  const result = await getFilteredStatsFromDB({ whereClause, values });
+//   const result = await getFilteredStatsFromDB({ whereClause, values });
 
-  return result.rows[0];
-};
+//   return result.rows[0];
+// };
 
-export const getMonthlyPnlService = async (query, userId) => {
-  const { year } = query;
-  const result = await getMonthlyPnlFromDB({ year, userId });
+// export const getMonthlyPnlService = async (query, userId) => {
+//   const { year } = query;
+//   const result = await getMonthlyPnlFromDB({ year, userId });
 
-  return result.rows;
-};
+//   return result.rows;
+// };
