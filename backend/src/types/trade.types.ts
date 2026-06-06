@@ -98,3 +98,12 @@ export interface GetExecutionsByTradeIdQueryResult {
   created_at: Date;
   updated_at: Date;
 }
+
+export interface GetTradeLogsByIdQueryResult {
+  trade_logs_id: string;
+  trade_id: string;
+  user_id: string;
+  description: string;
+  created_at: Date;
+  updated_at: Date;
+}

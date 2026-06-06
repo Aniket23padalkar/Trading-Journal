@@ -4,6 +4,7 @@ import type {
   ExecutionsRow,
   GetExecutionsByTradeIdQueryResult,
   GetExecutionsQueryResult,
+  GetTradeLogsByIdQueryResult,
   GetTradeQueryResult,
   GetTradeRepoParams,
   UpdateTradeRepoParams,
@@ -376,6 +377,25 @@ export const getTradesWithPaginationFromDB = async ({
     ...values,
     limit,
     offset,
+  ]);
+
+  return result.rows || null;
+};
+
+export const getTradeLogsByIdFromDB = async (
+  trade_ids: string[],
+  user_id: string,
+): Promise<GetTradeLogsByIdQueryResult[] | null> => {
+  const query = `
+    SELECT *
+    FROM trade_logs
+    WHERE trade_id = ANY($1::uuid[])
+      AND user_id = $2
+  `;
+
+  const result = await pool.query<GetTradeLogsByIdQueryResult>(query, [
+    trade_ids,
+    user_id,
   ]);
 
   return result.rows || null;

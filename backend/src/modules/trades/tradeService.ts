@@ -8,6 +8,7 @@ import {
   getFilteredStatsFromDB,
   getMonthlyPnlFromDB,
   getTradeFromDB,
+  getTradeLogsByIdFromDB,
   getTradeLogsFromDB,
   getTradesCountFromDB,
   getTradesWithPaginationFromDB,
@@ -184,26 +185,46 @@ export const getTradesService = async ({
 
   type ExecutionObj = (typeof logsRes)[number];
 
-  const logsMap = logsRes.reduce<Record<string, ExecutionObj[]>>((acc, log) => {
-    const tradeId = String(log.trade_id);
+  const logsMap = logsRes.reduce<Record<string, ExecutionObj[]>>((acc, exe) => {
+    const tradeId: string = exe.trade_id;
 
     if (!acc[tradeId]) {
       acc[tradeId] = [];
     }
 
-    acc[tradeId].push(log);
+    acc[tradeId].push(exe);
 
     return acc;
   }, Object.create(null));
 
+  const tradeLogs = await getTradeLogsByIdFromDB(tradeIds, user_id);
+
+  if (!tradeLogs) {
+    throw new AppError("Trade logs not found", 404);
+  }
+
+  type TradeLogObj = (typeof tradeLogs)[number];
+
+  const tradeLogsMap = tradeLogs.reduce<Record<string, TradeLogObj>>(
+    (acc, log) => {
+      const logId: string = log.trade_id;
+
+      acc[logId] = log;
+
+      return acc;
+    },
+    Object.create(null),
+  );
+
   const totalRes = await getTradesCountFromDB({ whereClause, values });
 
-  const total = Number(totalRes.rows[0].count);
+  const total: number = totalRes.rows[0].count;
 
   const totalPages = Math.ceil(total / limit);
 
   const result = tradesRes.rows.map((trade) => {
     const executions = logsMap[trade.trade_id] || [];
+    const trade_logs = tradeLogsMap[trade.trade_id] || [];
 
     return {
       trade: {
