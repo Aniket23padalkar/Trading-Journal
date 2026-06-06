@@ -1,14 +1,14 @@
 import pool from "../../config/db.js";
 import {
-  checkTradeOwnership,
   createTradeInDB,
   deleteTradeFromDB,
   extractYearMonthFromDB,
+  getExecutionsByIdsFromDB,
   getExecutionsFromDB,
   getFilteredStatsFromDB,
   getMonthlyPnlFromDB,
   getTradeFromDB,
-  getTradeLogsByIdsFromDB,
+  getTradeLogsFromDB,
   getTradesCountFromDB,
   getTradesWithPaginationFromDB,
   updateTradeInDB,
@@ -90,7 +90,7 @@ export const updateTradeService = async ({
     throw new AppError("Executions required", 400);
   }
 
-  const description = await getTradeLogsByIdsFromDB({ user_id, trade_id });
+  const description = await getTradeLogsFromDB({ user_id, trade_id });
 
   const existingTrade = {
     ...trade,
@@ -174,18 +174,27 @@ export const getTradesService = async ({
     throw new AppError("Trade not found", 404);
   }
 
-  const tradeIds = tradesRes?.map((t) => t.trade_id);
+  const tradeIds = tradesRes?.map((t) => t.trade_id) ?? [];
 
-  const logsRes = await getTradeLogsByIdsFromDB(tradeIds);
+  const logsRes = await getExecutionsByIdsFromDB(tradeIds);
 
-  const logsMap = Object.create(null);
-
-  for (const log of logsRes.rows) {
-    if (!logsMap[log.trade_id]) {
-      logsMap[log.trade_id] = [];
-    }
-    logsMap[log.trade_id].push(log);
+  if (!logsRes) {
+    throw new AppError("Executions not found", 404);
   }
+
+  type ExecutionObj = (typeof logsRes)[number];
+
+  const logsMap = logsRes.reduce<Record<string, ExecutionObj[]>>((acc, log) => {
+    const tradeId = String(log.trade_id);
+
+    if (!acc[tradeId]) {
+      acc[tradeId] = [];
+    }
+
+    acc[tradeId].push(log);
+
+    return acc;
+  }, Object.create(null));
 
   const totalRes = await getTradesCountFromDB({ whereClause, values });
 

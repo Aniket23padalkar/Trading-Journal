@@ -2,6 +2,7 @@ import pool from "../../config/db.js";
 import type {
   CreateTradeWithUserId,
   ExecutionsRow,
+  GetExecutionsByTradeIdQueryResult,
   GetExecutionsQueryResult,
   GetTradeQueryResult,
   GetTradeRepoParams,
@@ -44,6 +45,7 @@ export const getExecutionsFromDB = async (
 ): Promise<GetExecutionsQueryResult[] | null> => {
   const query = `
     SELECT 
+      execution_id,
       order_type,
       price,
       quantity,
@@ -379,15 +381,21 @@ export const getTradesWithPaginationFromDB = async ({
   return result.rows || null;
 };
 
-export const getTradeLogsByIdsFromDB = async (trade_ids) => {
+export const getExecutionsByIdsFromDB = async (
+  trade_ids: string[],
+): Promise<GetExecutionsByTradeIdQueryResult[] | null> => {
   const query = `
         SELECT *
-        FROM trade_logs
+        FROM executions
         WHERE trade_id = ANY($1::uuid[])
-        ORDER BY entry_time ASC
+        ORDER BY executed_at ASC
     `;
 
-  return pool.query(query, [trade_ids]);
+  const result = await pool.query<GetExecutionsByTradeIdQueryResult>(query, [
+    trade_ids,
+  ]);
+
+  return result.rows || null;
 };
 
 export const getTradesCountFromDB = async ({ whereClause, values }) => {
