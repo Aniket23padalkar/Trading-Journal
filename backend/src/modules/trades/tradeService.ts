@@ -2,11 +2,8 @@ import pool from "../../config/db.js";
 import {
   createTradeInDB,
   deleteTradeFromDB,
-  extractYearMonthFromDB,
   getExecutionsByIdsFromDB,
   getExecutionsFromDB,
-  getFilteredStatsFromDB,
-  getMonthlyPnlFromDB,
   getTradeFromDB,
   getTradeLogsByIdFromDB,
   getTradeLogsFromDB,
@@ -16,14 +13,15 @@ import {
   updateTradeInDB,
 } from "./tradeRepository.js";
 import buildTradeFilters from "../../utils/build.trade.filters.js";
-import getOverallStats from "../../utils/getOverallStats.js";
 import {
   createTradeSchema,
   type CreateTradeData,
 } from "../../schemas/trade.schema.js";
 import { AppError } from "../../utils/AppError.js";
 import type {
+  GetTradesResponse,
   GetTradesServicesParams,
+  TradesDataType,
   UpdateTradeServiceParams,
 } from "../../types/trade.types.js";
 import {
@@ -153,7 +151,7 @@ export const tradeDeleteService = async ({
 export const getTradesService = async ({
   query,
   user_id,
-}: GetTradesServicesParams) => {
+}: GetTradesServicesParams): Promise<GetTradesResponse> => {
   const page: number = query.page || 1;
   const limit: number = query.limit || 9;
   const offset: number = (page - 1) * limit;
@@ -217,7 +215,7 @@ export const getTradesService = async ({
     Object.create(null),
   );
 
-  const statsRes = await getTradeStatsFromDB(user_id);
+  const statsRes = await getTradeStatsFromDB(user_id, tradeIds);
 
   if (!statsRes) {
     throw new AppError("Error while getting stats", 500);
@@ -243,10 +241,10 @@ export const getTradesService = async ({
 
   const totalPages: number = Math.ceil(total / limit);
 
-  const result = tradesRes.map((trade) => {
+  const trades_data: TradesDataType[] = tradesRes.map((trade) => {
     const executions = logsMap[trade.trade_id] || [];
-    const trade_logs = tradeLogsMap[trade.trade_id] || [];
-    const stats = statsMap[trade.trade_id];
+    const trade_logs = tradeLogsMap[trade.trade_id] || null;
+    const stats = statsMap[trade.trade_id] || null;
 
     return {
       trade: {
@@ -263,14 +261,14 @@ export const getTradesService = async ({
         created_at: trade.created_at,
         updated_at: trade.updated_at,
       },
-      executions,
+      executions: executions.map(({ trade_id, ...rest }) => rest),
       trade_logs,
       stats,
     };
   });
 
   return {
-    trades_data: result,
+    trades_data,
     pagination: {
       total,
       limit,
@@ -280,23 +278,23 @@ export const getTradesService = async ({
   };
 };
 
-export const getYearMonthService = async (userId) => {
-  const result = await extractYearMonthFromDB(userId);
+// export const getYearMonthService = async (userId) => {
+//   const result = await extractYearMonthFromDB(userId);
 
-  return result;
-};
+//   return result;
+// };
 
-export const getStatsService = async (query, userId) => {
-  const { whereClause, values } = buildTradeFilters(query, userId);
+// export const getStatsService = async (query, userId) => {
+//   const { whereClause, values } = buildTradeFilters(query, userId);
 
-  const result = await getFilteredStatsFromDB({ whereClause, values });
+//   const result = await getFilteredStatsFromDB({ whereClause, values });
 
-  return result.rows[0];
-};
+//   return result.rows[0];
+// };
 
-export const getMonthlyPnlService = async (query, userId) => {
-  const { year } = query;
-  const result = await getMonthlyPnlFromDB({ year, userId });
+// export const getMonthlyPnlService = async (query, userId) => {
+//   const { year } = query;
+//   const result = await getMonthlyPnlFromDB({ year, userId });
 
-  return result.rows;
-};
+//   return result.rows;
+// };
