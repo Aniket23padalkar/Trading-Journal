@@ -7,6 +7,8 @@ import type {
   GetTradeLogsByIdQueryResult,
   GetTradeQueryResult,
   GetTradeRepoParams,
+  GetTradesCountFromDBParams,
+  GetTradeStatsQueryResult,
   UpdateTradeRepoParams,
 } from "../../types/trade.types.js";
 import { AppError } from "../../utils/AppError.js";
@@ -418,19 +420,77 @@ export const getExecutionsByIdsFromDB = async (
   return result.rows || null;
 };
 
-export const getTradesCountFromDB = async ({ whereClause, values }) => {
+export const getTradeStatsFromDB = async (
+  user_id: string,
+): Promise<GetTradeStatsQueryResult[] | null> => {
+  const query = `
+    SELECT
+      t.trade_id,
+
+      AVG(e.price FILTER) (WHERE e.order_type = 'buy') AS avg_buy_price,
+      AVG(e.price FILTER) (WHERE e.order_type = 'sell') AS avg_sell_price,
+
+      SUM(e.quantity) FILTER (WHERE e.order_type = 'buy') AS total_buy_qty,
+      SUM(e.quantity) FILTER (WHERE e.order_type = 'sell') AS total_sell_qty,
+
+      CASE
+        WHEN t.order_status = 'closed' AND t.direction = 'long' THEN
+          (AVG(e.price) FILTER (WHERE e.order_type = 'sell')
+          - AVG(e.price) FILTER (WHERE e.order_type = 'buy'))
+          * SUM(e.quantity) FILTER (WHERE e.order_type = 'buy')
+
+        WHEN t.order_status = 'closed' AND t.direction = 'short' THEN
+          (AVG(e.price) FILTER (WHERE e.order_type = 'buy')
+          - AVG(e.price) FILTER (WHERE e.order_type = 'sell'))
+          * SUM(e.quantity) FILTER (WHERE e.order_type = 'sell')
+        
+        ELSE 0
+      END AS pnl,
+
+      CASE
+        WHEN t.risk = 0 THEN NULL
+        ELSE
+          (
+            CASE
+              WHEN t.order_status = 'closed' AND t.direction = 'long' THEN
+                (AVG(e.price) FILTER (WHERE e.order_type = 'sell')
+                - AVG(e.price) FILTER (WHERE e.order_type = 'buy'))
+                * SUM(e.quantity) FILTER (WHERE e.order_type = 'buy')
+
+              WHEN t.order_status = 'closed' AND t.direction = 'short' THEN
+                (AVG(e.price) FILTER (WHERE e.order_type = 'buy')
+                - AVG(e.price) FILTER (WHERE e.order_type = 'sell'))
+                * SUM(e.quantity) FILTER (WHERE e.order_type = 'sell')
+
+              ELSE 0
+            END
+          ) / t.risk
+        END AS rr_ratio
+    FROM trades t
+    LEFT JOIN executions e
+      ON t.trade_id = e.trade_id
+    WHERE user_id = $1
+    GROUP BY t.trade_id
+  `;
+
+  const result = await pool.query<GetTradeStatsQueryResult>(query, [user_id]);
+
+  return result.rows || null;
+};
+
+export const getTradesCountFromDB = async ({
+  whereClause,
+  values,
+}: GetTradesCountFromDBParams): Promise<{ count: number } | null> => {
   const query = `
         SELECT COUNT(*)
-        FROM trades t
-        JOIN(
-            SELECT trade_id, MIN(entry_time) AS first_entry
-            FROM trade_logs
-            GROUP BY trade_id
-        ) l ON t.trade_id = l.trade_id
+        FROM trades
         WHERE ${whereClause}
     `;
 
-  return pool.query(query, values);
+  const result = await pool.query<{ count: number }>(query, values);
+
+  return result.rows[0] || null;
 };
 
 export const extractYearMonthFromDB = async (userId) => {

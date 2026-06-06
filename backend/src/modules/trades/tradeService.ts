@@ -11,6 +11,7 @@ import {
   getTradeLogsByIdFromDB,
   getTradeLogsFromDB,
   getTradesCountFromDB,
+  getTradeStatsFromDB,
   getTradesWithPaginationFromDB,
   updateTradeInDB,
 } from "./tradeRepository.js";
@@ -216,38 +217,55 @@ export const getTradesService = async ({
     Object.create(null),
   );
 
+  const statsRes = await getTradeStatsFromDB(user_id);
+
+  if (!statsRes) {
+    throw new AppError("Error while getting stats", 500);
+  }
+
+  type StatsMapObj = (typeof statsRes)[number];
+
+  const statsMap = statsRes.reduce<Record<string, StatsMapObj>>((acc, stat) => {
+    const tradeId: string = stat.trade_id;
+
+    acc[tradeId] = stat;
+
+    return acc;
+  }, Object.create(null));
+
   const totalRes = await getTradesCountFromDB({ whereClause, values });
 
-  const total: number = totalRes.rows[0].count;
+  if (!totalRes) {
+    throw new AppError("Trade count not found", 404);
+  }
 
-  const totalPages = Math.ceil(total / limit);
+  const total: number = totalRes.count;
 
-  const result = tradesRes.rows.map((trade) => {
+  const totalPages: number = Math.ceil(total / limit);
+
+  const result = tradesRes.map((trade) => {
     const executions = logsMap[trade.trade_id] || [];
     const trade_logs = tradeLogsMap[trade.trade_id] || [];
+    const stats = statsMap[trade.trade_id];
 
     return {
       trade: {
         trade_id: trade.trade_id,
         symbol: trade.symbol,
-        status: trade.status,
-        order_type: trade.order_type,
+        order_status: trade.order_status,
         market_type: trade.market_type,
         position: trade.position,
-        rating: trade.rating,
-        description: trade.description,
+        direction: trade.direction,
+        risk: trade.risk,
+        trade_rating: trade.trade_rating,
+        entry_time: trade.entry_time,
+        exit_time: trade.exit_time,
         created_at: trade.created_at,
         updated_at: trade.updated_at,
       },
       executions,
-      stats: {
-        pnl: trade.pnl,
-        avg_buy_price: trade.avg_buy_price,
-        avg_sell_price: trade.avg_sell_price,
-        avg_risk: trade.avg_risk,
-        avg_rr: trade.avg_rr,
-        total_qty: trade.total_qty,
-      },
+      trade_logs,
+      stats,
     };
   });
 
@@ -259,7 +277,6 @@ export const getTradesService = async ({
       page,
       totalPages,
     },
-    overallStats: await getOverallStats(pool, userId),
   };
 };
 

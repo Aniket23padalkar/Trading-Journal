@@ -107,3 +107,18 @@ export interface GetTradeLogsByIdQueryResult {
   created_at: Date;
   updated_at: Date;
 }
+
+export interface GetTradeStatsQueryResult {
+  trade_id: string;
+  avg_buy_price: number;
+  avg_sell_price: number;
+  total_buy_qty: number;
+  total_sell_qty: number;
+  pnl: number;
+  rr_ratio: number;
+}
+
+export interface GetTradesCountFromDBParams {
+  whereClause: string;
+  values: BuildFilterValues[];
+}
