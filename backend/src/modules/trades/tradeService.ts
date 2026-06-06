@@ -1,14 +1,15 @@
 import pool from "../../config/db.js";
 import {
-  checkTradeOwnership,
   createTradeInDB,
   deleteTradeFromDB,
   extractYearMonthFromDB,
+  getExecutionsByIdsFromDB,
   getExecutionsFromDB,
   getFilteredStatsFromDB,
   getMonthlyPnlFromDB,
   getTradeFromDB,
-  getTradeLogsByIdsFromDB,
+  getTradeLogsByIdFromDB,
+  getTradeLogsFromDB,
   getTradesCountFromDB,
   getTradesWithPaginationFromDB,
   updateTradeInDB,
@@ -90,7 +91,7 @@ export const updateTradeService = async ({
     throw new AppError("Executions required", 400);
   }
 
-  const description = await getTradeLogsByIdsFromDB({ user_id, trade_id });
+  const description = await getTradeLogsFromDB({ user_id, trade_id });
 
   const existingTrade = {
     ...trade,
@@ -174,27 +175,56 @@ export const getTradesService = async ({
     throw new AppError("Trade not found", 404);
   }
 
-  const tradeIds = tradesRes?.map((t) => t.trade_id);
+  const tradeIds = tradesRes?.map((t) => t.trade_id) ?? [];
 
-  const logsRes = await getTradeLogsByIdsFromDB(tradeIds);
+  const logsRes = await getExecutionsByIdsFromDB(tradeIds);
 
-  const logsMap = Object.create(null);
-
-  for (const log of logsRes.rows) {
-    if (!logsMap[log.trade_id]) {
-      logsMap[log.trade_id] = [];
-    }
-    logsMap[log.trade_id].push(log);
+  if (!logsRes) {
+    throw new AppError("Executions not found", 404);
   }
+
+  type ExecutionObj = (typeof logsRes)[number];
+
+  const logsMap = logsRes.reduce<Record<string, ExecutionObj[]>>((acc, exe) => {
+    const tradeId: string = exe.trade_id;
+
+    if (!acc[tradeId]) {
+      acc[tradeId] = [];
+    }
+
+    acc[tradeId].push(exe);
+
+    return acc;
+  }, Object.create(null));
+
+  const tradeLogs = await getTradeLogsByIdFromDB(tradeIds, user_id);
+
+  if (!tradeLogs) {
+    throw new AppError("Trade logs not found", 404);
+  }
+
+  type TradeLogObj = (typeof tradeLogs)[number];
+
+  const tradeLogsMap = tradeLogs.reduce<Record<string, TradeLogObj>>(
+    (acc, log) => {
+      const logId: string = log.trade_id;
+
+      acc[logId] = log;
+
+      return acc;
+    },
+    Object.create(null),
+  );
 
   const totalRes = await getTradesCountFromDB({ whereClause, values });
 
-  const total = Number(totalRes.rows[0].count);
+  const total: number = totalRes.rows[0].count;
 
   const totalPages = Math.ceil(total / limit);
 
   const result = tradesRes.rows.map((trade) => {
     const executions = logsMap[trade.trade_id] || [];
+    const trade_logs = tradeLogsMap[trade.trade_id] || [];
 
     return {
       trade: {

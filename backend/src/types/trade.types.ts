@@ -39,6 +39,7 @@ export interface GetTradeQueryResult {
 }
 
 export interface GetExecutionsQueryResult {
+  execution_id: string;
   order_type: "buy" | "sell";
   price: number;
   quantity: number;
@@ -85,4 +86,24 @@ export interface GetTradeRepoParams {
   orderBy: string;
   limit: number;
   offset: number;
+}
+
+export interface GetExecutionsByTradeIdQueryResult {
+  execution_id: string;
+  trade_id: string;
+  order_type: "buy" | "sell";
+  price: number;
+  quantity: number;
+  executed_at: Date;
+  created_at: Date;
+  updated_at: Date;
+}
+
+export interface GetTradeLogsByIdQueryResult {
+  trade_logs_id: string;
+  trade_id: string;
+  user_id: string;
+  description: string;
+  created_at: Date;
+  updated_at: Date;
 }
