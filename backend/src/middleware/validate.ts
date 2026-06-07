@@ -7,6 +7,10 @@ export const validate =
     const data = req[type];
     const result = schema.parse(data);
 
-    req[type] = result;
+    req.validated = {
+      ...(req.validated || {}),
+      [type]: result,
+    };
+
     next();
   };

@@ -18,7 +18,10 @@ export const createTrade = async (req: Request, res: Response) => {
     throw new AppError("Unauthorized", 401);
   }
 
-  const result = await createTradeService(req.body, req.user?.user_id);
+  const result = await createTradeService(
+    req.validated?.body,
+    req.user?.user_id,
+  );
 
   return res.status(201).json({ success: true, message: result.message });
 };
@@ -27,7 +30,7 @@ export const updateTrade = async (
   req: Request<TradeParamsTradeId, {}, UpdateTradeData>,
   res: Response,
 ) => {
-  const trade_id = req.params.trade_id;
+  const trade_id = req.validated?.params.trade_id;
 
   if (!req.user?.user_id) {
     throw new AppError("Unauthorized", 401);
@@ -35,7 +38,7 @@ export const updateTrade = async (
 
   const data = await updateTradeService({
     trade_id,
-    body: req.body,
+    body: req.validated?.body,
     user_id: req.user.user_id,
   });
 
@@ -47,7 +50,7 @@ export const deleteTrade = async (
   res: Response,
 ) => {
   const data = await tradeDeleteService({
-    trade_id: req.params.trade_id,
+    trade_id: req.validated?.params.trade_id,
     user_id: req.user.user_id,
   });
 
@@ -59,7 +62,7 @@ export const getTrades = async (
   res: Response<{ success: boolean; trades_data: GetTradesResponse }>,
 ) => {
   const result = await getTradesService({
-    query: req.query,
+    query: req.validated?.query,
     user_id: req.user.user_id,
   });
   return res.status(200).json({ success: true, trades_data: result });

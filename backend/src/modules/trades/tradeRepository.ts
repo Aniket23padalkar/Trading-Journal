@@ -423,53 +423,62 @@ export const getTradeStatsFromDB = async (
     SELECT
       t.trade_id,
 
-      AVG(e.price FILTER) (WHERE e.order_type = 'buy') AS avg_buy_price,
-      AVG(e.price FILTER) (WHERE e.order_type = 'sell') AS avg_sell_price,
+      ROUND(AVG(e.price) FILTER (WHERE e.order_type = 'buy')::NUMERIC,2) AS avg_buy_price,
+      ROUND(AVG(e.price) FILTER (WHERE e.order_type = 'sell')::NUMERIC,2) AS avg_sell_price,
 
       SUM(e.quantity) FILTER (WHERE e.order_type = 'buy') AS total_buy_qty,
       SUM(e.quantity) FILTER (WHERE e.order_type = 'sell') AS total_sell_qty,
 
-      CASE
-        WHEN t.order_status = 'closed' AND t.direction = 'long' THEN
-          (AVG(e.price) FILTER (WHERE e.order_type = 'sell')
-          - AVG(e.price) FILTER (WHERE e.order_type = 'buy'))
-          * SUM(e.quantity) FILTER (WHERE e.order_type = 'buy')
+      ROUND(
+        (
+          CASE
+            WHEN t.order_status = 'closed' AND t.direction = 'long' THEN
+              ((AVG(e.price) FILTER (WHERE e.order_type = 'sell'))
+              - AVG(e.price) FILTER (WHERE e.order_type = 'buy'))
+              * SUM(e.quantity) FILTER (WHERE e.order_type = 'buy')
 
-        WHEN t.order_status = 'closed' AND t.direction = 'short' THEN
-          (AVG(e.price) FILTER (WHERE e.order_type = 'buy')
-          - AVG(e.price) FILTER (WHERE e.order_type = 'sell'))
-          * SUM(e.quantity) FILTER (WHERE e.order_type = 'sell')
-        
-        ELSE 0
-      END AS pnl,
+            WHEN t.order_status = 'closed' AND t.direction = 'short' THEN
+              (AVG(e.price) FILTER (WHERE e.order_type = 'buy')
+              - AVG(e.price) FILTER (WHERE e.order_type = 'sell'))
+              * SUM(e.quantity) FILTER (WHERE e.order_type = 'sell')
 
-      CASE
-        WHEN t.risk = 0 THEN NULL
-        ELSE
-          (
-            CASE
-              WHEN t.order_status = 'closed' AND t.direction = 'long' THEN
-                (AVG(e.price) FILTER (WHERE e.order_type = 'sell')
-                - AVG(e.price) FILTER (WHERE e.order_type = 'buy'))
-                * SUM(e.quantity) FILTER (WHERE e.order_type = 'buy')
+            ELSE 0
+          END)::NUMERIC,2) AS pnl,
 
-              WHEN t.order_status = 'closed' AND t.direction = 'short' THEN
-                (AVG(e.price) FILTER (WHERE e.order_type = 'buy')
-                - AVG(e.price) FILTER (WHERE e.order_type = 'sell'))
-                * SUM(e.quantity) FILTER (WHERE e.order_type = 'sell')
+      ROUND(
+        (
+          CASE
+            WHEN t.risk = 0 THEN NULL
+            ELSE
+              (
+                CASE
+                  WHEN t.order_status = 'closed' AND t.direction = 'long' THEN
+                    (AVG(e.price) FILTER (WHERE e.order_type = 'sell')
+                    - AVG(e.price) FILTER (WHERE e.order_type = 'buy'))
+                    * SUM(e.quantity) FILTER (WHERE e.order_type = 'buy')
 
-              ELSE 0
-            END
+                  WHEN t.order_status = 'closed' AND t.direction = 'short' THEN
+                    (AVG(e.price) FILTER (WHERE e.order_type = 'buy')
+                    - AVG(e.price) FILTER (WHERE e.order_type = 'sell'))
+                    * SUM(e.quantity) FILTER (WHERE e.order_type = 'sell')
+
+                  ELSE 0
+                END
           ) / t.risk
-        END AS rr_ratio
+        END
+        )::NUMERIC,
+        2) AS rr_ratio
     FROM trades t
     LEFT JOIN executions e
       ON t.trade_id = e.trade_id
-    WHERE t.user_id = $1 AND t.trade_id = ANY($1::uuid[])
+    WHERE t.user_id = $1 AND t.trade_id = ANY($2::uuid[])
     GROUP BY t.trade_id
   `;
 
-  const result = await pool.query<GetTradeStatsQueryResult>(query, [user_id]);
+  const result = await pool.query<GetTradeStatsQueryResult>(query, [
+    user_id,
+    tradeIds,
+  ]);
 
   return result.rows || null;
 };

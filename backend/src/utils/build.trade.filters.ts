@@ -23,7 +23,7 @@ export default function buildTradeFilters(
   let index = 2;
 
   if (direction) {
-    conditions.push(`t.direction = $${index++}`);
+    conditions.push(`direction = $${index++}`);
     values.push(direction);
   }
 
