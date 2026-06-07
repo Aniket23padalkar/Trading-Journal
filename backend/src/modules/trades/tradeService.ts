@@ -243,8 +243,22 @@ export const getTradesService = async ({
 
   const trades_data: TradesDataType[] = tradesRes.map((trade) => {
     const executions = logsMap[trade.trade_id] || [];
-    const trade_logs = tradeLogsMap[trade.trade_id] || null;
-    const stats = statsMap[trade.trade_id] || null;
+    const trade_logs_raw = tradeLogsMap[trade.trade_id] || null;
+    const stats_raw = statsMap[trade.trade_id] || null;
+
+    const trade_logs = trade_logs_raw
+      ? (function ({ trade_id, user_id, ...rest }) {
+          return rest;
+        })(trade_logs_raw)
+      : null; //IIFE Immediate Invoke Function
+
+    // const trade_logs = trade_logs_raw
+    //   ? (({ trade_id, user_id, ...rest }) => rest)(trade_logs_raw)
+    //   : null;
+
+    const stats = stats_raw
+      ? (({ trade_id, ...rest }) => rest)(stats_raw)
+      : null; // This is mordern IIFE with arrow fucntion
 
     return {
       trade: {
