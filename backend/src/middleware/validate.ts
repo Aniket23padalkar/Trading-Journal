@@ -2,10 +2,11 @@ import type { NextFunction, Request, Response } from "express";
 import { z, ZodType } from "zod";
 
 export const validate =
-  <T extends ZodType>(schema: T) =>
+  <T extends ZodType>(schema: T, type: "body" | "params" | "query" = "body") =>
   (req: Request, res: Response, next: NextFunction) => {
-    const result = schema.parse(req.body);
+    const data = req[type];
+    const result = schema.parse(data);
 
-    req.body = result;
+    req[type] = result;
     next();
   };
