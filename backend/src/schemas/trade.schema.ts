@@ -10,29 +10,28 @@ export const executionsSchema = z.object({
 
 export type ExecutionsData = z.infer<typeof executionsSchema>;
 
-export const createTradeSchema = z
-  .object({
-    symbol: z.string().toLowerCase().trim().min(1),
-    market_type: z.enum(["equity", "options", "futures"]),
-    order_status: z.enum(["open", "closed"]),
-    direction: z.enum(["long", "short"]),
-    position: z.enum([
-      "intraday",
-      "btst",
-      "stbt",
-      "swing",
-      "positional",
-      "longterm",
-    ]),
-    risk: z.coerce.number().positive(),
-    trade_rating: z
-      .enum(["worst", "poor", "average", "good", "best"])
-      .optional(),
-    entry_time: z.coerce.date(),
-    exit_time: z.coerce.date().optional(),
-    executions: z.array(executionsSchema).min(1),
-    description: z.string().trim(),
-  })
+const baseTradeSchema = z.object({
+  symbol: z.string().toLowerCase().trim().min(1),
+  market_type: z.enum(["equity", "options", "futures"]),
+  order_status: z.enum(["open", "closed"]),
+  direction: z.enum(["long", "short"]),
+  position: z.enum([
+    "intraday",
+    "btst",
+    "stbt",
+    "swing",
+    "positional",
+    "longterm",
+  ]),
+  risk: z.coerce.number().positive(),
+  trade_rating: z.enum(["worst", "poor", "average", "good", "best"]).optional(),
+  entry_time: z.coerce.date(),
+  exit_time: z.coerce.date().optional(),
+  executions: z.array(executionsSchema).min(1),
+  description: z.string().trim().optional(),
+});
+
+export const createTradeSchema = baseTradeSchema
   .refine(
     (data) => {
       if (data.exit_time && data.exit_time < data.entry_time) {
@@ -56,11 +55,23 @@ export const createTradeSchema = z
       message: "Open trade should not have exit time",
       path: ["exit_time"],
     },
+  )
+  .refine(
+    (data) => {
+      if (data.order_status === "closed" && data.exit_time) {
+        return data.exit_time ? true : false;
+      }
+      return true;
+    },
+    {
+      message: "Closed trades must have exit time!",
+      path: ["exit_time"],
+    },
   );
 
 export type CreateTradeData = z.infer<typeof createTradeSchema>;
 
-export const updateTradeSchema = createTradeSchema
+export const updateTradeSchema = baseTradeSchema
   .partial()
   .superRefine((data, ctx) => {
     if (data.exit_time && data.entry_time) {

@@ -3,10 +3,7 @@ import { protect } from "../../middleware/auth.middleware.js";
 import {
   createTrade,
   deleteTrade,
-  getMonthlyPnl,
-  getStats,
   getTrades,
-  getYearMonth,
   updateTrade,
 } from "./tradeControllers.js";
 import { asyncHandler } from "../../utils/async.handler.js";
@@ -45,8 +42,8 @@ router.get(
   protect,
   asyncHandler(getTrades),
 );
-router.get("/yearmonth", protect, getYearMonth);
-router.get("/stats", protect, getStats);
-router.get("/monthly-pnl", protect, getMonthlyPnl);
+// router.get("/yearmonth", protect, getYearMonth);
+// router.get("/stats", protect, getStats);
+// router.get("/monthly-pnl", protect, getMonthlyPnl);
 
 export default router;
