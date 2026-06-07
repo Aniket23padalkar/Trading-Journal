@@ -159,7 +159,7 @@ export const getTradeQuerySchema = z.object({
     .transform(Number)
     .refine((val) => val > 0, { message: "Page must be >= 1" })
     .optional(),
-  direction: z.enum(["long", "short"]),
+  direction: z.enum(["long", "short"]).optional(),
   order_status: z.enum(["open", "closed"]).optional(),
   market_type: z.enum(["equity", "options", "futures"]).optional(),
   position: z

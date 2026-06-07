@@ -32,13 +32,13 @@ router.patch(
 );
 router.delete(
   "/:trade_id",
-  validate(tradeParamsSchema),
+  validate(tradeParamsSchema, "params"),
   protect,
   asyncHandler(deleteTrade),
 );
 router.get(
   "/",
-  validate(getTradeQuerySchema),
+  validate(getTradeQuerySchema, "query"),
   protect,
   asyncHandler(getTrades),
 );
