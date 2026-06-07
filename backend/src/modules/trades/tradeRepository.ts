@@ -113,8 +113,8 @@ export const createTradeInDB = async ({
       [
         user_id,
         symbol,
-        order_status,
         market_type,
+        order_status,
         position,
         trade_rating,
         risk,
@@ -141,13 +141,7 @@ export const createTradeInDB = async ({
     );
 
     const values: string[] = [];
-    const rows: ExecutionsRow[] = executions.map((exe) => [
-      trade_id,
-      exe.order_type,
-      exe.price,
-      exe.quantity,
-      exe.executed_at,
-    ]);
+    const rows: ExecutionsRow[] = [];
     const params = rows.flat();
 
     executions.forEach((exe, i) => {
@@ -178,10 +172,11 @@ export const createTradeInDB = async ({
     await client.query("COMMIT");
   } catch (err: unknown) {
     await client.query("ROLLBACK");
+    console.error("Create trade Error", err);
     if (err instanceof AppError) {
-      console.error(err);
-      throw new AppError(err.message || "Failed to create trade", 500);
+      throw err;
     }
+    throw new AppError("Failed to create trade", 500);
   } finally {
     client.release();
   }
