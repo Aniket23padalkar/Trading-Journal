@@ -5,7 +5,7 @@ export const executionsSchema = z.object({
   order_type: z.enum(["buy", "sell"]),
   price: z.coerce.number().positive(),
   quantity: z.coerce.number().int().min(1),
-  executed_at: z.string().transform((val) => new Date(val)),
+  executed_at: z.coerce.date(),
 });
 
 export type ExecutionsData = z.infer<typeof executionsSchema>;

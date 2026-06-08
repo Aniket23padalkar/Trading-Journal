@@ -1,4 +1,3 @@
-import pool from "../../config/db.js";
 import {
   createTradeInDB,
   deleteTradeFromDB,
@@ -30,6 +29,8 @@ import {
   validateOrderTypes,
   validateQuantities,
 } from "./trade.validator.js";
+import { safeMerge } from "../../utils/merge.utils.js";
+import { removeUndefined } from "../../utils/removeundefined.utils.js";
 
 export const createTradeService = async (
   body: CreateTradeData,
@@ -86,21 +87,21 @@ export const updateTradeService = async ({
 
   const executions = await getExecutionsFromDB(trade_id);
 
-  if (!executions) {
-    throw new AppError("Executions required", 400);
-  }
-
   const description = await getTradeLogsFromDB({ user_id, trade_id });
 
   const existingTrade = {
     ...trade,
-    description: description,
+    description,
     executions,
   };
 
+  const cleanedBody = removeUndefined(body);
+
+  const updatedTrade = safeMerge(existingTrade, cleanedBody);
+
   const merged = {
     ...existingTrade,
-    ...body,
+    ...updatedTrade,
   };
 
   const validatedTrade = createTradeSchema.parse(merged);

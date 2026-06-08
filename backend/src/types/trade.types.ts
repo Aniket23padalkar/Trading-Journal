@@ -47,7 +47,7 @@ export interface GetExecutionsQueryResult {
 }
 
 export interface UpdateTradeRepoParams {
-  validatedTrade: CreateTradeData;
+  validatedTrade: UpdateTradeData;
   trade_id: string;
   user_id: string;
 }
@@ -58,23 +58,23 @@ export interface GetTradesServicesParams {
 }
 
 export interface ValidateDirectionParams {
-  executions: ExecutionsData[];
-  direction: "long" | "short";
+  executions: ExecutionsData[] | undefined;
+  direction: "long" | "short" | undefined;
 }
 
 export interface ValidateExecutionTimeParams {
-  executions: ExecutionsData[];
-  entry_time: Date;
+  executions: ExecutionsData[] | undefined;
+  entry_time: Date | undefined;
 }
 
 export interface ValidateOrderTypeParams {
-  executions: ExecutionsData[];
-  order_status: "open" | "closed";
+  executions: ExecutionsData[] | undefined;
+  order_status: "open" | "closed" | undefined;
 }
 
 export interface ValidateQuantitiesParams {
-  executions: ExecutionsData[];
-  direction: "long" | "short";
+  executions: ExecutionsData[] | undefined;
+  direction: "long" | "short" | undefined;
 }
 
 export type BuildFilterValues = string | Date | number;
