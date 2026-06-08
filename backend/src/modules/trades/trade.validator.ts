@@ -12,7 +12,7 @@ export const validateDirection = ({
   direction,
 }: ValidateDirectionParams): void => {
   const firstExecution: ExecutionsData | undefined = executions
-    .slice()
+    ?.slice()
     .sort((a, b) => a.executed_at.getTime() - b.executed_at.getTime())[0];
 
   if (direction === "long" && firstExecution?.order_type === "sell") {
@@ -28,7 +28,8 @@ export const validateExecutionTime = ({
   executions,
   entry_time,
 }: ValidateExecutionTimeParams): void => {
-  const invalidExecution: boolean = executions.some(
+  if (entry_time === undefined) return;
+  const invalidExecution: boolean | undefined = executions?.some(
     (exe) => exe.executed_at < entry_time,
   );
 
@@ -42,7 +43,7 @@ export const validateOrderTypes = ({
   order_status,
 }: ValidateOrderTypeParams) => {
   const types: Set<"buy" | "sell"> = new Set(
-    executions.map((e) => e.order_type),
+    executions?.map((e) => e.order_type),
   );
 
   if (order_status === "open" && types.size > 1) {
@@ -58,6 +59,7 @@ export const validateQuantities = ({
   executions,
   direction,
 }: ValidateQuantitiesParams) => {
+  if (executions === undefined) return;
   const totalBuy: number = executions
     .filter((exe) => exe.order_type === "buy")
     .reduce((sum, exe) => sum + exe.quantity, 0);
