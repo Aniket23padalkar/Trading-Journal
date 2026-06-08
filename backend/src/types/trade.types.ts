@@ -156,7 +156,9 @@ export interface GetCompleteTradeQueryResult {
   created_at: Date;
   updated_at: Date;
 
-  executions: Omit<GetExecutionsByTradeIdQueryResult, "trade_id">;
+  executions: Omit<GetExecutionsByTradeIdQueryResult, "trade_id">[];
+
+  trade_logs: Omit<GetTradeLogsByIdQueryResult, "trade_id" | "user_id">;
 
   avg_buy_price: number;
   avg_sell_price: number;

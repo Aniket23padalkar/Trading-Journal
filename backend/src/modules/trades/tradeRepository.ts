@@ -2,6 +2,7 @@ import pool from "../../config/db.js";
 import type {
   CreateTradeWithUserId,
   ExecutionsRow,
+  GetCompleteTradeQueryResult,
   GetExecutionsByTradeIdQueryResult,
   GetExecutionsQueryResult,
   GetTradeLogsByIdQueryResult,
@@ -9,6 +10,7 @@ import type {
   GetTradeRepoParams,
   GetTradesCountFromDBParams,
   GetTradeStatsQueryResult,
+  TradesDataType,
   UpdateTradeRepoParams,
 } from "../../types/trade.types.js";
 import { AppError } from "../../utils/AppError.js";
@@ -186,7 +188,7 @@ export const updateTradeInDB = async ({
   validatedTrade,
   trade_id,
   user_id,
-}: UpdateTradeRepoParams) => {
+}: UpdateTradeRepoParams): Promise<TradesDataType> => {
   const client = await pool.connect();
 
   try {
@@ -312,6 +314,41 @@ export const updateTradeInDB = async ({
     }
 
     await client.query("COMMIT");
+
+    const updatedTrade_raw = await getCompleteTradeFromDB(trade_id, user_id);
+
+    if (!updatedTrade_raw) {
+      throw new AppError("Trade not found", 404);
+    }
+
+    const updatedTrade: TradesDataType = {
+      trade: {
+        trade_id: updatedTrade_raw.trade_id,
+        symbol: updatedTrade_raw.symbol,
+        order_status: updatedTrade_raw.order_status,
+        market_type: updatedTrade_raw.market_type,
+        position: updatedTrade_raw.position,
+        direction: updatedTrade_raw.direction,
+        risk: updatedTrade_raw.risk,
+        trade_rating: updatedTrade_raw.trade_rating,
+        entry_time: updatedTrade_raw.entry_time,
+        exit_time: updatedTrade_raw.exit_time,
+        created_at: updatedTrade_raw.created_at,
+        updated_at: updatedTrade_raw.updated_at,
+      },
+      executions: updatedTrade_raw.executions,
+      trade_logs: updatedTrade_raw.trade_logs,
+      stats: {
+        avg_buy_price: updatedTrade_raw.avg_buy_price,
+        avg_sell_price: updatedTrade_raw.avg_sell_price,
+        total_buy_qty: updatedTrade_raw.total_buy_qty,
+        total_sell_qty: updatedTrade_raw.total_sell_qty,
+        pnl: updatedTrade_raw.pnl,
+        rr_ratio: updatedTrade_raw.rr_ratio,
+      },
+    };
+
+    return updatedTrade;
   } catch (err) {
     await client.query("ROLLBACK");
     throw err;
@@ -418,7 +455,7 @@ export const getExecutionsByIdsFromDB = async (
 export const getTradeStatsFromDB = async (
   user_id: string,
   tradeIds: string[],
-): Promise<GetTradeStatsQueryResult[] | null> => {
+): Promise<GetTradeStatsQueryResult[]> => {
   const query = `
     SELECT
       t.trade_id,
@@ -480,13 +517,13 @@ export const getTradeStatsFromDB = async (
     tradeIds,
   ]);
 
-  return result.rows || null;
+  return result.rows;
 };
 
 export const getCompleteTradeFromDB = async (
   trade_id: string,
   user_id: string,
-) => {
+): Promise<GetCompleteTradeQueryResult | null> => {
   const query = `
     SELECT
       t.trade_id,
@@ -515,6 +552,13 @@ export const getCompleteTradeFromDB = async (
       ) FILTER (WHERE e.execution_id IS NOT NULL) ,
        '[]'
       ) AS executions,
+
+      json_build_object(
+        'trade_logs_id',tl.trade_logs_id,
+        'description',tl.description,
+        'created_at',tl.created_at,
+        'updated_at',tl.updated_at
+      ) AS trade_logs,
 
       ROUND(AVG(e.price) FILTER (WHERE e.order_type = 'buy')::NUMERIC,2) AS avg_buy_price,
       ROUND(AVG(e.price) FILTER (WHERE e.order_type = 'sell')::NUMERIC,2) AS avg_sell_price,
@@ -565,12 +609,15 @@ export const getCompleteTradeFromDB = async (
     LEFT JOIN executions e ON e.trade_id = t.trade_id
     LEFT JOIN trade_logs tl ON tl.trade_id = t.trade_id
     WHERE t.trade_id = $1 AND t.user_id = $2
-    GROUP BY t.trade_id
+    GROUP BY t.trade_id, tl.trade_logs_id
   `;
 
-  const result = await pool.query(query, [trade_id, user_id]);
+  const result = await pool.query<GetCompleteTradeQueryResult>(query, [
+    trade_id,
+    user_id,
+  ]);
 
-  return result.rows;
+  return result.rows[0] || null;
 };
 
 export const getTradesCountFromDB = async ({
