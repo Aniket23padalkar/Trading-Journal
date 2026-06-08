@@ -45,7 +45,7 @@ export const getTradeFromDB = async ({
 
 export const getExecutionsFromDB = async (
   trade_id: string,
-): Promise<GetExecutionsQueryResult[] | null> => {
+): Promise<GetExecutionsQueryResult[]> => {
   const query = `
     SELECT 
       execution_id,
@@ -59,7 +59,7 @@ export const getExecutionsFromDB = async (
 
   const result = await pool.query<GetExecutionsQueryResult>(query, [trade_id]);
 
-  return result.rows || null;
+  return result.rows;
 };
 
 export const getTradeLogsFromDB = async ({
@@ -68,7 +68,7 @@ export const getTradeLogsFromDB = async ({
 }: {
   user_id: string;
   trade_id: string;
-}): Promise<string | null> => {
+}): Promise<string | undefined> => {
   const query = `
     SELECT 
       description
@@ -81,7 +81,7 @@ export const getTradeLogsFromDB = async ({
     trade_id,
   ]);
 
-  return result.rows[0]?.description || null;
+  return result.rows[0]?.description || undefined;
 };
 
 export const createTradeInDB = async ({

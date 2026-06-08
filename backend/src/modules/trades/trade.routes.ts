@@ -25,8 +25,8 @@ router.post(
 );
 router.patch(
   "/:trade_id",
-  validate(tradeParamsSchema),
-  validate(updateTradeSchema),
+  validate(tradeParamsSchema, "params"),
+  validate(updateTradeSchema, "body"),
   protect,
   asyncHandler(updateTrade),
 );
