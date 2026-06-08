@@ -8,8 +8,19 @@ import type {
 
 export type DB = Pool | PoolClient;
 
-export interface CreateTradeWithUserId extends CreateTradeData {
+export type CreateTradeParams = Omit<
+  CreateTradeData,
+  "executions" | "description"
+> & {
+  client: PoolClient;
   user_id: string;
+};
+
+export interface InsertIntoTradeLogsParams {
+  user_id: string;
+  trade_id: string;
+  description: string | undefined;
+  client: PoolClient;
 }
 
 export type ExecutionsRow = [

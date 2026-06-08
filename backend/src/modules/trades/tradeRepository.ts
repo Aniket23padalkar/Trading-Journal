@@ -1,9 +1,8 @@
 import type { PoolClient } from "pg";
 import pool from "../../config/db.js";
 import type {
-  CreateTradeWithUserId,
+  CreateTradeParams,
   DB,
-  ExecutionsRow,
   GetCompleteTradeQueryResult,
   GetExecutionsByTradeIdQueryResult,
   GetExecutionsQueryResult,
@@ -12,7 +11,7 @@ import type {
   GetTradeRepoParams,
   GetTradesCountFromDBParams,
   GetTradeStatsQueryResult,
-  TradesDataType,
+  InsertIntoTradeLogsParams,
   UpdateExecutionsData,
   UpdateTradeRepoParams,
 } from "../../types/trade.types.js";
@@ -113,91 +112,61 @@ export const createTradeInDB = async ({
   direction,
   entry_time,
   exit_time,
-  executions,
+  client,
+}: CreateTradeParams): Promise<string | undefined> => {
+  const query: string = `
+    INSERT INTO trades
+      (user_id, symbol, market_type, order_status, position, trade_rating, risk, direction, entry_time, exit_time) 
+    VALUES 
+      ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10) 
+    RETURNING trade_id
+  `;
+
+  const result = await client.query<{ trade_id: string }>(query, [
+    user_id,
+    symbol,
+    market_type,
+    order_status,
+    position,
+    trade_rating,
+    risk,
+    direction,
+    entry_time,
+    exit_time,
+  ]);
+
+  return result.rows[0]?.trade_id;
+};
+
+export const insertIntoTradeLogsInDB = async ({
+  client,
+  trade_id,
+  user_id,
   description,
-}: CreateTradeWithUserId): Promise<void> => {
-  const client = await pool.connect();
+}: InsertIntoTradeLogsParams): Promise<void> => {
+  const query: string = `
+    INSERT INTO trade_logs
+      (trade_id, user_id, description)
+    VALUES
+      ($1,$2,$3)
+  `;
 
-  try {
-    await client.query("BEGIN");
+  await client.query(query, [trade_id, user_id, description]);
+};
 
-    const newTrade = await client.query<{ trade_id: string }>(
-      `
-        INSERT INTO trades
-          (user_id, symbol, market_type, order_status, position, trade_rating, risk, direction, entry_time, exit_time) 
-        VALUES 
-          ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10) 
-        RETURNING trade_id`,
-      [
-        user_id,
-        symbol,
-        market_type,
-        order_status,
-        position,
-        trade_rating,
-        risk,
-        direction,
-        entry_time,
-        exit_time,
-      ],
-    );
+export const insertIntoExecutionsDynamicValues = async (
+  client: PoolClient,
+  values: string[],
+  params: (string | number | Date)[],
+): Promise<void> => {
+  const query: string = `
+    INSERT INTO executions
+      (trade_id, order_type, price, quantity, executed_at)
+    VALUES
+      ${values.join(",")}
+  `;
 
-    if (!newTrade.rows[0]?.trade_id) {
-      throw new AppError("Error while creating a trade", 500);
-    }
-
-    const trade_id: string = newTrade.rows[0].trade_id;
-
-    await client.query(
-      `
-        INSERT INTO trade_logs
-          (trade_id, user_id, description)
-        VALUES
-          ($1,$2,$3)
-      `,
-      [trade_id, user_id, description],
-    );
-
-    const values: string[] = [];
-    const rows: ExecutionsRow[] = [];
-    const params = rows.flat();
-
-    executions.forEach((exe, i) => {
-      const base = i * 5;
-
-      values.push(
-        `($${base + 1}, $${base + 2}, $${base + 3}, $${base + 4}, $${base + 5})`,
-      );
-
-      params.push(
-        trade_id,
-        exe.order_type,
-        exe.price,
-        exe.quantity,
-        exe.executed_at,
-      );
-    });
-
-    await client.query(
-      `INSERT INTO executions
-          (trade_id, order_type, price, quantity, executed_at) 
-        VALUES 
-          ${values.join(",")}
-        `,
-      params,
-    );
-
-    await client.query("COMMIT");
-  } catch (err: unknown) {
-    await client.query("ROLLBACK");
-    console.error("Create trade Error", err);
-    if (err instanceof AppError) {
-      throw err;
-    }
-    throw new AppError("Failed to create trade", 500);
-  } finally {
-    client.release();
-  }
+  await client.query(query, params);
 };
 
 export const updateTradeInDB = async ({
@@ -260,21 +229,6 @@ export const updateExecutionsFromDB = async (
     exe.execution_id,
     trade_id,
   ]);
-};
-
-export const insertIntoExecutions = async (
-  client: PoolClient,
-  values: string[],
-  params: (string | number | Date)[],
-): Promise<void> => {
-  const query: string = `
-    INSERT INTO executions
-      (trade_id, order_type, price, quantity, executed_at)
-    VALUES
-      ${values.join(",")}
-  `;
-
-  await client.query(query, params);
 };
 
 export const deleteTradeFromDB = async ({

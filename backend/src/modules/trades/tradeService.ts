@@ -11,7 +11,8 @@ import {
   getTradesCountFromDB,
   getTradeStatsFromDB,
   getTradesWithPaginationFromDB,
-  insertIntoExecutions,
+  insertIntoExecutionsDynamicValues,
+  insertIntoTradeLogsInDB,
   updateExecutionsFromDB,
   updateTradeInDB,
 } from "./tradeRepository.js";
@@ -65,22 +66,65 @@ export const createTradeService = async (
 
   validateQuantities({ executions, direction });
 
-  await createTradeInDB({
-    symbol,
-    market_type,
-    order_status,
-    position,
-    trade_rating,
-    risk,
-    direction,
-    entry_time,
-    exit_time,
-    executions,
-    description,
-    user_id,
-  });
+  const client = await pool.connect();
 
-  return { message: "Trade created successfully" };
+  try {
+    await client.query("BEGIN");
+
+    const trade_id = await createTradeInDB({
+      user_id,
+      symbol,
+      order_status,
+      market_type,
+      position,
+      trade_rating,
+      risk,
+      direction,
+      entry_time,
+      exit_time,
+      client,
+    });
+
+    if (trade_id === undefined) {
+      throw new AppError("Error while creating a trade", 500);
+    }
+
+    await insertIntoTradeLogsInDB({ client, trade_id, user_id, description });
+
+    const values: string[] = [];
+    const rows: ExecutionsRow[] = [];
+    const params = rows.flat();
+
+    executions.forEach((exe, i) => {
+      const base = i * 5;
+
+      values.push(
+        `($${base + 1}, $${base + 2}, $${base + 3}, $${base + 4}, $${base + 5})`,
+      );
+
+      params.push(
+        trade_id,
+        exe.order_type,
+        exe.price,
+        exe.quantity,
+        exe.executed_at,
+      );
+    });
+
+    await insertIntoExecutionsDynamicValues(client, values, params);
+
+    await client.query("COMMIT");
+    return { message: "Trade created successfully" };
+  } catch (err: unknown) {
+    await client.query("ROLLBACK");
+    console.error("Create trade Error", err);
+    if (err instanceof AppError) {
+      throw err;
+    }
+    throw new AppError("Failed to create trade", 500);
+  } finally {
+    client.release();
+  }
 };
 
 export const updateTradeService = async ({
@@ -199,7 +243,7 @@ export const updateTradeService = async ({
         );
       });
 
-      await insertIntoExecutions(client, values, params);
+      await insertIntoExecutionsDynamicValues(client, values, params);
     }
 
     await client.query("COMMIT");
