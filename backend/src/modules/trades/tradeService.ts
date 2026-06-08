@@ -408,7 +408,7 @@ export const getTradesService = async ({
       ? (function ({ trade_id, user_id, ...rest }) {
           return rest;
         })(trade_logs_raw)
-      : null; //IIFE Immediate Invoke Function
+      : null; //IIFE Immediate Invoke Function//
 
     // const trade_logs = trade_logs_raw
     //   ? (({ trade_id, user_id, ...rest }) => rest)(trade_logs_raw)
