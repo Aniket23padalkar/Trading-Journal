@@ -36,13 +36,13 @@ export const updateTrade = async (
     throw new AppError("Unauthorized", 401);
   }
 
-  const data = await updateTradeService({
+  const result = await updateTradeService({
     trade_id,
     body: req.validated?.body,
     user_id: req.user.user_id,
   });
 
-  return res.status(200).json(data);
+  return res.status(200).json({ success: true, updatedTrade: result });
 };
 
 export const deleteTrade = async (

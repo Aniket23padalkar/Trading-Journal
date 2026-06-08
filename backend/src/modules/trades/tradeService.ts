@@ -80,7 +80,7 @@ export const updateTradeService = async ({
   trade_id,
   body,
   user_id,
-}: UpdateTradeServiceParams) => {
+}: UpdateTradeServiceParams): Promise<TradesDataType> => {
   const trade = await getTradeFromDB({ trade_id, user_id });
 
   if (!trade) throw new AppError("Trade not found", 404);
@@ -131,6 +131,8 @@ export const updateTradeService = async ({
     trade_id,
     user_id,
   });
+
+  return tradeData;
 };
 
 export const tradeDeleteService = async ({
