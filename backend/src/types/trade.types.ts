@@ -1,9 +1,12 @@
+import type { Client, Pool, PoolClient } from "pg";
 import type {
   CreateTradeData,
   ExecutionsData,
   GetTradeQueryData,
   UpdateTradeData,
 } from "../schemas/trade.schema.js";
+
+export type DB = Pool | PoolClient;
 
 export interface CreateTradeWithUserId extends CreateTradeData {
   user_id: string;
@@ -46,7 +49,15 @@ export interface GetExecutionsQueryResult {
   executed_at: Date;
 }
 
+export type UpdateExecutionsData = Omit<
+  GetExecutionsQueryResult,
+  "execution_id"
+> & {
+  execution_id?: string | undefined;
+};
+
 export interface UpdateTradeRepoParams {
+  client: PoolClient;
   validatedTrade: UpdateTradeData;
   trade_id: string;
   user_id: string;
