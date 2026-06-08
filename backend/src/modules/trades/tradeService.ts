@@ -1,6 +1,8 @@
 import {
   createTradeInDB,
+  deleteFromExecutions,
   deleteTradeFromDB,
+  getCompleteTradeFromDB,
   getExecutionsByIdsFromDB,
   getExecutionsFromDB,
   getTradeFromDB,
@@ -9,6 +11,8 @@ import {
   getTradesCountFromDB,
   getTradeStatsFromDB,
   getTradesWithPaginationFromDB,
+  insertIntoExecutions,
+  updateExecutionsFromDB,
   updateTradeInDB,
 } from "./tradeRepository.js";
 import buildTradeFilters from "../../utils/build.trade.filters.js";
@@ -18,9 +22,11 @@ import {
 } from "../../schemas/trade.schema.js";
 import { AppError } from "../../utils/AppError.js";
 import type {
+  ExecutionsRow,
   GetTradesResponse,
   GetTradesServicesParams,
   TradesDataType,
+  UpdateExecutionsData,
   UpdateTradeServiceParams,
 } from "../../types/trade.types.js";
 import {
@@ -31,6 +37,7 @@ import {
 } from "./trade.validator.js";
 import { safeMerge } from "../../utils/merge.utils.js";
 import { removeUndefined } from "../../utils/removeundefined.utils.js";
+import pool from "../../config/db.js";
 
 export const createTradeService = async (
   body: CreateTradeData,
@@ -85,7 +92,7 @@ export const updateTradeService = async ({
 
   if (!trade) throw new AppError("Trade not found", 404);
 
-  const executions = await getExecutionsFromDB(trade_id);
+  const executions = await getExecutionsFromDB({ db: pool, trade_id });
 
   const description = await getTradeLogsFromDB({ user_id, trade_id });
 
@@ -126,13 +133,117 @@ export const updateTradeService = async ({
     direction: validatedTrade.direction,
   });
 
-  const tradeData = await updateTradeInDB({
-    validatedTrade,
-    trade_id,
-    user_id,
-  });
+  const client = await pool.connect();
 
-  return tradeData;
+  try {
+    await client.query("BEGIN");
+
+    await updateTradeInDB({ validatedTrade, trade_id, user_id, client });
+
+    const existingExecutions = await getExecutionsFromDB({
+      db: client,
+      trade_id,
+    });
+
+    const existingIds: string[] = existingExecutions.map((r) => r.execution_id);
+
+    const incoming: UpdateExecutionsData[] = validatedTrade.executions || [];
+
+    const incomingIds = incoming
+      .filter((e) => e.execution_id)
+      .map((e) => e.execution_id);
+
+    const toDelete: string[] = existingIds.filter(
+      (eId) => !incomingIds.includes(eId),
+    );
+
+    if (toDelete.length > 0) {
+      await deleteFromExecutions(client, toDelete);
+    }
+
+    const updates: UpdateExecutionsData[] = incoming?.filter(
+      (e) => e.execution_id,
+    );
+    const inserts: UpdateExecutionsData[] = incoming.filter(
+      (e) => !e.execution_id,
+    );
+
+    await Promise.all(
+      updates.map((exe) => updateExecutionsFromDB(client, exe, trade_id)),
+    );
+
+    if (inserts.length) {
+      const values: string[] = [];
+      const rows: ExecutionsRow[] = inserts.map((exe) => [
+        trade_id,
+        exe.order_type,
+        exe.price,
+        exe.quantity,
+        exe.executed_at,
+      ]);
+      const params = rows.flat();
+
+      inserts.forEach((exe, i) => {
+        const base: number = i * 5;
+
+        values.push(
+          `($${base + 1}, $${base + 2}, $${base + 3}, $${base + 4}, $${base + 5})`,
+        );
+
+        params.push(
+          trade_id,
+          exe.order_type,
+          exe.price,
+          exe.quantity,
+          exe.executed_at,
+        );
+      });
+
+      await insertIntoExecutions(client, values, params);
+    }
+
+    await client.query("COMMIT");
+
+    const updatedTrade_raw = await getCompleteTradeFromDB(trade_id, user_id);
+
+    if (!updatedTrade_raw) {
+      throw new AppError("Trade not found", 404);
+    }
+
+    const updatedTrade: TradesDataType = {
+      trade: {
+        trade_id: updatedTrade_raw.trade_id,
+        symbol: updatedTrade_raw.symbol,
+        order_status: updatedTrade_raw.order_status,
+        market_type: updatedTrade_raw.market_type,
+        position: updatedTrade_raw.position,
+        direction: updatedTrade_raw.direction,
+        risk: updatedTrade_raw.risk,
+        trade_rating: updatedTrade_raw.trade_rating,
+        entry_time: updatedTrade_raw.entry_time,
+        exit_time: updatedTrade_raw.exit_time,
+        created_at: updatedTrade_raw.created_at,
+        updated_at: updatedTrade_raw.updated_at,
+      },
+      executions: updatedTrade_raw.executions,
+      trade_logs: updatedTrade_raw.trade_logs,
+      stats: {
+        avg_buy_price: updatedTrade_raw.avg_buy_price,
+        avg_sell_price: updatedTrade_raw.avg_sell_price,
+        total_buy_qty: updatedTrade_raw.total_buy_qty,
+        total_sell_qty: updatedTrade_raw.total_sell_qty,
+        pnl: updatedTrade_raw.pnl,
+        rr_ratio: updatedTrade_raw.rr_ratio,
+      },
+    };
+
+    return updatedTrade;
+  } catch (err) {
+    await client.query("ROLLBACK");
+    throw err;
+  } finally {
+    client.release();
+  }
 };
 
 export const tradeDeleteService = async ({
