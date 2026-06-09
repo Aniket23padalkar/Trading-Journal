@@ -5,20 +5,21 @@ import { ScaleLoader } from "react-spinners";
 import DashboardImg from "../assets/Dashboard_V1.1.png";
 import TradesImg from "../assets/Trades_V1.1.png";
 import { toast } from "react-toastify";
-import { registerUser } from "../api/authService";
+import { registerUser } from "../api/authService.js";
+import type { UserSignUpData } from "../types/auth.types.js";
 
 export default function SignUp() {
-  const [btnLoading, setBtnLoading] = useState(false);
-  const [userSignUpInfo, setUserSignUpInfo] = useState({
-    firstName: "",
-    lastName: "",
-    email_id: "",
+  const [btnLoading, setBtnLoading] = useState<boolean>(false);
+  const [userSignUpInfo, setUserSignUpInfo] = useState<UserSignUpData>({
+    first_name: "",
+    last_name: "",
+    email: "",
     password: "",
-    confirmPassword: "",
+    confirm_password: "",
   });
   const navigate = useNavigate();
 
-  function handleChange(e) {
+  function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     const { name, value } = e.target;
     setUserSignUpInfo((prev) => ({
       ...prev,
@@ -28,19 +29,19 @@ export default function SignUp() {
 
   function resetSignUp() {
     setUserSignUpInfo({
-      firstName: "",
-      lastName: "",
-      email_id: "",
+      first_name: "",
+      last_name: "",
+      email: "",
       password: "",
-      confirmPassword: "",
+      confirm_password: "",
     });
   }
 
-  async function handleSignUp(e) {
+  async function handleSignUp(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    const { password, confirmPassword, ...rest } = userSignUpInfo;
+    const { password, confirm_password, ...rest } = userSignUpInfo;
 
-    if (password !== confirmPassword) {
+    if (password !== confirm_password) {
       toast.error("Password Dont Match!");
       return;
     }
@@ -55,9 +56,11 @@ export default function SignUp() {
       toast.success("Account Created Successfully!");
       resetSignUp();
       navigate("/signin");
-    } catch (err) {
+    } catch (err: unknown) {
       console.log(err);
-      toast.error(err.message);
+      if (err instanceof Error) {
+        toast.error(err.message);
+      }
     } finally {
       setBtnLoading(false);
     }
@@ -100,8 +103,8 @@ export default function SignUp() {
               className="px-4 py-1.5 w-full border rounded border-gray-400 outline-none focus:border-teal-400"
               type="text"
               required
-              name="firstName"
-              value={userSignUpInfo.firstName}
+              name="first_name"
+              value={userSignUpInfo.first_name}
               onChange={handleChange}
               placeholder="First Name"
             />
@@ -109,8 +112,8 @@ export default function SignUp() {
               className="px-4 py-1.5 w-full border rounded border-gray-400 outline-none focus:border-teal-400"
               type="text"
               required
-              name="lastName"
-              value={userSignUpInfo.lastName}
+              name="last_name"
+              value={userSignUpInfo.last_name}
               onChange={handleChange}
               placeholder="Last Name"
             />
@@ -118,9 +121,9 @@ export default function SignUp() {
           <input
             className="px-4 mt-2 w-full py-1.5 border rounded border-gray-400 outline-none focus:border-teal-400"
             type="email"
-            name="email_id"
+            name="email"
             required
-            value={userSignUpInfo.email_id}
+            value={userSignUpInfo.email}
             placeholder="Email..."
             onChange={handleChange}
           />
@@ -137,8 +140,8 @@ export default function SignUp() {
             className="px-4 mt-2 py-1.5 w-full border rounded border-gray-400 outline-none focus:border-teal-400"
             type="password"
             required
-            name="confirmPassword"
-            value={userSignUpInfo.confirmPassword}
+            name="confirm_password"
+            value={userSignUpInfo.confirm_password}
             placeholder="Confirm Password"
             onChange={handleChange}
           />
