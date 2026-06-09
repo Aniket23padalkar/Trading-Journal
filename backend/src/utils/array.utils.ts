@@ -17,3 +17,19 @@ export function groupBy<T, K extends keyof T>(
     {} as Record<string, T[]>,
   );
 }
+
+export function mapBy<T, K extends keyof T>(
+  array: T[],
+  key: K,
+): Record<string, T> {
+  return array.reduce(
+    (acc, item) => {
+      const mapKey = String(item[key]);
+
+      acc[mapKey] = item;
+
+      return acc;
+    },
+    {} as Record<string, T>,
+  );
+}
