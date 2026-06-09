@@ -5,7 +5,7 @@ import { ScaleLoader } from "react-spinners";
 import DashboardImg from "../assets/Dashboard_V1.1.png";
 import TradesImg from "../assets/Trades_V1.1.png";
 import { toast } from "react-toastify";
-import { registerUser } from "../services/authService";
+import { registerUser } from "../api/authService";
 
 export default function SignUp() {
   const [btnLoading, setBtnLoading] = useState(false);

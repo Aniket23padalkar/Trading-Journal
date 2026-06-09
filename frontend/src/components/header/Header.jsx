@@ -5,7 +5,7 @@ import { FaBars } from "react-icons/fa6";
 import { BiMoon, BiSun } from "react-icons/bi";
 import { useContext, useState } from "react";
 import { AuthContext } from "../../context/AuthContext";
-import { logoutUser } from "../../services/authService";
+import { logoutUser } from "../../api/authService";
 import { TradeContext } from "../../context/TradesContext";
 
 export default function Header({ isAsideOpen, setIsAsideOpen }) {

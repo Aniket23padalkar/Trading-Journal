@@ -1,5 +1,5 @@
 import { createContext, useEffect, useState } from "react";
-import { getTradesData } from "../services/tradesService";
+import { getTradesData } from "../api/tradesService";
 
 export const TradeContext = createContext(null);
 

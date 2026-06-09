@@ -7,7 +7,7 @@ import DashboardImg from "../assets/Dashboard_V1.1.png";
 import TradesImg from "../assets/Trades_V1.1.png";
 
 import { toast } from "react-toastify";
-import { loginUser } from "../services/authService";
+import { loginUser } from "../api/authService";
 import { AuthContext } from "../context/AuthContext";
 
 export default function SignIn() {
@@ -42,7 +42,7 @@ export default function SignIn() {
       navigate("/dashboard");
     } catch (err) {
       console.log(err);
-      toast.error("Wrong Email or Password!");
+      toast.error(err.message);
     } finally {
       setBtnLoading(false);
     }
