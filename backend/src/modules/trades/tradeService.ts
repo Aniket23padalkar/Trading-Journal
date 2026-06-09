@@ -39,6 +39,7 @@ import {
 import { safeMerge } from "../../utils/merge.utils.js";
 import { removeUndefined } from "../../utils/removeundefined.utils.js";
 import pool from "../../config/db.js";
+import { groupBy, mapBy } from "../../utils/array.utils.js";
 
 export const createTradeService = async (
   body: CreateTradeData,
@@ -340,19 +341,7 @@ export const getTradesService = async ({
     throw new AppError("Executions not found", 404);
   }
 
-  type ExecutionObj = (typeof logsRes)[number];
-
-  const logsMap = logsRes.reduce<Record<string, ExecutionObj[]>>((acc, exe) => {
-    const tradeId: string = exe.trade_id;
-
-    if (!acc[tradeId]) {
-      acc[tradeId] = [];
-    }
-
-    acc[tradeId].push(exe);
-
-    return acc;
-  }, Object.create(null));
+  const logsMap = groupBy(logsRes, "trade_id");
 
   const tradeLogs = await getTradeLogsByIdFromDB(tradeIds, user_id);
 
@@ -360,18 +349,7 @@ export const getTradesService = async ({
     throw new AppError("Trade logs not found", 404);
   }
 
-  type TradeLogObj = (typeof tradeLogs)[number];
-
-  const tradeLogsMap = tradeLogs.reduce<Record<string, TradeLogObj>>(
-    (acc, log) => {
-      const logId: string = log.trade_id;
-
-      acc[logId] = log;
-
-      return acc;
-    },
-    Object.create(null),
-  );
+  const tradeLogsMap = mapBy(tradeLogs, "trade_id");
 
   const statsRes = await getTradeStatsFromDB(user_id, tradeIds);
 
@@ -379,15 +357,7 @@ export const getTradesService = async ({
     throw new AppError("Error while getting stats", 500);
   }
 
-  type StatsMapObj = (typeof statsRes)[number];
-
-  const statsMap = statsRes.reduce<Record<string, StatsMapObj>>((acc, stat) => {
-    const tradeId: string = stat.trade_id;
-
-    acc[tradeId] = stat;
-
-    return acc;
-  }, Object.create(null));
+  const statsMap = mapBy(statsRes, "trade_id");
 
   const totalRes = await getTradesCountFromDB({ whereClause, values });
 
