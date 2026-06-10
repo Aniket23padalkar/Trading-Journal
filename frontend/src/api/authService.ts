@@ -1,42 +1,37 @@
 import type {
+  ApiResponse,
   RegisterUserParams,
-  RegisterUserResponse,
+  User,
+  UserSignInData,
 } from "../types/auth.types.js";
 
 const API = import.meta.env.VITE_API_URL;
 
-export async function registerUser(
-  data: RegisterUserParams,
-): Promise<RegisterUserResponse> {
+export async function registerUser(data: RegisterUserParams): Promise<User> {
   try {
     const res: Response = await fetch(`${API}/api/auth/register`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({
-        first_name: data.first_name,
-        last_name: data.last_name,
-        email: data.email,
-        password: data.password,
-      }),
+      body: JSON.stringify(data),
       credentials: "include",
     });
 
-    const result: RegisterUserResponse = await res.json();
+    const result: ApiResponse<User> = await res.json();
 
-    if (!res.ok) {
+    if (!result.success) {
       throw new Error(result.message);
     }
 
-    return result;
+    return result.data;
   } catch (err: unknown) {
     console.log(err);
     throw err;
   }
 }
 
-export async function loginUser(data) {
+export async function loginUser(data: UserSignInData): Promise<User> {
   try {
     const res = await fetch(`${API}/api/auth/login`, {
       method: "POST",
@@ -47,13 +42,13 @@ export async function loginUser(data) {
       credentials: "include",
     });
 
-    const result = await res.json();
+    const result: ApiResponse<User> = await res.json();
 
-    if (!res.ok) {
-      throw new Error(result.message);
+    if (!result.success) {
+      throw new Error(result?.message);
     }
 
-    return result;
+    return result.data;
   } catch (err) {
     console.log(err);
     throw err;

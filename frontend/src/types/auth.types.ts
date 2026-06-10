@@ -4,6 +4,7 @@ export interface User {
   last_name: string;
   email: string;
   role: string;
+  created_at: Date;
 }
 
 export interface AuthContextType {
@@ -26,6 +27,10 @@ export interface UserSignUpData {
 
 export type RegisterUserParams = Omit<UserSignUpData, "confirm_password">;
 
+export type ApiResponse<T> =
+  | { success: true; data: T; message?: string }
+  | { success: false; message: string };
+
 export interface RegisterUserResponse {
   success: boolean;
   message: string;
@@ -34,4 +39,9 @@ export interface RegisterUserResponse {
 export interface UserSignInData {
   email: string;
   password: string;
+}
+
+export interface SignInUserResponse {
+  success: boolean;
+  data: User;
 }

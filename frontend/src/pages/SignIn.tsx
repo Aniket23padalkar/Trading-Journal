@@ -9,7 +9,7 @@ import TradesImg from "../assets/Trades_V1.1.png";
 import { toast } from "react-toastify";
 import { loginUser } from "../api/authService.js";
 import { useAuthContext } from "../hooks/useAuthContext.js";
-import type { UserSignInData } from "../types/auth.types.js";
+import type { User, UserSignInData } from "../types/auth.types.js";
 import { getErrorMessage } from "../utils/error.handler.js";
 
 export default function SignIn() {
@@ -34,9 +34,9 @@ export default function SignIn() {
 
     try {
       setBtnLoading(true);
-      const res = await loginUser(userSignIn);
+      const res: User = await loginUser(userSignIn);
 
-      setUser(res.user);
+      setUser(res);
       setUserSignIn({
         email: "",
         password: "",

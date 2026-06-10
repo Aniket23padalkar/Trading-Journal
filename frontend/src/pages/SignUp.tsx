@@ -49,12 +49,12 @@ export default function SignUp() {
 
     try {
       setBtnLoading(true);
-      const result = await registerUser({
+      await registerUser({
         ...rest,
         password,
       });
 
-      toast.success(result.message);
+      toast.success("User registered successfully");
       resetSignUp();
       navigate("/signin");
     } catch (err: unknown) {
