@@ -1,5 +1,5 @@
+import type { ApiResponse } from "../types/api.response.js";
 import type {
-  ApiResponse,
   RegisterUserParams,
   User,
   UserSignInData,

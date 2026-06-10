@@ -17,10 +17,6 @@ export interface UserSignUpData {
 
 export type RegisterUserParams = Omit<UserSignUpData, "confirm_password">;
 
-export type ApiResponse<T> =
-  | { success: true; data: T; message: string }
-  | { success: false; message: string };
-
 export interface RegisterUserResponse {
   success: boolean;
   message: string;

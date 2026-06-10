@@ -14,22 +14,22 @@ interface HeaderProps {
   setIsAsideOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export default function Header({ isAsideOpen, setIsAsideOpen }: HeaderProps) {
+export default function Header({ setIsAsideOpen }: HeaderProps) {
   const { theme, setTheme } = useThemeContext();
   const { user } = useAuthContext();
-  const [logoutWindow, setLogoutWindow] = useState(false);
+  const [logoutWindow, setLogoutWindow] = useState<boolean>(false);
   const navigate = useNavigate();
 
-  function handleTheme() {
+  function handleTheme(): void {
     setTheme((prev) => (prev === "light" ? "dark" : "light"));
   }
 
-  async function handleLogout() {
+  async function handleLogout(): Promise<void> {
     try {
       await logoutUser();
       navigate("/signin");
     } catch (err) {
-      const message = getErrorMessage(err);
+      const message: string = getErrorMessage(err);
       console.log(message);
     }
   }
