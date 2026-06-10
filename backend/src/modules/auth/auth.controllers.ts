@@ -13,19 +13,25 @@ const cookieOptions: CookieOptions = {
 
 export const registerUser = async (
   req: Request<{}, {}, registerData>,
-  res: Response<{ success: boolean; message: string }>,
+  res: Response<{ success: boolean; data: SafeUser; message: string }>,
 ) => {
-  const data = await registerService(req.body);
-  return res.status(201).json({ success: true, message: data.message });
+  const result = await registerService(req.body);
+  return res.status(201).json({
+    success: true,
+    data: result,
+    message: "Registered userd successfully",
+  });
 };
 
 export const loginUser = async (
   req: Request<{}, {}, loginData>,
-  res: Response<{ success: boolean; data: SafeUser }>,
+  res: Response<{ success: boolean; data: SafeUser; message: string }>,
 ) => {
   const { token, user } = await loginService(req.body);
   res.cookie("token", token, cookieOptions);
-  return res.status(200).json({ success: true, data: user });
+  return res
+    .status(200)
+    .json({ success: true, data: user, message: "Logged in successfully" });
 };
 
 export const getUser = async (
@@ -40,7 +46,7 @@ export const getUser = async (
 
 export const logoutUser = async (
   req: Request,
-  res: Response<{ success: boolean; message: string }>,
+  res: Response<{ success: boolean; data: {}; message: string }>,
 ) => {
   res.clearCookie("token", {
     httpOnly: true,
@@ -49,5 +55,5 @@ export const logoutUser = async (
   });
   return res
     .status(200)
-    .json({ success: true, message: "Logged out successfully!" });
+    .json({ success: true, data: {}, message: "Logged out successfully!" });
 };

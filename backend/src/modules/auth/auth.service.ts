@@ -6,6 +6,7 @@ import type {
   LoginBodyData,
   RegisterBodyData,
   RegisterUserResponse,
+  SafeUser,
   SafeUserWithToken,
 } from "../../types/auth.types.js";
 import { AppError } from "../../utils/AppError.js";
@@ -26,7 +27,7 @@ const generateToken = (user_id: string) => {
 
 export const registerService = async (
   body: RegisterBodyData,
-): Promise<RegisterUserResponse> => {
+): Promise<SafeUser> => {
   const first_name = body.first_name.trim();
   const last_name = body.last_name.trim();
   const email = body.email.toLowerCase().trim();
@@ -41,20 +42,24 @@ export const registerService = async (
   const hashedPassword = await bcrypt.hash(password, 12);
 
   try {
-    await createUser({
+    const result = await createUser({
       first_name,
       last_name,
       email,
       password: hashedPassword,
     });
+
+    if (result === undefined) {
+      throw new AppError("Error while registering", 500);
+    }
+
+    return result;
   } catch (err: any) {
     if (err.code === "23505") {
       throw new AppError("User already exists", 409);
     }
     throw err;
   }
-
-  return { message: "User Created Successfully!" };
 };
 
 export const loginService = async (
