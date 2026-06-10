@@ -7,16 +7,6 @@ export interface User {
   created_at: Date;
 }
 
-export interface AuthContextType {
-  user: User | null;
-  setUser: React.Dispatch<React.SetStateAction<User | null>>;
-  authLoading: boolean;
-}
-
-export interface AuthProviderProps {
-  children: React.ReactNode;
-}
-
 export interface UserSignUpData {
   first_name: string;
   last_name: string;
@@ -28,7 +18,7 @@ export interface UserSignUpData {
 export type RegisterUserParams = Omit<UserSignUpData, "confirm_password">;
 
 export type ApiResponse<T> =
-  | { success: true; data: T; message?: string }
+  | { success: true; data: T; message: string }
   | { success: false; message: string };
 
 export interface RegisterUserResponse {

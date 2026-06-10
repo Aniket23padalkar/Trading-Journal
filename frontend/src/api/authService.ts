@@ -55,40 +55,40 @@ export async function loginUser(data: UserSignInData): Promise<User> {
   }
 }
 
-export async function getCurrentUser() {
+export async function getCurrentUser(): Promise<User> {
   try {
     const res = await fetch(`${API}/api/auth/me`, {
       method: "GET",
       credentials: "include",
     });
 
-    const result = await res.json();
+    const result: ApiResponse<User> = await res.json();
 
-    if (!res.ok) {
+    if (!result.success) {
       throw new Error(result.message);
     }
 
-    return result;
+    return result.data;
   } catch (err) {
     console.log(err);
     throw err;
   }
 }
 
-export async function logoutUser() {
+export async function logoutUser(): Promise<string> {
   try {
     const res = await fetch(`${API}/api/auth/logout`, {
       method: "POST",
       credentials: "include",
     });
 
-    const result = await res.json();
+    const result: ApiResponse<{}> = await res.json();
 
-    if (!res.ok) {
+    if (!result.success) {
       throw new Error(result.message);
     }
 
-    return result;
+    return result?.message;
   } catch (err) {
     throw err;
   }

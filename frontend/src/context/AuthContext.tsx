@@ -2,13 +2,13 @@ import { createContext, useEffect, useState } from "react";
 import { getCurrentUser } from "../api/authService.js";
 import type {
   AuthContextType,
-  AuthProviderProps,
-  User,
-} from "../types/auth.types.js";
+  ContextProviderProps,
+} from "../types/context.types.js";
+import type { User } from "../types/auth.types.js";
 
 export const AuthContext = createContext<AuthContextType | null>(null);
 
-export default function AuthProvider({ children }: AuthProviderProps) {
+export default function AuthProvider({ children }: ContextProviderProps) {
   const [user, setUser] = useState<User | null>(null);
   const [authLoading, setAuthLoading] = useState<boolean>(true);
 
