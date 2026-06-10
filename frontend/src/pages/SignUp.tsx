@@ -7,6 +7,7 @@ import TradesImg from "../assets/Trades_V1.1.png";
 import { toast } from "react-toastify";
 import { registerUser } from "../api/authService.js";
 import type { UserSignUpData } from "../types/auth.types.js";
+import { getErrorMessage } from "../utils/error.handler.js";
 
 export default function SignUp() {
   const [btnLoading, setBtnLoading] = useState<boolean>(false);
@@ -53,14 +54,12 @@ export default function SignUp() {
         password,
       });
 
-      toast.success("Account Created Successfully!");
+      toast.success("User registered successfully");
       resetSignUp();
       navigate("/signin");
     } catch (err: unknown) {
-      console.log(err);
-      if (err instanceof Error) {
-        toast.error(err.message);
-      }
+      const message = getErrorMessage(err);
+      console.log(message);
     } finally {
       setBtnLoading(false);
     }

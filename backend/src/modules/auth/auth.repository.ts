@@ -1,5 +1,9 @@
 import pool from "../../config/db.js";
-import type { RegisterBodyData, User } from "../../types/auth.types.js";
+import type {
+  RegisterBodyData,
+  SafeUser,
+  User,
+} from "../../types/auth.types.js";
 
 export const getUserFromDB = async (email: string): Promise<User | null> => {
   const query = `
@@ -25,13 +29,27 @@ export const createUser = async ({
   last_name,
   email,
   password,
-}: RegisterBodyData): Promise<void> => {
+}: RegisterBodyData): Promise<SafeUser | undefined> => {
   const query = `
       INSERT INTO users
         (first_name, last_name, email, password_hash)
       VALUES
         ($1,$2,$3,$4)
+      RETURNING
+        user_id,
+        first_name,
+        last_name,
+        email,
+        role,
+        created_at
     `;
 
-  await pool.query(query, [first_name, last_name, email, password]);
+  const result = await pool.query<SafeUser>(query, [
+    first_name,
+    last_name,
+    email,
+    password,
+  ]);
+
+  return result.rows[0] || undefined;
 };
