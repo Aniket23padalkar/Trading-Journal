@@ -9,12 +9,14 @@ import TradesImg from "../assets/Trades_V1.1.png";
 import { toast } from "react-toastify";
 import { loginUser } from "../api/authService.js";
 import { useAuthContext } from "../hooks/useAuthContext.js";
+import type { UserSignInData } from "../types/auth.types.js";
+import { getErrorMessage } from "../utils/error.handler.js";
 
 export default function SignIn() {
   const { setUser } = useAuthContext();
-  const [btnLoading, setBtnLoading] = useState(false);
-  const [userSignIn, setUserSignIn] = useState({
-    email_id: "",
+  const [btnLoading, setBtnLoading] = useState<boolean>(false);
+  const [userSignIn, setUserSignIn] = useState<UserSignInData>({
+    email: "",
     password: "",
   });
   const navigate = useNavigate();
@@ -36,13 +38,13 @@ export default function SignIn() {
 
       setUser(res.user);
       setUserSignIn({
-        email_id: "",
+        email: "",
         password: "",
       });
       navigate("/dashboard");
     } catch (err) {
-      console.log(err);
-      toast.error(err.message);
+      const message = getErrorMessage(err);
+      console.log(message);
     } finally {
       setBtnLoading(false);
     }
@@ -82,9 +84,9 @@ export default function SignIn() {
           <input
             className="px-4 w-full py-1.5 border rounded border-gray-400 outline-none focus:border-teal-400"
             type="email"
-            name="email_id"
+            name="email"
             required
-            value={userSignIn.email_id}
+            value={userSignIn.email}
             placeholder="Email..."
             onChange={handleChange}
           />
