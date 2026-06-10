@@ -3,28 +3,34 @@ import logo from "../../assets/TradeLens-Logo2.png";
 import logoDark from "../../assets/TradeLens-Dark.png";
 import { FaBars } from "react-icons/fa6";
 import { BiMoon, BiSun } from "react-icons/bi";
-import { useContext, useState } from "react";
-import { AuthContext } from "../../context/AuthContext";
-import { logoutUser } from "../../api/authService";
-import { TradeContext } from "../../context/TradesContext";
+import { useState } from "react";
+import { logoutUser } from "../../api/authService.js";
+import { useThemeContext } from "../../hooks/useThemeContext.js";
+import { useAuthContext } from "../../hooks/useAuthContext.js";
+import { getErrorMessage } from "../../utils/error.handler.js";
 
-export default function Header({ isAsideOpen, setIsAsideOpen }) {
-  const { theme, setTheme } = useContext(TradeContext);
-  const { user } = useContext(AuthContext);
-  const [logoutWindow, setLogoutWindow] = useState(false);
+interface HeaderProps {
+  isAsideOpen: boolean;
+  setIsAsideOpen: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+export default function Header({ setIsAsideOpen }: HeaderProps) {
+  const { theme, setTheme } = useThemeContext();
+  const { user } = useAuthContext();
+  const [logoutWindow, setLogoutWindow] = useState<boolean>(false);
   const navigate = useNavigate();
 
-  function handleTheme() {
+  function handleTheme(): void {
     setTheme((prev) => (prev === "light" ? "dark" : "light"));
   }
 
-  async function handleLogout() {
+  async function handleLogout(): Promise<void> {
     try {
       await logoutUser();
       navigate("/signin");
     } catch (err) {
-      console.log(err);
-      alert(err.message);
+      const message: string = getErrorMessage(err);
+      console.log(message);
     }
   }
 
@@ -32,7 +38,7 @@ export default function Header({ isAsideOpen, setIsAsideOpen }) {
     <header className="col-start-1 col-end-3 flex h-16 w-full justify-between items-center bg-white dark:bg-gray-950 grow pr-10  px-4 py-3">
       <div className="h-16 flex items-center">
         <div
-          onClick={() => setIsAsideOpen(!isAsideOpen)}
+          onClick={() => setIsAsideOpen((prev) => !prev)}
           className="text-xl cursor-pointer dark:text-white lg:hidden"
         >
           <FaBars />
@@ -63,13 +69,13 @@ export default function Header({ isAsideOpen, setIsAsideOpen }) {
             onClick={() => setLogoutWindow(!logoutWindow)}
             className="flex items-center justify-center  cursor-pointer text-lg font-medium capitalize dark:text-white rounded"
           >
-            {`Hi, ${user.firstname}` || "A"}
+            {`Hi, ${user?.first_name}` || "A"}
           </div>
           {logoutWindow && (
             <div className="flex flex-col items-center justify-between absolute z-10 bg-white -bottom-22 p-2 -left-50  min-w-70 rounded-lg shadow shadow-gray-500">
               <span className="flex text-md w-full pl-2 gap-1">
                 <p className="text-gray-500 text-nowrap">Email Id : </p>{" "}
-                <h1 className="text-blue-500 text-wrap"> {user.email_id}</h1>
+                <h1 className="text-blue-500 text-wrap"> {user?.email}</h1>
               </span>
               <button
                 onClick={handleLogout}

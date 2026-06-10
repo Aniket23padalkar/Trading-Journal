@@ -4,13 +4,16 @@ import App from "./App";
 import { BrowserRouter } from "react-router-dom";
 import AuthProvider from "./context/AuthContext";
 import TradeProvider from "./context/TradesContext";
+import ThemeProvider from "./context/ThemeContext";
 
 createRoot(document.getElementById("root")).render(
   <BrowserRouter>
-    <AuthProvider>
-      <TradeProvider>
-        <App />
-      </TradeProvider>
-    </AuthProvider>
+    <ThemeProvider>
+      <AuthProvider>
+        <TradeProvider>
+          <App />
+        </TradeProvider>
+      </AuthProvider>
+    </ThemeProvider>
   </BrowserRouter>,
 );
