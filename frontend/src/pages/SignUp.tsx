@@ -48,12 +48,12 @@ export default function SignUp() {
 
     try {
       setBtnLoading(true);
-      await registerUser({
+      const result = await registerUser({
         ...rest,
         password,
       });
 
-      toast.success("Account Created Successfully!");
+      toast.success(result.message);
       resetSignUp();
       navigate("/signin");
     } catch (err: unknown) {

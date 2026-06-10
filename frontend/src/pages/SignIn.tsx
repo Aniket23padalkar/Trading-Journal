@@ -7,11 +7,11 @@ import DashboardImg from "../assets/Dashboard_V1.1.png";
 import TradesImg from "../assets/Trades_V1.1.png";
 
 import { toast } from "react-toastify";
-import { loginUser } from "../api/authService";
-import { AuthContext } from "../context/AuthContext";
+import { loginUser } from "../api/authService.js";
+import { useAuthContext } from "../hooks/useAuthContext.js";
 
 export default function SignIn() {
-  const { setUser } = useContext(AuthContext);
+  const { setUser } = useAuthContext();
   const [btnLoading, setBtnLoading] = useState(false);
   const [userSignIn, setUserSignIn] = useState({
     email_id: "",
@@ -19,7 +19,7 @@ export default function SignIn() {
   });
   const navigate = useNavigate();
 
-  function handleChange(e) {
+  function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     const { name, value } = e.target;
     setUserSignIn((prev) => ({
       ...prev,
@@ -27,7 +27,7 @@ export default function SignIn() {
     }));
   }
 
-  async function handleSubmit(e) {
+  async function handleSubmit(e: React.ChangeEvent<HTMLFormElement>) {
     e.preventDefault();
 
     try {

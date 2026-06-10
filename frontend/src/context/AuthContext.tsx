@@ -1,11 +1,16 @@
 import { createContext, useEffect, useState } from "react";
-import { getCurrentUser } from "../api/authService";
+import { getCurrentUser } from "../api/authService.js";
+import type {
+  AuthContextType,
+  AuthProviderProps,
+  User,
+} from "../types/auth.types.js";
 
-export const AuthContext = createContext(null);
+export const AuthContext = createContext<AuthContextType | null>(null);
 
-export default function AuthProvider({ children }) {
-  const [user, setUser] = useState(null);
-  const [authLoading, setAuthLoading] = useState(true);
+export default function AuthProvider({ children }: AuthProviderProps) {
+  const [user, setUser] = useState<User | null>(null);
+  const [authLoading, setAuthLoading] = useState<boolean>(true);
 
   useEffect(() => {
     async function fetchUser() {
