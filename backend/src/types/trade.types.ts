@@ -137,6 +137,7 @@ export interface GetTradeStatsQueryResult {
   total_buy_qty: number;
   total_sell_qty: number;
   pnl: number;
+  total_qty: number;
   rr_ratio: number;
 }
 
@@ -187,5 +188,6 @@ export interface GetCompleteTradeQueryResult {
   total_buy_qty: number;
   total_sell_qty: number;
   pnl: number;
+  total_qty: number;
   rr_ratio: number;
 }

@@ -1,37 +1,40 @@
 import { useContext, useEffect, useState } from "react";
-import useDrag from "../hooks/useDrag";
+import useDrag from "../hooks/useDrag.jsx";
 import { FaExclamation } from "react-icons/fa6";
-import ExecutionRow from "./ExecutionRow";
-import QtyRow from "./QtyRow";
+import ExecutionRow from "./ExecutionRow.jsx";
+import QtyRow from "./QtyRow.jsx";
 import { insertTrade, updateTrade } from "../services/tradesService";
 import { toast } from "react-toastify";
-import { TradeContext } from "../context/TradesContext";
-import { ClipLoader, MoonLoader } from "react-spinners";
+import { ClipLoader } from "react-spinners";
+import { useTradesContext } from "../hooks/useTradesContext.js";
+import { getErrorMessage } from "../utils/error.handler.js";
+import type { ExecutionsType, FormDataType } from "../types/trades.types.js";
 
 export default function AddModal({ editTrade, setEditTrade, setAddModal }) {
   const { modalRef, handleMouseDown } = useDrag();
-  const [loading, setLoading] = useState(false);
-  const [formData, setFormData] = useState({
+  const [loading, setLoading] = useState<boolean>(false);
+  const [formData, setFormData] = useState<FormDataType>({
     symbol: "",
-    order_type_type: "",
-    status: "",
-    market_type: "",
-    position: "",
-    rating: "",
+    order_status: null,
+    market_type: null,
+    risk: null,
+    position: null,
+    direction: "",
+    trade_rating: null,
     description: "",
+    entry_time: null,
+    exit_time: null,
   });
-  const [execution, setExecution] = useState([
+  const [executions, setExecutions] = useState<ExecutionsType[]>([
     {
-      buy_price: "",
-      sell_price: "",
-      quantity: "",
-      risk: "",
-      entry_time: "",
-      exit_time: "",
+      order_type: null,
+      price: null,
+      quantity: null,
+      executed_at: null,
     },
   ]);
   const [executionModal, setExecutionModal] = useState(false);
-  const { fetchTrades } = useContext(TradeContext);
+  const { fetchTrades } = useTradesContext();
 
   function handleChange(e) {
     const { name, value } = e.target;
@@ -42,21 +45,19 @@ export default function AddModal({ editTrade, setEditTrade, setAddModal }) {
   }
 
   function handleExecutionEntries(index, field, value) {
-    setExecution((prev) =>
+    setExecutions((prev) =>
       prev.map((exe, i) => (i === index ? { ...exe, [field]: value } : exe)),
     );
   }
 
   function handleExecutionQtyModal() {
-    setExecution((prev) => [
+    setExecutions((prev) => [
       ...prev,
       {
-        buy_price: "",
-        sell_price: "",
-        quantity: "",
-        risk: "",
-        entry_time: "",
-        exit_time: "",
+        order_type: null,
+        price: null,
+        quantity: null,
+        executed_at: null,
       },
     ]);
   }
@@ -64,27 +65,28 @@ export default function AddModal({ editTrade, setEditTrade, setAddModal }) {
   function resetForm() {
     setFormData({
       symbol: "",
-      order_type: "",
-      status: "",
-      market_type: "",
-      position: "",
-      rating: "",
+      order_status: null,
+      market_type: null,
+      risk: null,
+      position: null,
+      direction: "",
+      trade_rating: null,
       description: "",
+      entry_time: null,
+      exit_time: null,
     });
 
-    setExecution([
+    setExecutions([
       {
-        buy_price: "",
-        sell_price: "",
-        quantity: "",
-        risk: "",
-        entry_time: "",
-        exit_time: "",
+        order_type: null,
+        price: null,
+        quantity: null,
+        executed_at: null,
       },
     ]);
   }
 
-  async function handleSubmit(e) {
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setLoading(true);
     if (editTrade) {
@@ -92,7 +94,7 @@ export default function AddModal({ editTrade, setEditTrade, setAddModal }) {
         const res = await updateTrade(
           editTrade.trade.trade_id,
           formData,
-          execution,
+          executions,
         );
 
         await fetchTrades();
@@ -102,13 +104,14 @@ export default function AddModal({ editTrade, setEditTrade, setAddModal }) {
         setAddModal(false);
         setExecutionModal(false);
         toast.success("Trade Updated Successfully!");
-      } catch (err) {
-        console.log(err.message);
-        toast.error(err.message);
+      } catch (err: unknown) {
+        const message = getErrorMessage(err);
+        toast.error(message);
+        console.log(err);
       }
     } else {
       try {
-        const res = await insertTrade(formData, execution);
+        const res = await insertTrade(formData, executions);
 
         await fetchTrades();
 
@@ -118,9 +121,10 @@ export default function AddModal({ editTrade, setEditTrade, setAddModal }) {
         setExecutionModal(false);
         setEditTrade(null);
         toast.success("Trade Added Successfullly");
-      } catch (err) {
-        console.log(err.message);
-        toast.error(err.message);
+      } catch (err: unknown) {
+        const message = getErrorMessage(err);
+        toast.error(message);
+        console.log(err);
         setLoading(false);
       }
     }
@@ -133,8 +137,8 @@ export default function AddModal({ editTrade, setEditTrade, setAddModal }) {
     setExecutionModal(false);
   }
 
-  function onDelete(index) {
-    setExecution((prev) => prev.filter((_, i) => i !== index));
+  function onDelete(index: number) {
+    setExecutions((prev) => prev.filter((_, i) => i !== index));
   }
 
   console.log(editTrade);
@@ -151,7 +155,7 @@ export default function AddModal({ editTrade, setEditTrade, setAddModal }) {
         description: editTrade.trade.description || "",
       });
 
-      setExecution(
+      setExecutions(
         editTrade.executions?.length > 0
           ? editTrade.executions
           : [
@@ -280,8 +284,8 @@ export default function AddModal({ editTrade, setEditTrade, setAddModal }) {
               Add Qty
             </button>
           </div>
-          {execution.length > 0 &&
-            execution.map((exe, i) => {
+          {executions.length > 0 &&
+            executions.map((exe, i) => {
               return (
                 i === 0 && (
                   <ExecutionRow
@@ -307,8 +311,8 @@ export default function AddModal({ editTrade, setEditTrade, setAddModal }) {
                 </button>
               </div>
               <div className="flex-1 relative w-full p-2 overflow-y-auto">
-                {execution.length > 1 &&
-                  execution.map((exe, i) => {
+                {executions.length > 1 &&
+                  executions.map((exe, i) => {
                     if (i === 0) return null;
                     return (
                       <QtyRow
@@ -322,7 +326,7 @@ export default function AddModal({ editTrade, setEditTrade, setAddModal }) {
                       />
                     );
                   })}
-                {execution.length === 1 && (
+                {executions.length === 1 && (
                   <div className="flex items-center absolute justify-center h-full w-full left-0 top-0 text-xl text-blue-500 text-shadow-lg">
                     <h1>No added Qty!</h1>
                   </div>

@@ -70,3 +70,30 @@ export interface FilterValues {
   pnlSort: string;
   dateTimeSort: string;
 }
+
+export interface FormDataType {
+  symbol: string;
+  market_type: "equity" | "options" | "futures" | null;
+  order_status: "open" | "closed" | null;
+  position:
+    | "intraday"
+    | "btst"
+    | "stbt"
+    | "swing"
+    | "positional"
+    | "longterm"
+    | null;
+  risk: number | null;
+  direction: string;
+  trade_rating: "worst" | "poor" | "average" | "good" | "best" | null;
+  description: string;
+  entry_time: Date | null;
+  exit_time?: Date | null;
+}
+
+export interface ExecutionsType {
+  order_type: "buy" | "sell" | null;
+  price: number | null;
+  quantity: number | null;
+  executed_at: Date | null;
+}
