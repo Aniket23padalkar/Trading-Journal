@@ -9,6 +9,7 @@ import type {
   Pagination,
   TradesData,
 } from "../types/trades.types.js";
+import { cleanParams } from "../utils/cleanParams.js";
 
 export const TradeContext = createContext<TradesContextType | null>(null);
 
@@ -30,15 +31,16 @@ export default function TradeProvider({ children }: ContextProviderProps) {
     dateTimeSort: "",
   });
 
-  const params = {
+  const params = cleanParams({
     currentPage,
     limit: 9,
     ...filterValues,
-  };
+  });
 
   async function fetchTrades() {
     try {
       const data = await getTradesData(params);
+      console.log(data);
 
       setTrades(data?.trades_data);
 

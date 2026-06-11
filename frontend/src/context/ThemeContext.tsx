@@ -7,7 +7,7 @@ import type {
 
 export const ThemeContext = createContext<ThemeContextType | null>(null);
 
-export function ThemeProvider({ children }: ContextProviderProps) {
+export default function ThemeProvider({ children }: ContextProviderProps) {
   const [theme, setTheme] = useState<Theme>(() => {
     const stored = localStorage.getItem("theme");
     return stored === "dark" ? "dark" : "light";

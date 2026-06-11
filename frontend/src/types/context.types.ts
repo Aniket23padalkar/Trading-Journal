@@ -1,10 +1,5 @@
 import type { User } from "./auth.types.js";
-import type {
-  Data,
-  FilterValues,
-  Pagination,
-  TradesData,
-} from "./trades.types.js";
+import type { FilterValues, Pagination, TradesData } from "./trades.types.js";
 
 export interface ContextProviderProps {
   children: React.ReactNode;
