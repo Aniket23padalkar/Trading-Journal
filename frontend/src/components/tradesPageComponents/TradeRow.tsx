@@ -1,21 +1,31 @@
 import React, { useCallback, useContext } from "react";
 import { FaEdit, FaTrash } from "react-icons/fa";
-import formatDateTime from "../../utils/formatDateTime";
-import { TradeContext } from "../../context/TradesContext";
+import formatDateTime from "../../utils/formatDateTime.jsx";
+import type { TradesData } from "../../types/trades.types.js";
+import { useTradesContext } from "../../hooks/useTradesContext.js";
+
+interface TradeRowParams {
+  trade: TradesData;
+  index: number;
+  handleSetEditTrade: (trade: TradesData) => void;
+  handleDeleteTrade: (trade_id: string) => void;
+  setCurrentViewTrade: React.Dispatch<React.SetStateAction<TradesData>>;
+  handleSetViewModal: React.Dispatch<React.SetStateAction<boolean>>;
+}
 
 function TradeRow({
-  t,
+  trade,
   index,
   handleSetEditTrade,
   handleDeleteTrade,
   setCurrentViewTrade,
   handleSetViewModal,
-}) {
-  const { pagination } = useContext(TradeContext);
+}: TradeRowParams) {
+  const { pagination } = useTradesContext();
   const handleViewModal = useCallback(() => {
-    setCurrentViewTrade(t);
+    setCurrentViewTrade(trade);
     handleSetViewModal((prev) => !prev);
-  }, [[t, setCurrentViewTrade, handleSetViewModal]]);
+  }, [[trade, setCurrentViewTrade, handleSetViewModal]]);
 
   const startIndex = (pagination.page - 1) * pagination.limit;
   return (

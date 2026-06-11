@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import { FaArrowDown, FaArrowUp } from "react-icons/fa6";
 import { ScaleLoader } from "react-spinners";
 import Swal from "sweetalert2";
-import TradeRow from "./TradeRow.jsx";
+import TradeRow from "./TradeRow.js";
 import { deleteTrade } from "../../services/tradesService.js";
 import { useTradesContext } from "../../hooks/useTradesContext.js";
 import { getErrorMessage } from "../../utils/error.handler.js";
@@ -136,7 +136,7 @@ function TradesTable({
               trades?.map((trade, index) => (
                 <TradeRow
                   key={trade.trade.trade_id}
-                  t={trade}
+                  trade={trade}
                   index={index}
                   handleSetEditTrade={handleSetEditTrade}
                   setCurrentViewTrade={setCurrentViewTrade}
