@@ -15,8 +15,13 @@ export const TradeContext = createContext<TradesContextType | null>(null);
 
 export default function TradeProvider({ children }: ContextProviderProps) {
   const [fetchLoading, setFetchLoading] = useState<boolean>(true);
-  const [trades, setTrades] = useState<TradesData[] | []>([]);
-  const [pagination, setPagination] = useState<Pagination | {}>({});
+  const [trades, setTrades] = useState<TradesData[]>([]);
+  const [pagination, setPagination] = useState<Pagination>({
+    page: 1,
+    limit: 9,
+    total: 0,
+    totalPages: 1,
+  });
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [filterValues, setFilterValues] = useState<FilterValues>({
     order_type: "",
@@ -32,15 +37,16 @@ export default function TradeProvider({ children }: ContextProviderProps) {
   });
 
   const params = cleanParams({
-    currentPage,
+    page: currentPage,
     limit: 9,
     ...filterValues,
   });
 
+  console.log(trades);
+
   async function fetchTrades() {
     try {
       const data = await getTradesData(params);
-      console.log(data);
 
       setTrades(data?.trades_data);
 

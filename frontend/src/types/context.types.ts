@@ -21,8 +21,8 @@ export interface ThemeContextType {
 export interface TradesContextType {
   trades: TradesData[];
   setTrades: React.Dispatch<React.SetStateAction<[] | TradesData[]>>;
-  pagination: Pagination | {};
-  setPagination: React.Dispatch<React.SetStateAction<{} | Pagination>>;
+  pagination: Pagination;
+  setPagination: React.Dispatch<React.SetStateAction<Pagination>>;
   currentPage: number;
   setCurrentPage: React.Dispatch<React.SetStateAction<number>>;
   filterValues: FilterValues;
