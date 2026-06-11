@@ -36,6 +36,7 @@ export interface Stats {
   total_buy_qty: number;
   total_sell_qty: number;
   pnl: number;
+  total_qty: number;
   rr_ratio: number;
 }
 

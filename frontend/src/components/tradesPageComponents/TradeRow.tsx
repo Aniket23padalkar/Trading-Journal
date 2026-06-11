@@ -1,6 +1,6 @@
 import React, { useCallback, useContext } from "react";
 import { FaEdit, FaTrash } from "react-icons/fa";
-import formatDateTime from "../../utils/formatDateTime.jsx";
+import formatDateTime from "../../utils/formatDateTime.js";
 import type { TradesData } from "../../types/trades.types.js";
 import { useTradesContext } from "../../hooks/useTradesContext.js";
 
@@ -27,66 +27,70 @@ function TradeRow({
     handleSetViewModal((prev) => !prev);
   }, [[trade, setCurrentViewTrade, handleSetViewModal]]);
 
+  console.log(pagination);
+
   const startIndex = (pagination.page - 1) * pagination.limit;
   return (
     <tr onClick={handleViewModal}>
       <td className="bg-gray-200 dark:bg-gray-900">{startIndex + index + 1}</td>
       <td className="text-left whitespace-nowrap w-30 font-medium text-base capitalize px-1 bg-gray-100 dark:bg-gray-800">
-        {t.trade.symbol}
+        {trade.trade.symbol}
       </td>
       <td>
         <p
           className={`text-xs px-1 border rounded font-medium ${
-            t.trade.order_type === "BUY"
+            trade.trade.direction === "long"
               ? "text-[#03c988] border-[#03c988]"
-              : t.trade.order_type === "SELL"
+              : trade.trade.direction === "short"
                 ? "text-[#ff7779ff] border-[#ff7779ff] "
                 : "text-white"
           }`}
         >
-          {t.trade.order_type}
+          {trade.trade.direction}
         </p>
       </td>
-      <td className="text-xs dark:text-gray-300">{t.trade.status}</td>
-      <td className="dark:text-gray-300">{t.trade.market_type}</td>
-      <td>{t.stats.total_qty}</td>
+      <td className="text-xs dark:text-gray-300">{trade.trade.order_status}</td>
+      <td className="dark:text-gray-300">{trade.trade.market_type}</td>
+      <td>{trade.stats.total_qty}</td>
 
       <td>
         <p className="text-xs bg-blue-100 dark:text-black dark:bg-blue-400 rounded">
-          {t.trade.position}
+          {trade.trade.position}
         </p>
       </td>
       <td className="text-xs text-blue-700 dark:text-sky-500 whitespace-nowrap">
-        {formatDateTime(t.executions[0].entry_time)}
+        {formatDateTime(trade.trade.entry_time)}
       </td>
-      <td>{t.stats.avg_risk}</td>
+      <td>{trade.trade.risk}</td>
       <td
         className={`text-sm font-bold ${
-          t.stats.pnl >= 0
+          trade.stats.pnl >= 0
             ? "text-green-600 dark:text-green-500"
             : "text-red-500 dark:text-red-400"
         }`}
       >
         {" "}
-        {t.stats.pnl > 0 && "+"}
-        {t.trade.status === "Open"
+        {trade.stats.pnl > 0 && "+"}
+        {trade.trade.order_status === "open"
           ? "-"
-          : Number(t.stats.pnl).toLocaleString("en-IN", {
+          : Number(trade.stats.pnl).toLocaleString("en-IN", {
               minimumFractionDigits: 2,
               maximumFractionDigits: 2,
             })}
-        {t.trade.status === "Open" ? "-" : "/-"}
+        {trade.trade.order_status === "open" ? "-" : "/-"}
       </td>
       <td style={{ fontWeight: 600 }}>
-        {t.trade.status === "Open" ? "-" : Number(t.stats.avg_rr).toFixed(1)}
-        {t.trade.status === "Open" ? "-" : "X"}
+        {trade.trade.order_status === "open"
+          ? "-"
+          : Number(trade.stats.rr_ratio).toFixed(1)}
+        {trade.trade.order_status === "open" ? "-" : "X"}
       </td>
-      <td>{t.trade.rating}</td>
+      <td>{trade.trade.trade_rating}</td>
       <td>
         <button
           onClick={(e) => {
             e.stopPropagation();
-            handleSetEditTrade(t);
+            handleSetEditTrade(trade);
           }}
           className="cursor-pointer bg-transparent"
         >
@@ -95,7 +99,7 @@ function TradeRow({
         <button
           onClick={(e) => {
             e.stopPropagation();
-            handleDeleteTrade(t.trade.trade_id);
+            handleDeleteTrade(trade.trade.trade_id);
           }}
           className="cursor-pointer bg-transparent xl:pl-2"
         >

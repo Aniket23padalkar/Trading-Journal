@@ -9,9 +9,9 @@ import { getErrorMessage } from "../../utils/error.handler.js";
 import type { TradesData } from "../../types/trades.types.js";
 
 interface TradesTableParams {
-  handleSetViewModal: (val: boolean) => void;
+  handleSetViewModal: React.Dispatch<React.SetStateAction<boolean>>;
   handleSetEditTrade: (trade: TradesData) => void;
-  setCurrentViewTrade: React.Dispatch<React.SetStateAction<null>>;
+  setCurrentViewTrade: React.Dispatch<React.SetStateAction<TradesData>>;
 }
 
 function TradesTable({

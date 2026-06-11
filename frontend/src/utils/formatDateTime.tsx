@@ -1,4 +1,4 @@
-export default function formatDateTime(dt) {
+export default function formatDateTime(dt: Date) {
   if (!dt) return "--";
 
   return new Date(dt).toLocaleString("en-IN", {
