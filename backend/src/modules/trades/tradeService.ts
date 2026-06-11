@@ -278,6 +278,7 @@ export const updateTradeService = async ({
         total_buy_qty: updatedTrade_raw.total_buy_qty,
         total_sell_qty: updatedTrade_raw.total_sell_qty,
         pnl: updatedTrade_raw.pnl,
+        total_qty: updatedTrade_raw.total_qty,
         rr_ratio: updatedTrade_raw.rr_ratio,
       },
     };
@@ -370,23 +371,40 @@ export const getTradesService = async ({
   const totalPages: number = Math.ceil(total / limit);
 
   const trades_data: TradesDataType[] = tradesRes.map((trade) => {
-    const executions = logsMap[trade.trade_id] || [];
+    const executions_raw = logsMap[trade.trade_id] || [];
     const trade_logs_raw = tradeLogsMap[trade.trade_id] || null;
     const stats_raw = statsMap[trade.trade_id] || null;
 
+    const executions = executions_raw.map((item) => {
+      return {
+        execution_id: item.execution_id,
+        order_type: item.order_type,
+        price: Number(item.price),
+        quantity: Number(item.quantity),
+        executed_at: new Date(item.executed_at),
+        created_at: new Date(item.created_at),
+        updated_at: new Date(item.updated_at),
+      };
+    });
+
     const trade_logs = trade_logs_raw
-      ? (function ({ trade_id, user_id, ...rest }) {
-          return rest;
-        })(trade_logs_raw)
-      : null; //IIFE Immediate Invoke Function//
+      ? {
+          trade_logs_id: trade_logs_raw?.trade_logs_id,
+          description: trade_logs_raw?.description,
+          created_at: new Date(trade_logs_raw.created_at),
+          updated_at: new Date(trade_logs_raw.updated_at),
+        }
+      : null;
 
-    // const trade_logs = trade_logs_raw
-    //   ? (({ trade_id, user_id, ...rest }) => rest)(trade_logs_raw)
-    //   : null;
-
-    const stats = stats_raw
-      ? (({ trade_id, ...rest }) => rest)(stats_raw)
-      : null; // This is mordern IIFE with arrow fucntion
+    const stats = {
+      avg_buy_price: Number(stats_raw?.avg_buy_price),
+      avg_sell_price: Number(stats_raw?.avg_sell_price),
+      total_buy_qty: Number(stats_raw?.total_buy_qty),
+      total_sell_qty: Number(stats_raw?.total_sell_qty),
+      total_qty: Number(stats_raw?.total_qty),
+      pnl: Number(stats_raw?.pnl),
+      rr_ratio: Number(stats_raw?.rr_ratio),
+    };
 
     return {
       trade: {
@@ -396,14 +414,14 @@ export const getTradesService = async ({
         market_type: trade.market_type,
         position: trade.position,
         direction: trade.direction,
-        risk: trade.risk,
+        risk: Number(trade.risk),
         trade_rating: trade.trade_rating,
-        entry_time: trade.entry_time,
-        exit_time: trade.exit_time,
-        created_at: trade.created_at,
-        updated_at: trade.updated_at,
+        entry_time: new Date(trade.entry_time),
+        exit_time: new Date(trade.exit_time),
+        created_at: new Date(trade.created_at),
+        updated_at: new Date(trade.updated_at),
       },
-      executions: executions.map(({ trade_id, ...rest }) => rest),
+      executions,
       trade_logs,
       stats,
     };
