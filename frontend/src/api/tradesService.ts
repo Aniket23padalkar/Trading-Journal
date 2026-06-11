@@ -1,3 +1,6 @@
+import type { ApiResponse } from "../types/api.response.js";
+import type { Data } from "../types/trades.types.js";
+
 const API = import.meta.env.VITE_API_URL;
 
 export async function insertTrade(formData, execution) {
@@ -24,7 +27,9 @@ export async function insertTrade(formData, execution) {
   }
 }
 
-export async function getTradesData(params) {
+export async function getTradesData(
+  params: Record<string, any>,
+): Promise<Data> {
   const query = new URLSearchParams(params).toString();
 
   try {
@@ -33,13 +38,13 @@ export async function getTradesData(params) {
       credentials: "include",
     });
 
-    const data = await res.json();
+    const result: ApiResponse<Data> = await res.json();
 
-    if (!res.ok) {
-      throw new Error(data.message);
+    if (!result.success) {
+      throw new Error(result.message);
     }
 
-    return data;
+    return result.data;
   } catch (err) {
     console.log(err);
     throw err;
