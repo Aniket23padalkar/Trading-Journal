@@ -2,45 +2,53 @@ import React, { useContext } from "react";
 import { FaArrowDown, FaArrowUp } from "react-icons/fa6";
 import { ScaleLoader } from "react-spinners";
 import Swal from "sweetalert2";
-import TradeRow from "./TradeRow";
+import TradeRow from "./TradeRow.jsx";
 import { deleteTrade } from "../../services/tradesService.js";
-import { TradeContext } from "../../context/TradesContext";
+import { useTradesContext } from "../../hooks/useTradesContext.js";
+import { getErrorMessage } from "../../utils/error.handler.js";
+import type { TradesData } from "../../types/trades.types.js";
+
+interface TradesTableParams {
+  handleSetViewModal: (val: boolean) => void;
+  handleSetEditTrade: (trade: TradesData) => void;
+  setCurrentViewTrade: React.Dispatch<React.SetStateAction<null>>;
+}
 
 function TradesTable({
   handleSetViewModal,
   handleSetEditTrade,
   setCurrentViewTrade,
-}) {
-  const { trades, setTrades, setFilterValue, filterValue, fetchLoading } =
-    useContext(TradeContext);
+}: TradesTableParams) {
+  const { trades, setTrades, setFilterValues, filterValues, fetchLoading } =
+    useTradesContext();
 
-  function handleFilterChange() {
-    setFilterValue((prev) => ({
+  function handleFilterChange(): void {
+    setFilterValues((prev) => ({
       ...prev,
       pnlSort:
-        prev.pnlSort === "DESC"
-          ? "ASC"
-          : prev.pnlSort === "ASC"
-            ? "DESC"
-            : "DESC",
+        prev.pnlSort === "desc"
+          ? "asc"
+          : prev.pnlSort === "asc"
+            ? "desc"
+            : "desc",
       dateTimeSort: "",
     }));
   }
 
-  function handleDateTimeSort() {
-    setFilterValue((prev) => ({
+  function handleDateTimeSort(): void {
+    setFilterValues((prev) => ({
       ...prev,
       dateTimeSort:
-        prev.dateTimeSort === "DESC"
-          ? "ASC"
-          : prev.dateTimeSort === "ASC"
-            ? "DESC"
-            : "DESC",
+        prev.dateTimeSort === "desc"
+          ? "asc"
+          : prev.dateTimeSort === "asc"
+            ? "desc"
+            : "desc",
       pnlSort: "",
     }));
   }
 
-  async function handleDeleteTrade(id) {
+  async function handleDeleteTrade(trade_id: string): Promise<void> {
     const result = await Swal.fire({
       title: "Are you sure?",
       text: "You won't be able to revert this!",
@@ -52,21 +60,21 @@ function TradesTable({
     });
     if (result.isConfirmed) {
       try {
-        const deleted = await deleteTrade(id);
+        const deleted = await deleteTrade(trade_id);
         console.log(deleted);
 
-        setTrades((prev) => prev.filter((t) => t.trade.trade_id !== id));
+        setTrades((prev) => prev.filter((t) => t.trade.trade_id !== trade_id));
 
         Swal.fire({
           title: "Deleted!",
           text: "Your Trade has been deleted.",
           icon: "success",
         });
-      } catch (err) {
-        console.log(err);
+      } catch (err: unknown) {
+        const message = getErrorMessage(err);
         Swal.fire({
           title: "Error!",
-          text: err.message,
+          text: message,
           icon: "error",
         });
       }
@@ -95,9 +103,9 @@ function TradesTable({
                 className="flex items-center gap-1 justify-center cursor-pointer select-none"
                 onClick={handleDateTimeSort}
               >
-                {filterValue.dateTimeSort === "DESC" ? (
+                {filterValues.dateTimeSort === "desc" ? (
                   <FaArrowDown />
-                ) : filterValue.dateTimeSort === "ASC" ? (
+                ) : filterValues.dateTimeSort === "asc" ? (
                   <FaArrowUp />
                 ) : (
                   <FaArrowDown />
@@ -109,9 +117,9 @@ function TradesTable({
                 className="flex items-center gap-3 justify-center cursor-pointer select-none"
                 onClick={handleFilterChange}
               >
-                {filterValue.pnlSort === "DESC" ? (
+                {filterValues.pnlSort === "desc" ? (
                   <FaArrowDown />
-                ) : filterValue.pnlSort === "ASC" ? (
+                ) : filterValues.pnlSort === "asc" ? (
                   <FaArrowUp />
                 ) : (
                   <FaArrowDown />

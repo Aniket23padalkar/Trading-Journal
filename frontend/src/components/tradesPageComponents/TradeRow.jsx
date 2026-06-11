@@ -14,7 +14,7 @@ function TradeRow({
   const { pagination } = useContext(TradeContext);
   const handleViewModal = useCallback(() => {
     setCurrentViewTrade(t);
-    handleSetViewModal(true);
+    handleSetViewModal((prev) => !prev);
   }, [[t, setCurrentViewTrade, handleSetViewModal]]);
 
   const startIndex = (pagination.page - 1) * pagination.limit;
