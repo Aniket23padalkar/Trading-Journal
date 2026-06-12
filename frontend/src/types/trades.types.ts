@@ -59,6 +59,19 @@ export interface Data {
   pagination: Pagination;
 }
 
+export interface FilterValuesUI {
+  order_type: string | "";
+  order_status: string | "";
+  market_type: string | "";
+  position: string | "";
+  fromDate: Date | "";
+  toDate: Date | "";
+  year: number | "";
+  month: number | "";
+  pnlSort: string | "";
+  dateTimeSort: string | "";
+}
+
 export interface FilterValues {
   order_type: string;
   order_status: string;
@@ -134,4 +147,19 @@ export interface UpdateTradeParams {
   trade_id: string;
   formData: FormDataType;
   executions: ExecutionsTypeWithID[];
+}
+
+export interface GetYearAndMonthData {
+  years: number[];
+  months: number[];
+}
+
+export interface FormattedMonthsData {
+  label: string | undefined;
+  value: number;
+}
+
+export interface GetYearAndMonthResponse {
+  years: number[];
+  months: FormattedMonthsData[];
 }

@@ -1,5 +1,10 @@
 import type { ApiResponse, DeleteResponse } from "../types/api.response.js";
-import type { Data } from "../types/trades.types.js";
+import type {
+  Data,
+  FormattedMonthsData,
+  GetYearAndMonthData,
+  GetYearAndMonthResponse,
+} from "../types/trades.types.js";
 
 const API = import.meta.env.VITE_API_URL;
 
@@ -94,18 +99,20 @@ export async function deleteTrade(trade_id: string): Promise<DeleteResponse> {
   }
 }
 
-export async function getYearAndMonth() {
+export async function getYearAndMonth(): Promise<GetYearAndMonthResponse> {
   try {
     const res = await fetch(`${API}/api/trades/yearmonth`, {
       method: "GET",
       credentials: "include",
     });
 
-    const data = await res.json();
+    const result: ApiResponse<GetYearAndMonthData> = await res.json();
 
-    if (!res.ok) {
-      throw new Error(data.message);
+    if (!result.success) {
+      throw new Error(result.message);
     }
+
+    console.log(result);
 
     const monthOrder = [
       "Jan",
@@ -122,19 +129,21 @@ export async function getYearAndMonth() {
       "Dec",
     ];
 
-    const formattedMonths = data.months.map((m) => ({
-      label: monthOrder[m - 1],
-      value: m,
-    }));
+    const formattedMonths: FormattedMonthsData[] = result.data.months.map(
+      (m) => ({
+        label: monthOrder[m - 1],
+        value: m,
+      }),
+    );
 
-    return { years: data.years, months: formattedMonths };
+    return { years: result.data.years, months: formattedMonths };
   } catch (err) {
-    console.log(err.message);
+    console.log(err);
     throw err;
   }
 }
 
-export async function getMonthlyPnl(year) {
+export async function getMonthlyPnl(year: number) {
   try {
     const res = await fetch(`${API}/api/trades/monthly-pnl?year=${year}`, {
       method: "GET",
@@ -149,7 +158,7 @@ export async function getMonthlyPnl(year) {
 
     return data;
   } catch (err) {
-    console.log(err.message);
+    console.log(err);
     throw err;
   }
 }
@@ -170,7 +179,7 @@ export async function getFilterStats(params) {
 
     return data;
   } catch (err) {
-    console.log(err.message);
+    console.log(err);
     throw err;
   }
 }

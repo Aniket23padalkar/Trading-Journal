@@ -1,12 +1,13 @@
-import { useContext } from "react";
-import { TradeContext } from "../../context/TradesContext";
+import { useTradesContext } from "../../hooks/useTradesContext.js";
 
 export default function Filters() {
-  const { filterValue, setFilterValue } = useContext(TradeContext);
+  const { filterValues, setFilterValues } = useTradesContext();
 
-  function handleChange(e) {
+  function handleChange(
+    e: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>,
+  ) {
     const { name, value } = e.target;
-    setFilterValue((prev) => ({
+    setFilterValues((prev) => ({
       ...prev,
       [name]: value,
     }));
@@ -17,7 +18,7 @@ export default function Filters() {
       <select
         className="filter-select"
         name="order_type"
-        value={filterValue.order_type}
+        value={filterValues.order_type}
         onChange={handleChange}
       >
         <option value="">Order</option>
@@ -27,19 +28,19 @@ export default function Filters() {
 
       <select
         name="market_type"
-        value={filterValue.market_type}
+        value={filterValues.market_type}
         className="filter-select"
         onChange={handleChange}
       >
         <option value="">Market-Type</option>
         <option value="Equity">Equity</option>
         <option value="Options">Options</option>
-        <option value="Futures">Futures</option>
+        <option value="Futures">Futures</option>s
       </select>
       <select
         className="filter-select"
         name="position"
-        value={filterValue.position}
+        value={filterValues.position}
         onChange={handleChange}
       >
         <option value="">Position</option>
@@ -57,7 +58,11 @@ export default function Filters() {
           name="fromDate"
           className="px-2 outline-none text-xs text-violet-400 dark:text-blue-300 uppercase"
           onChange={handleChange}
-          value={filterValue.fromDate}
+          value={
+            typeof filterValues.fromDate === "string"
+              ? filterValues.fromDate
+              : ""
+          }
         />
         <span className="text-sm">to</span>
         <input
@@ -65,7 +70,9 @@ export default function Filters() {
           name="toDate"
           className="px-2 outline-none text-xs text-violet-400 dark:text-blue-300 uppercase"
           onChange={handleChange}
-          value={filterValue.toDate}
+          value={
+            typeof filterValues.toDate === "string" ? filterValues.toDate : ""
+          }
         />
       </div>
     </div>
