@@ -3,7 +3,7 @@ import { FaArrowDown, FaArrowUp } from "react-icons/fa6";
 import { ScaleLoader } from "react-spinners";
 import Swal from "sweetalert2";
 import TradeRow from "./TradeRow.js";
-import { deleteTrade } from "../../services/tradesService.js";
+import { deleteTrade } from "../../api/tradesService.js";
 import { useTradesContext } from "../../hooks/useTradesContext.js";
 import { getErrorMessage } from "../../utils/error.handler.js";
 import type { TradesData } from "../../types/trades.types.js";

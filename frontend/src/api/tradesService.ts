@@ -1,4 +1,4 @@
-import type { ApiResponse } from "../types/api.response.js";
+import type { ApiResponse, DeleteResponse } from "../types/api.response.js";
 import type { Data } from "../types/trades.types.js";
 
 const API = import.meta.env.VITE_API_URL;
@@ -51,7 +51,7 @@ export async function getTradesData(
   }
 }
 
-export async function updateTrade(id, formData, execution) {
+export async function updateTrade({ id, formData, execution }) {
   try {
     const res = await fetch(`${API}/api/trades/${id}`, {
       method: "PATCH",
@@ -74,20 +74,20 @@ export async function updateTrade(id, formData, execution) {
   }
 }
 
-export async function deleteTrade(id) {
+export async function deleteTrade(trade_id: string): Promise<DeleteResponse> {
   try {
-    const res = await fetch(`${API}/api/trades/${id}`, {
+    const res = await fetch(`${API}/api/trades/${trade_id}`, {
       method: "DELETE",
       credentials: "include",
     });
 
-    const data = await res.json();
+    const result: ApiResponse<{ trade_id: string }> = await res.json();
 
-    if (!res.ok) {
-      throw new Error(data.message);
+    if (!result.success) {
+      throw new Error(result.message);
     }
 
-    return data;
+    return result;
   } catch (err) {
     console.log(err);
     throw err;

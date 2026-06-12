@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useMemo, useState } from "react";
 import FormatPnL from "../../utils/FormatPnL";
 import { TradeContext } from "../../context/TradesContext";
-import { getFilterStats } from "../../services/tradesService";
+import { getFilterStats } from "../../api/tradesService";
 import { ScaleLoader } from "react-spinners";
 
 function TableFooter() {

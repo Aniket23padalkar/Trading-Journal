@@ -1,4 +1,4 @@
-import formatDateTimeLocal from "../utils/formatDateTimeLocal";
+import formatDateTimeLocal from "../../utils/formatDateTimeLocal";
 
 export default function ExecutionRow({
   execution,

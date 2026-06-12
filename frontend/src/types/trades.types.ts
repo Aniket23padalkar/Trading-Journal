@@ -72,6 +72,26 @@ export interface FilterValues {
   dateTimeSort: string;
 }
 
+export interface FormDataUIType {
+  symbol: string;
+  market_type: "equity" | "options" | "futures" | "";
+  order_status: "open" | "closed" | "";
+  position:
+    | "intraday"
+    | "btst"
+    | "stbt"
+    | "swing"
+    | "positional"
+    | "longterm"
+    | "";
+  risk: number | "";
+  direction: string;
+  trade_rating: "worst" | "poor" | "average" | "good" | "best" | "";
+  description: string;
+  entry_time: Date | "";
+  exit_time?: Date | "";
+}
+
 export interface FormDataType {
   symbol: string;
   market_type: "equity" | "options" | "futures" | null;
@@ -92,9 +112,26 @@ export interface FormDataType {
   exit_time?: Date | null;
 }
 
+export interface ExecutionsUIType {
+  order_type: "buy" | "sell" | "";
+  price: number | "";
+  quantity: number | "";
+  executed_at: Date | "";
+}
+
 export interface ExecutionsType {
   order_type: "buy" | "sell" | null;
   price: number | null;
   quantity: number | null;
   executed_at: Date | null;
+}
+
+interface ExecutionsTypeWithID extends ExecutionsType {
+  execution_id: string;
+}
+
+export interface UpdateTradeParams {
+  trade_id: string;
+  formData: FormDataType;
+  executions: ExecutionsTypeWithID[];
 }

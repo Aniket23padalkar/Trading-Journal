@@ -1,6 +1,6 @@
 import React from "react";
 import { FaTrash } from "react-icons/fa6";
-import formatDateTimeLocal from "../utils/formatDateTimeLocal";
+import formatDateTimeLocal from "../../utils/formatDateTimeLocal";
 
 function QtyRow({
   index,

@@ -1,11 +1,11 @@
 import { useContext, useState } from "react";
-import formatDateTime from "../utils/formatDateTime";
-import useDrag from "../hooks/useDrag";
+import formatDateTime from "../../utils/formatDateTime";
+import useDrag from "../../hooks/useDrag";
 import { FaIndianRupeeSign } from "react-icons/fa6";
 import ReactMarkdown from "react-markdown";
-import calculatePnL from "../utils/CalculatePnl";
-import FormatPnL from "../utils/FormatPnL";
-import { TradeContext } from "../context/TradesContext";
+import calculatePnL from "../../utils/CalculatePnl";
+import FormatPnL from "../../utils/FormatPnL";
+import { TradeContext } from "../../context/TradesContext";
 
 export default function ViewModal({ setViewModal, currentViewTrade }) {
   const { theme } = useContext(TradeContext);
