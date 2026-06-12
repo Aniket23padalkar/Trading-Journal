@@ -189,3 +189,8 @@ export interface GetCompleteTradeQueryResult {
   pnl: number;
   rr_ratio: number;
 }
+
+export interface GetYearAndMonthType {
+  years: number[];
+  months: number[];
+}
