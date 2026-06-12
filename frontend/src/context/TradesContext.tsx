@@ -6,6 +6,7 @@ import type {
 } from "../types/context.types.js";
 import type {
   FilterValues,
+  FilterValuesUI,
   Pagination,
   TradesData,
 } from "../types/trades.types.js";
@@ -23,23 +24,36 @@ export default function TradeProvider({ children }: ContextProviderProps) {
     totalPages: 1,
   });
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const [filterValues, setFilterValues] = useState<FilterValues>({
+  const [filterValues, setFilterValues] = useState<FilterValuesUI>({
     order_type: "",
     order_status: "",
     market_type: "",
     position: "",
-    fromDate: null,
-    toDate: null,
-    year: null,
-    month: null,
+    fromDate: "",
+    toDate: "",
+    year: "",
+    month: "",
     pnlSort: "",
     dateTimeSort: "",
   });
 
+  const payload: FilterValues = {
+    order_type: filterValues.order_type,
+    order_status: filterValues.order_status,
+    market_type: filterValues.market_type,
+    position: filterValues.position,
+    fromDate: new Date(filterValues.fromDate),
+    toDate: new Date(filterValues.toDate),
+    year: Number(filterValues.year),
+    month: Number(filterValues.month),
+    pnlSort: filterValues.pnlSort,
+    dateTimeSort: filterValues.dateTimeSort,
+  };
+
   const params = cleanParams({
     page: currentPage,
     limit: 9,
-    ...filterValues,
+    ...payload,
   });
 
   console.log(trades);

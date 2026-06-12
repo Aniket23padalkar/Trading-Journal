@@ -1,5 +1,5 @@
 import type { User } from "./auth.types.js";
-import type { FilterValues, Pagination, TradesData } from "./trades.types.js";
+import type { FilterValuesUI, Pagination, TradesData } from "./trades.types.js";
 
 export interface ContextProviderProps {
   children: React.ReactNode;
@@ -25,8 +25,8 @@ export interface TradesContextType {
   setPagination: React.Dispatch<React.SetStateAction<Pagination>>;
   currentPage: number;
   setCurrentPage: React.Dispatch<React.SetStateAction<number>>;
-  filterValues: FilterValues;
-  setFilterValues: React.Dispatch<React.SetStateAction<FilterValues>>;
+  filterValues: FilterValuesUI;
+  setFilterValues: React.Dispatch<React.SetStateAction<FilterValuesUI>>;
   fetchLoading: boolean;
   fetchTrades: () => void;
 }

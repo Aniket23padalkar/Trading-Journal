@@ -1,32 +1,45 @@
 import React, { Suspense, useCallback, useContext, useState } from "react";
 import { FaFilter } from "react-icons/fa";
-const Filters = React.lazy(() => import("./Filters"));
+const Filters = React.lazy(() => import("./Filters.js"));
 import { ScaleLoader } from "react-spinners";
-import { TradeContext } from "../../context/TradesContext";
+import { TradeContext } from "../../context/TradesContext.js";
 import { useEffect } from "react";
-import { getYearAndMonth } from "../../api/tradesService";
+import { getYearAndMonth } from "../../api/tradesService.js";
+import type {
+  FilterValues,
+  GetYearAndMonthResponse,
+} from "../../types/trades.types.js";
+import { useTradesContext } from "../../hooks/useTradesContext.js";
 
-function TradesHeader({ setAddModal }) {
-  const { filterValue, setFilterValue } = useContext(TradeContext);
-  const [viewFilters, setViewFilters] = useState(false);
-  const [yearsMonths, setYearsMonths] = useState();
+interface TradesHeaderParams {
+  setAddModal: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+function TradesHeader({ setAddModal }: TradesHeaderParams) {
+  const { filterValues, setFilterValues } = useTradesContext();
+  const [viewFilters, setViewFilters] = useState<boolean>(false);
+  const [yearsMonths, setYearsMonths] =
+    useState<GetYearAndMonthResponse | null>(null);
 
   const handleChange = useCallback(
-    (e) => {
-      const { name, value } = e.target;
-      setFilterValue((prev) => {
+    (e: React.ChangeEvent<HTMLSelectElement>) => {
+      const { name, value } = e.target as {
+        name: keyof FilterValues;
+        value: string;
+      };
+      setFilterValues((prev) => {
         if (prev?.[name] === value) return prev;
         return { ...prev, [name]: value };
       });
     },
-    [setFilterValue],
+    [setFilterValues],
   );
 
   const handleClearFilters = useCallback(() => {
-    setFilterValue({
-      order: "",
-      status: "",
-      marketType: "",
+    setFilterValues({
+      order_type: "",
+      order_status: "",
+      market_type: "",
       position: "",
       fromDate: "",
       toDate: "",
@@ -35,14 +48,15 @@ function TradesHeader({ setAddModal }) {
       pnlSort: "",
       dateTimeSort: "",
     });
-  }, [setFilterValue]);
+  }, [setFilterValues]);
+
+  async function fetchYearMonth() {
+    const res = await getYearAndMonth();
+
+    setYearsMonths(res);
+  }
 
   useEffect(() => {
-    async function fetchYearMonth() {
-      const res = await getYearAndMonth();
-
-      setYearsMonths(res);
-    }
     fetchYearMonth();
   }, []);
 
@@ -63,7 +77,7 @@ function TradesHeader({ setAddModal }) {
         <select
           name="year"
           className="filter-select"
-          value={filterValue.year}
+          value={filterValues.year}
           onChange={handleChange}
         >
           <option value="">All Years</option>
@@ -76,7 +90,7 @@ function TradesHeader({ setAddModal }) {
         {/* <p>Monthly Trades :</p> */}
         <select
           name="month"
-          value={filterValue.month}
+          value={filterValues.month}
           className="filter-select"
           onChange={handleChange}
         >
@@ -89,7 +103,7 @@ function TradesHeader({ setAddModal }) {
         </select>
         <select
           name="status"
-          value={filterValue.status}
+          value={filterValues.order_status}
           className="filter-select"
           onChange={handleChange}
         >
