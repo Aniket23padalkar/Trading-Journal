@@ -1,42 +1,62 @@
 import { useContext, useEffect, useState } from "react";
-import useDrag from "../hooks/useDrag.jsx";
+import useDrag from "../../hooks/useDrag.jsx";
 import { FaExclamation } from "react-icons/fa6";
 import ExecutionRow from "./ExecutionRow.jsx";
 import QtyRow from "./QtyRow.jsx";
-import { insertTrade, updateTrade } from "../services/tradesService";
+import { insertTrade, updateTrade } from "../../api/tradesService";
 import { toast } from "react-toastify";
 import { ClipLoader } from "react-spinners";
-import { useTradesContext } from "../hooks/useTradesContext.js";
-import { getErrorMessage } from "../utils/error.handler.js";
-import type { ExecutionsType, FormDataType } from "../types/trades.types.js";
+import { useTradesContext } from "../../hooks/useTradesContext.js";
+import { getErrorMessage } from "../../utils/error.handler.js";
+import type {
+  ExecutionsType,
+  ExecutionsUIType,
+  FormDataType,
+  FormDataUIType,
+  TradesData,
+} from "../../types/trades.types.js";
 
-export default function AddModal({ editTrade, setEditTrade, setAddModal }) {
+interface AddModalParams {
+  editTrade: TradesData;
+  setEditTrade: React.Dispatch<React.SetStateAction<TradesData | null>>;
+  setAddModal: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+export default function AddModal({
+  editTrade,
+  setEditTrade,
+  setAddModal,
+}: AddModalParams) {
   const { modalRef, handleMouseDown } = useDrag();
   const [loading, setLoading] = useState<boolean>(false);
-  const [formData, setFormData] = useState<FormDataType>({
+  const [formData, setFormData] = useState<FormDataUIType>({
     symbol: "",
-    order_status: null,
-    market_type: null,
-    risk: null,
-    position: null,
+    order_status: "",
+    market_type: "",
+    risk: "",
+    position: "",
     direction: "",
-    trade_rating: null,
+    trade_rating: "",
     description: "",
-    entry_time: null,
-    exit_time: null,
+    entry_time: "",
+    exit_time: "",
   });
-  const [executions, setExecutions] = useState<ExecutionsType[]>([
+  const [executions, setExecutions] = useState<ExecutionsUIType[]>([
     {
-      order_type: null,
-      price: null,
-      quantity: null,
-      executed_at: null,
+      order_type: "",
+      price: "",
+      quantity: "",
+      executed_at: "",
     },
   ]);
   const [executionModal, setExecutionModal] = useState(false);
   const { fetchTrades } = useTradesContext();
 
-  function handleChange(e) {
+  function handleChange(
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
+    >,
+  ) {
     const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
@@ -54,10 +74,10 @@ export default function AddModal({ editTrade, setEditTrade, setAddModal }) {
     setExecutions((prev) => [
       ...prev,
       {
-        order_type: null,
-        price: null,
-        quantity: null,
-        executed_at: null,
+        order_type: "",
+        price: "",
+        quantity: "",
+        executed_at: "",
       },
     ]);
   }
@@ -65,23 +85,23 @@ export default function AddModal({ editTrade, setEditTrade, setAddModal }) {
   function resetForm() {
     setFormData({
       symbol: "",
-      order_status: null,
-      market_type: null,
-      risk: null,
-      position: null,
+      order_status: "",
+      market_type: "",
+      risk: "",
+      position: "",
       direction: "",
-      trade_rating: null,
+      trade_rating: "",
       description: "",
-      entry_time: null,
-      exit_time: null,
+      entry_time: "",
+      exit_time: "",
     });
 
     setExecutions([
       {
-        order_type: null,
-        price: null,
-        quantity: null,
-        executed_at: null,
+        order_type: "",
+        price: "",
+        quantity: "",
+        executed_at: "",
       },
     ]);
   }
@@ -91,13 +111,13 @@ export default function AddModal({ editTrade, setEditTrade, setAddModal }) {
     setLoading(true);
     if (editTrade) {
       try {
-        const res = await updateTrade(
-          editTrade.trade.trade_id,
+        const res = await updateTrade({
+          trade_id: editTrade.trade.trade_id,
           formData,
           executions,
-        );
+        });
 
-        await fetchTrades();
+        fetchTrades();
 
         console.log(res);
         resetForm();
@@ -113,7 +133,7 @@ export default function AddModal({ editTrade, setEditTrade, setAddModal }) {
       try {
         const res = await insertTrade(formData, executions);
 
-        await fetchTrades();
+        fetchTrades();
 
         console.log(res);
         resetForm();
@@ -146,13 +166,16 @@ export default function AddModal({ editTrade, setEditTrade, setAddModal }) {
   useEffect(() => {
     if (editTrade) {
       setFormData({
-        symbol: editTrade.trade.symbol || "",
-        order_type: editTrade.trade.order_type || "",
-        status: editTrade.trade.status || "",
+        symbol: editTrade.trade.symbol,
+        order_status: editTrade.trade.order_status,
         market_type: editTrade.trade.market_type || "",
         position: editTrade.trade.position || "",
-        rating: editTrade.trade.rating || "",
-        description: editTrade.trade.description || "",
+        trade_rating: editTrade.trade.trade_rating || "",
+        risk: editTrade.trade.risk || "",
+        direction: editTrade.trade.direction || "",
+        description: editTrade.trade_logs.description || "",
+        entry_time: editTrade.trade.entry_time || "",
+        exit_time: editTrade.trade.exit_time || "",
       });
 
       setExecutions(
@@ -160,12 +183,10 @@ export default function AddModal({ editTrade, setEditTrade, setAddModal }) {
           ? editTrade.executions
           : [
               {
-                buy_price: "",
-                sell_price: "",
+                order_type: "",
+                price: "",
                 quantity: "",
-                risk: "",
-                entry_time: "",
-                exit_time: "",
+                executed_at: "",
               },
             ],
       );
@@ -203,12 +224,12 @@ export default function AddModal({ editTrade, setEditTrade, setAddModal }) {
             <div className="gap-2 flex">
               <select
                 required
-                value={formData.order_type}
-                name="order_type"
+                value={formData.direction}
+                name="direction"
                 className={`add-modal-select w-25  dark:border dark:border-teal-900 ${
-                  formData.order_type === "BUY"
+                  formData.direction === "BUY"
                     ? "bg-green-400 text-white dark:bg-green-400"
-                    : formData.order_type === "SELL"
+                    : formData.direction === "SELL"
                       ? "bg-red-400 text-white dark:bg-red-400"
                       : "bg-violet-50 dark:bg-gray-800"
                 }`}
@@ -220,9 +241,9 @@ export default function AddModal({ editTrade, setEditTrade, setAddModal }) {
               </select>
               <select
                 onChange={handleChange}
-                value={formData.status}
+                value={formData.order_status}
                 required
-                name="status"
+                name="order_status"
                 className="add-modal-select w-25"
               >
                 <option value="">Status</option>
@@ -263,7 +284,7 @@ export default function AddModal({ editTrade, setEditTrade, setAddModal }) {
             </select>
 
             <select
-              value={formData.rating}
+              value={formData.trade_rating}
               required
               name="rating"
               className="add-modal-select"
@@ -318,8 +339,8 @@ export default function AddModal({ editTrade, setEditTrade, setAddModal }) {
                       <QtyRow
                         key={i}
                         execution={exe}
-                        status={formData.status}
-                        order={formData.order_type}
+                        order_status={formData.order_status}
+                        direction={formData.direction}
                         index={i}
                         onDelete={onDelete}
                         handleExecutionEntries={handleExecutionEntries}

@@ -4,7 +4,7 @@ const Filters = React.lazy(() => import("./Filters"));
 import { ScaleLoader } from "react-spinners";
 import { TradeContext } from "../../context/TradesContext";
 import { useEffect } from "react";
-import { getYearAndMonth } from "../../services/tradesService";
+import { getYearAndMonth } from "../../api/tradesService";
 
 function TradesHeader({ setAddModal }) {
   const { filterValue, setFilterValue } = useContext(TradeContext);
