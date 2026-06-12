@@ -4,6 +4,7 @@ import {
   createTrade,
   deleteTrade,
   getTrades,
+  getYearMonth,
   updateTrade,
 } from "./tradeControllers.js";
 import { asyncHandler } from "../../utils/async.handler.js";
@@ -42,7 +43,7 @@ router.get(
   protect,
   asyncHandler(getTrades),
 );
-// router.get("/yearmonth", protect, getYearMonth);
+router.get("/yearmonth", protect, getYearMonth);
 // router.get("/stats", protect, getStats);
 // router.get("/monthly-pnl", protect, getMonthlyPnl);
 

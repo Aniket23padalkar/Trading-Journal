@@ -2,6 +2,7 @@ import {
   createTradeInDB,
   deleteFromExecutions,
   deleteTradeFromDB,
+  extractYearMonthFromDB,
   getCompleteTradeFromDB,
   getExecutionsByIdsFromDB,
   getExecutionsFromDB,
@@ -438,11 +439,11 @@ export const getTradesService = async ({
   };
 };
 
-// export const getYearMonthService = async (userId) => {
-//   const result = await extractYearMonthFromDB(userId);
+export const getYearMonthService = async (user_id: string) => {
+  const result = await extractYearMonthFromDB(user_id);
 
-//   return result;
-// };
+  return result;
+};
 
 // export const getStatsService = async (query, userId) => {
 //   const { whereClause, values } = buildTradeFilters(query, userId);

@@ -11,6 +11,7 @@ import type {
   GetTradeRepoParams,
   GetTradesCountFromDBParams,
   GetTradeStatsQueryResult,
+  GetYearAndMonthType,
   InsertIntoTradeLogsParams,
   UpdateExecutionsData,
   UpdateTradeRepoParams,
@@ -519,23 +520,21 @@ export const getTradesCountFromDB = async ({
   return result.rows[0] || null;
 };
 
-// export const extractYearMonthFromDB = async (userId) => {
-//   const query = `
-//     WITH first_logs AS(
-//       SELECT trade_id, MIN(entry_time) AS first_entry
-//       FROM trade_logs
-//       GROUP BY trade_id
-//     )
-//     SELECT
-//       ARRAY_AGG(DISTINCT EXTRACT(YEAR FROM first_entry)) AS years,
-//       ARRAY_AGG(DISTINCT EXTRACT(MONTH FROM first_entry)) AS months
-//     FROM first_logs fl
-//     JOIN trades t ON t.trade_id = fl.trade_id
-//     WHERE user_id = $1
-//   `;
+export const extractYearMonthFromDB = async (
+  user_id: string,
+): Promise<GetYearAndMonthType | undefined> => {
+  const query: string = `
+    SELECT
+      ARRAY_AGG(DISTINCT EXTRACT(YEAR FROM entry_time)) AS years,
+      ARRAY_AGG(DISTINCT EXTRACT(MONTH FROM entry_time)) AS months
+    FROM trades
+    WHERE user_id = $1
+  `;
 
-//   return pool.query(query, [userId]);
-// };
+  const result = await pool.query<GetYearAndMonthType>(query, [user_id]);
+
+  return result.rows[0] || undefined;
+};
 
 // export const getFilteredStatsFromDB = async ({ whereClause, values }) => {
 //   const query = `

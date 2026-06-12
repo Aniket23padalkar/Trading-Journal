@@ -2,6 +2,7 @@ import type { Request, Response } from "express";
 import {
   createTradeService,
   getTradesService,
+  getYearMonthService,
   tradeDeleteService,
   updateTradeService,
 } from "./tradeService.js";
@@ -81,6 +82,7 @@ export const getTrades = async (
     query: req.validated?.query,
     user_id: req.user.user_id,
   });
+
   return res.status(200).json({
     success: true,
     data: result,
@@ -88,19 +90,15 @@ export const getTrades = async (
   });
 };
 
-// export const getYearMonth = async (req, res) => {
-//   try {
-//     const data = await getYearMonthService(req.user.user_id);
+export const getYearMonth = async (req: Request, res: Response) => {
+  const result = await getYearMonthService(req.user.user_id);
 
-//     res.status(200).json(data.rows[0]);
-//   } catch (err) {
-//     console.error(err);
-//     if (err.statusCode) {
-//       return res.status(err.statusCode).json({ message: err.message });
-//     }
-//     res.status(500).json({ message: "Server Error" });
-//   }
-// };
+  return res.status(200).json({
+    success: true,
+    data: result,
+    message: "Trades fetched successfully",
+  });
+};
 
 // export const getStats = async (req, res) => {
 //   try {
