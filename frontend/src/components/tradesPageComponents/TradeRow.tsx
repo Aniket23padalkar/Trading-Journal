@@ -38,7 +38,7 @@ function TradeRow({
       </td>
       <td>
         <p
-          className={`text-xs px-1 border rounded font-medium ${
+          className={`text-xs px-1 border rounded font-medium uppercase ${
             trade.trade.direction === "long"
               ? "text-[#03c988] border-[#03c988]"
               : trade.trade.direction === "short"
