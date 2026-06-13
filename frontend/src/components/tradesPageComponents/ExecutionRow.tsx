@@ -1,0 +1,80 @@
+import type {
+  ExecutionsUIType,
+  FormDataUIType,
+  HandleExecutionEntries,
+} from "../../types/trades.types.js";
+import formatDateTimeLocal from "../../utils/formatDateTimeLocal.js";
+
+interface ExecutionRowParams {
+  execution: ExecutionsUIType;
+  formData: FormDataUIType;
+  index: number;
+  handleExecutionEntries: ({
+    index,
+    field,
+    value,
+  }: HandleExecutionEntries) => void;
+}
+
+export default function ExecutionRow({
+  execution,
+  formData,
+  handleExecutionEntries,
+  index,
+}: ExecutionRowParams) {
+  return (
+    <>
+      <div className="flex justify-between gap-2 ">
+        <div className="flex w-full gap-2 items-baseline">
+          <input
+            value={execution.price ?? ""}
+            name="price"
+            required
+            className="add-modal-select w-30 disabled:bg-gray-300 dark:disabled:bg-gray-500 placeholder:text-green-500 placeholder:font-bold"
+            type="number"
+            placeholder="Price"
+            onChange={(e) =>
+              handleExecutionEntries(index, "buy_price", e.target.value)
+            }
+          />
+
+          <input
+            required
+            value={execution.quantity}
+            name="quantity"
+            type="number"
+            placeholder="Quantity"
+            className="add-modal-select w-30 text-black dark:text-white"
+            onChange={(e) =>
+              handleExecutionEntries(index, "quantity", e.target.value)
+            }
+          />
+          <select
+            name="order_type"
+            className="add-modal-select"
+            id="order_type"
+          >
+            <option value="">Order-Type</option>
+            <option value="buy">Buy</option>
+            <option value="sell">Sell</option>
+          </select>
+          <div className="flex relative">
+            <label className="absolute text-xs z-10 top-0 left-0 text-gray-600 dark:text-gray-400">
+              Executed_at
+            </label>
+            <input
+              value={formatDateTimeLocal(execution.executed_at)}
+              name="executed_at"
+              required
+              type="datetime-local"
+              className="add-modal-select h-7 mt-4 w-36 uppercase"
+              onChange={(e) =>
+                handleExecutionEntries(index, "executed_at", e.target.value)
+              }
+            />
+          </div>
+        </div>
+      </div>
+    </>
+  );
+}

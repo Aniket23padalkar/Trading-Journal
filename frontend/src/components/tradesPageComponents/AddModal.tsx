@@ -1,8 +1,8 @@
 import { useContext, useEffect, useState } from "react";
 import useDrag from "../../hooks/useDrag.jsx";
 import { FaExclamation } from "react-icons/fa6";
-import ExecutionRow from "./ExecutionRow.jsx";
-import QtyRow from "./QtyRow.jsx";
+import ExecutionRow from "./ExecutionRow.js";
+import QtyRow from "./QtyRow.js";
 import { insertTrade, updateTrade } from "../../api/tradesService";
 import { toast } from "react-toastify";
 import { ClipLoader } from "react-spinners";
@@ -13,8 +13,10 @@ import type {
   ExecutionsUIType,
   FormDataType,
   FormDataUIType,
+  HandleExecutionEntries,
   TradesData,
 } from "../../types/trades.types.js";
+import formatDateTimeLocal from "../../utils/formatDateTimeLocal.js";
 
 interface AddModalParams {
   editTrade: TradesData;
@@ -64,7 +66,11 @@ export default function AddModal({
     }));
   }
 
-  function handleExecutionEntries(index, field, value) {
+  function handleExecutionEntries({
+    index,
+    field,
+    value,
+  }: HandleExecutionEntries) {
     setExecutions((prev) =>
       prev.map((exe, i) => (i === index ? { ...exe, [field]: value } : exe)),
     );
@@ -195,7 +201,7 @@ export default function AddModal({
 
   return (
     <div
-      className="flex flex-col overflow-visible fixed inset-0 top-1/5 left-1/8 sm:top-1/5 sm:left-1/5 md:top-1/5 md:left-1/4 lg:top-1/4 lg:left-1/3 h-110 w-120 z-10 bg-white dark:bg-gray-800 rounded-xl shadow-2xl"
+      className="flex flex-col overflow-visible fixed inset-0 top-1/6 left-1/8 sm:top-1/5 sm:left-1/5 md:top-1/5 md:left-1/4 lg:top-1/6 lg:left-1/3 h-120 w-140 z-10 bg-white dark:bg-gray-800 rounded-xl shadow-2xl"
       ref={modalRef}
     >
       <div
@@ -227,28 +233,28 @@ export default function AddModal({
                 value={formData.direction}
                 name="direction"
                 className={`add-modal-select w-25  dark:border dark:border-teal-900 ${
-                  formData.direction === "BUY"
-                    ? "bg-green-400 text-white dark:bg-green-400"
-                    : formData.direction === "SELL"
-                      ? "bg-red-400 text-white dark:bg-red-400"
+                  formData.direction === "long"
+                    ? "bg-green-300 text-green-700 dark:bg-green-400"
+                    : formData.direction === "short"
+                      ? "bg-red-300 text-red-700 dark:bg-red-400"
                       : "bg-violet-50 dark:bg-gray-800"
                 }`}
                 onChange={handleChange}
               >
-                <option value="">Order</option>
-                <option value="BUY">BUY</option>
-                <option value="SELL">SELL</option>
+                <option value="">Direction</option>
+                <option value="long">Long</option>
+                <option value="short">Short</option>
               </select>
               <select
                 onChange={handleChange}
                 value={formData.order_status}
                 required
                 name="order_status"
-                className="add-modal-select w-25"
+                className="add-modal-select w-32"
               >
-                <option value="">Status</option>
-                <option value="Open">Open</option>
-                <option value="Closed">Closed</option>
+                <option value="">Order_Status</option>
+                <option value="open">Open</option>
+                <option value="closed">Closed</option>
               </select>
             </div>
           </div>
@@ -262,12 +268,12 @@ export default function AddModal({
               className="add-modal-select"
             >
               <option value="">Position</option>
-              <option value="Intraday">Intraday</option>
-              <option value="BTST">BTST</option>
-              <option value="STBT">STBT</option>
-              <option value="Swing">Swing</option>
-              <option value="Positional">Positional</option>
-              <option value="Long-Term">Long-Term</option>
+              <option value="intraday">Intraday</option>
+              <option value="btst">BTST</option>
+              <option value="stbt">STBT</option>
+              <option value="swing">Swing</option>
+              <option value="positional">Positional</option>
+              <option value="longterm">Long-Term</option>
             </select>
 
             <select
@@ -278,9 +284,9 @@ export default function AddModal({
               onChange={handleChange}
             >
               <option value="">Market-Type</option>
-              <option value="Equity">Equity</option>
-              <option value="Options">Options</option>
-              <option value="Futures">Futures</option>
+              <option value="equity">Equity</option>
+              <option value="options">Options</option>
+              <option value="futures">Futures</option>
             </select>
 
             <select
@@ -291,11 +297,11 @@ export default function AddModal({
               onChange={handleChange}
             >
               <option value="">Trade-Rate</option>
-              <option value="Worst">Worst</option>
-              <option value="Poor">Poor</option>
-              <option value="Average">Average</option>
-              <option value="Good">Good</option>
-              <option value="Best">Best</option>
+              <option value="worst">Worst</option>
+              <option value="poor">Poor</option>
+              <option value="average">Average</option>
+              <option value="good">Good</option>
+              <option value="best">Best</option>
             </select>
             <button
               type="button"
@@ -304,6 +310,44 @@ export default function AddModal({
             >
               Add Qty
             </button>
+          </div>
+          <div className="flex w-full gap-2">
+            <input
+              required
+              value={formData.risk}
+              name="risk"
+              type="number"
+              placeholder="Risk"
+              className="add-modal-select h-7 text-black mt-4 dark:text-white"
+              onChange={handleChange}
+            />
+            <div className="flex relative">
+              <label className="absolute text-xs z-10 top-0 left-0 text-gray-600 dark:text-gray-400">
+                Entry_time
+              </label>
+              <input
+                value={formatDateTimeLocal(formData.entry_time)}
+                name="entry_time"
+                required
+                type="datetime-local"
+                className="add-modal-select h-7 mt-4 w-36 uppercase"
+                onChange={handleChange}
+              />
+            </div>
+            <div className="flex relative">
+              <label className="absolute text-xs z-10 top-0 left-0 text-gray-600 dark:text-gray-400">
+                Exit Time:
+              </label>
+              <input
+                value={formatDateTimeLocal(formData.exit_time)}
+                name="exit_time"
+                required
+                disabled={formData.order_status === "open"}
+                type="datetime-local"
+                className="add-modal-select h-7 mt-4 w-36 disabled:bg-gray-300 dark:disabled:bg-gray-500 uppercase"
+                onChange={handleChange}
+              />
+            </div>
           </div>
           {executions.length > 0 &&
             executions.map((exe, i) => {

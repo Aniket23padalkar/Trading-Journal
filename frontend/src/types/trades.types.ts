@@ -64,8 +64,8 @@ export interface FilterValuesUI {
   order_status: string | "";
   market_type: string | "";
   position: string | "";
-  fromDate: Date | "";
-  toDate: Date | "";
+  fromDate: Date | null;
+  toDate: Date | null;
   year: number | "";
   month: number | "";
   pnlSort: string | "";
@@ -98,7 +98,7 @@ export interface FormDataUIType {
     | "longterm"
     | "";
   risk: number | "";
-  direction: string;
+  direction: "long" | "short" | "";
   trade_rating: "worst" | "poor" | "average" | "good" | "best" | "";
   description: string;
   entry_time: Date | "";
@@ -118,7 +118,7 @@ export interface FormDataType {
     | "longterm"
     | null;
   risk: number | null;
-  direction: string;
+  direction: "long" | "short" | null;
   trade_rating: "worst" | "poor" | "average" | "good" | "best" | null;
   description: string;
   entry_time: Date | null;
@@ -162,4 +162,10 @@ export interface FormattedMonthsData {
 export interface GetYearAndMonthResponse {
   years: number[];
   months: FormattedMonthsData[];
+}
+
+export interface HandleExecutionEntries<T extends keyof ExecutionsUIType> {
+  index: number;
+  field: T;
+  value: ExecutionsUIType[T];
 }
