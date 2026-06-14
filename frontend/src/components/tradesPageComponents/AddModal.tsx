@@ -3,7 +3,7 @@ import useDrag from "../../hooks/useDrag.jsx";
 import { FaExclamation } from "react-icons/fa6";
 import ExecutionRow from "./ExecutionRow.js";
 import QtyRow from "./QtyRow.js";
-import { insertTrade, updateTrade } from "../../api/tradesService";
+import { insertTrade, updateTrade } from "../../api/tradesService.js";
 import { toast } from "react-toastify";
 import { ClipLoader } from "react-spinners";
 import { useTradesContext } from "../../hooks/useTradesContext.js";
@@ -66,11 +66,11 @@ export default function AddModal({
     }));
   }
 
-  function handleExecutionEntries({
+  function handleExecutionEntries<T extends keyof ExecutionsUIType>({
     index,
     field,
     value,
-  }: HandleExecutionEntries) {
+  }: HandleExecutionEntries<T>) {
     setExecutions((prev) =>
       prev.map((exe, i) => (i === index ? { ...exe, [field]: value } : exe)),
     );
@@ -292,7 +292,7 @@ export default function AddModal({
             <select
               value={formData.trade_rating}
               required
-              name="rating"
+              name="trade_rating"
               className="add-modal-select"
               onChange={handleChange}
             >

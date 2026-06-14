@@ -13,7 +13,7 @@ interface ExecutionRowParams {
     index,
     field,
     value,
-  }: HandleExecutionEntries) => void;
+  }: HandleExecutionEntries<keyof ExecutionsUIType>) => void;
 }
 
 export default function ExecutionRow({
@@ -34,7 +34,11 @@ export default function ExecutionRow({
             type="number"
             placeholder="Price"
             onChange={(e) =>
-              handleExecutionEntries(index, "buy_price", e.target.value)
+              handleExecutionEntries({
+                index: index,
+                field: "price",
+                value: Number(e.target.value),
+              })
             }
           />
 
@@ -46,7 +50,11 @@ export default function ExecutionRow({
             placeholder="Quantity"
             className="add-modal-select w-30 text-black dark:text-white"
             onChange={(e) =>
-              handleExecutionEntries(index, "quantity", e.target.value)
+              handleExecutionEntries({
+                index: index,
+                field: "quantity",
+                value: Number(e.target.value),
+              })
             }
           />
           <select
@@ -69,7 +77,11 @@ export default function ExecutionRow({
               type="datetime-local"
               className="add-modal-select h-7 mt-4 w-36 uppercase"
               onChange={(e) =>
-                handleExecutionEntries(index, "executed_at", e.target.value)
+                handleExecutionEntries({
+                  index: index,
+                  field: "executed_at",
+                  value: new Date(e.target.value),
+                })
               }
             />
           </div>
