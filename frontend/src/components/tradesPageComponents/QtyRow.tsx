@@ -16,7 +16,7 @@ interface QtyRowParams {
     index,
     field,
     value,
-  }: HandleExecutionEntries) => void;
+  }: HandleExecutionEntries<keyof ExecutionsUIType>) => void;
 }
 
 function QtyRow({
@@ -46,7 +46,7 @@ function QtyRow({
             handleExecutionEntries({
               index: index,
               field: "price",
-              value: e.target.value,
+              value: Number(e.target.value),
             })
           }
         />
@@ -61,7 +61,7 @@ function QtyRow({
             handleExecutionEntries({
               index: index,
               field: "quantity",
-              value: e.target.value,
+              value: Number(e.target.value),
             })
           }
         />
@@ -89,7 +89,7 @@ function QtyRow({
               handleExecutionEntries({
                 index: index,
                 field: "executed_at",
-                value: new Date(e.target.value).toISOString(),
+                value: new Date(e.target.value),
               })
             }
           />

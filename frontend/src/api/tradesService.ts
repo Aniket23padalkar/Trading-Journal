@@ -8,14 +8,14 @@ import type {
 
 const API = import.meta.env.VITE_API_URL;
 
-export async function insertTrade(formData, execution) {
+export async function insertTrade({ formData, executions }) {
   try {
     const res = await fetch(`${API}/api/trades`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ ...formData, executions: execution }),
+      body: JSON.stringify({ ...formData, executions: executions }),
       credentials: "include",
     });
 
@@ -56,14 +56,14 @@ export async function getTradesData(
   }
 }
 
-export async function updateTrade({ id, formData, execution }) {
+export async function updateTrade({ trade_id, formData, executions }) {
   try {
-    const res = await fetch(`${API}/api/trades/${id}`, {
+    const res = await fetch(`${API}/api/trades/${trade_id}`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ ...formData, executions: execution }),
+      body: JSON.stringify({ ...formData, executions: executions }),
       credentials: "include",
     });
 
