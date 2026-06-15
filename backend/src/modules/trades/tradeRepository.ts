@@ -342,8 +342,8 @@ export const getTradeStatsFromDB = async (
       SUM(e.quantity) FILTER (WHERE e.order_type = 'sell') AS total_sell_qty,
 
       (
-        SUM(e.quantity) FILTER (WHERE e.order_type = 'buy')
-        + SUM(e.quantity) FILTER (WHERE e.order_type = 'sell')
+        COALESCE(SUM(e.quantity) FILTER (WHERE e.order_type = 'buy'),0)
+        + COALESCE(SUM(e.quantity) FILTER (WHERE e.order_type = 'sell'),0)
       ) AS total_qty,
 
       ROUND(
@@ -437,8 +437,8 @@ export const getCompleteTradeFromDB = async (
       SUM(e.quantity) FILTER (WHERE e.order_type = 'sell') AS total_sell_qty,
 
       (
-        SUM(e.quantity) FILTER (WHERE e.order_type = 'buy')
-        + SUM(e.quantity) FILTER (WHERE e.order_type = 'sell')
+        COALESCE(SUM(e.quantity) FILTER (WHERE e.order_type = 'buy'),0)
+        + COALESCE(SUM(e.quantity) FILTER (WHERE e.order_type = 'sell'),0)
       ) AS total_qty,
 
       ROUND(
