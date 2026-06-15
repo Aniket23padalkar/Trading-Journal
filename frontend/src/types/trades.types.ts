@@ -120,7 +120,7 @@ export interface FormDataType {
   risk: number | null;
   direction: "long" | "short" | null;
   trade_rating: "worst" | "poor" | "average" | "good" | "best" | null;
-  description: string;
+  description: string | null;
   entry_time: Date | null;
   exit_time?: Date | null;
 }
@@ -139,14 +139,19 @@ export interface ExecutionsType {
   executed_at: Date | null;
 }
 
-interface ExecutionsTypeWithID extends ExecutionsType {
-  execution_id: string;
+interface ExecutionsTypeWithID extends ExecutionsUIType {
+  execution_id?: string;
 }
 
 export interface UpdateTradeParams {
   trade_id: string;
   formData: FormDataType;
   executions: ExecutionsTypeWithID[];
+}
+
+export interface InsertTradeParams {
+  formData: FormDataType;
+  executions: ExecutionsUIType[];
 }
 
 export interface GetYearAndMonthData {
