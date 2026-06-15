@@ -418,7 +418,7 @@ export const getTradesService = async ({
         risk: Number(trade.risk),
         trade_rating: trade.trade_rating,
         entry_time: new Date(trade.entry_time),
-        exit_time: new Date(trade.exit_time),
+        exit_time: trade.exit_time ? new Date(trade.exit_time) : null,
         created_at: new Date(trade.created_at),
         updated_at: new Date(trade.updated_at),
       },
