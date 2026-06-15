@@ -61,6 +61,14 @@ export default function ExecutionRow({
             name="order_type"
             className="add-modal-select"
             id="order_type"
+            value={execution.order_type}
+            onChange={(e) =>
+              handleExecutionEntries({
+                index: index,
+                field: "order_type",
+                value: e.target.value as ExecutionsUIType["order_type"],
+              })
+            }
           >
             <option value="">Order-Type</option>
             <option value="buy">Buy</option>

@@ -54,12 +54,37 @@ export default function AddModal({
   const [executionModal, setExecutionModal] = useState(false);
   const { fetchTrades } = useTradesContext();
 
+  const formDataPayload: FormDataType = {
+    symbol: formData.symbol,
+    order_status: formData.order_status || null,
+    market_type: formData.market_type || null,
+    risk: Number(formData.risk),
+    position: formData.position || null,
+    direction: formData.direction || null,
+    trade_rating: formData.trade_rating || null,
+    description: formData.description,
+    entry_time: new Date(formData.entry_time),
+    exit_time: formData.exit_time ? new Date(formData.exit_time) : null,
+  };
+  console.log(formDataPayload);
+
   function handleChange(
     e: React.ChangeEvent<
       HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
     >,
   ) {
-    const { name, value } = e.target;
+    const target = e.target;
+    const name = target.name as keyof FormDataUIType;
+    let value: FormDataUIType[typeof name];
+
+    if (target instanceof HTMLInputElement && target.type === "number") {
+      value = Number(target.value) as FormDataUIType[typeof name];
+    } else if (target instanceof HTMLInputElement && target.type === "date") {
+      value = new Date(target.value) as FormDataUIType[typeof name];
+    } else {
+      value = target.value as FormDataUIType[typeof name];
+    }
+
     setFormData((prev) => ({
       ...prev,
       [name]: value,
@@ -119,7 +144,7 @@ export default function AddModal({
       try {
         const res = await updateTrade({
           trade_id: editTrade.trade.trade_id,
-          formData,
+          formData: formDataPayload,
           executions,
         });
 
@@ -137,7 +162,10 @@ export default function AddModal({
       }
     } else {
       try {
-        const res = await insertTrade(formData, executions);
+        const res = await insertTrade({
+          formData: formDataPayload,
+          executions,
+        });
 
         fetchTrades();
 
@@ -166,8 +194,6 @@ export default function AddModal({
   function onDelete(index: number) {
     setExecutions((prev) => prev.filter((_, i) => i !== index));
   }
-
-  console.log(editTrade);
 
   useEffect(() => {
     if (editTrade) {

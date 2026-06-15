@@ -4,11 +4,13 @@ import type {
   FormattedMonthsData,
   GetYearAndMonthData,
   GetYearAndMonthResponse,
+  InsertTradeParams,
+  UpdateTradeParams,
 } from "../types/trades.types.js";
 
 const API = import.meta.env.VITE_API_URL;
 
-export async function insertTrade({ formData, executions }) {
+export async function insertTrade({ formData, executions }: InsertTradeParams) {
   try {
     const res = await fetch(`${API}/api/trades`, {
       method: "POST",
@@ -27,7 +29,6 @@ export async function insertTrade({ formData, executions }) {
 
     return data;
   } catch (err) {
-    console.log(err.message);
     throw err;
   }
 }
@@ -56,7 +57,11 @@ export async function getTradesData(
   }
 }
 
-export async function updateTrade({ trade_id, formData, executions }) {
+export async function updateTrade({
+  trade_id,
+  formData,
+  executions,
+}: UpdateTradeParams) {
   try {
     const res = await fetch(`${API}/api/trades/${trade_id}`, {
       method: "PATCH",
