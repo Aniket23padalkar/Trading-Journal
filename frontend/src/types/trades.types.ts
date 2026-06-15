@@ -60,12 +60,12 @@ export interface Data {
 }
 
 export interface FilterValuesUI {
-  order_type: string | "";
+  direction: string | "";
   order_status: string | "";
   market_type: string | "";
   position: string | "";
-  fromDate: Date | null;
-  toDate: Date | null;
+  fromDate: Date | "";
+  toDate: Date | "";
   year: number | "";
   month: number | "";
   pnlSort: string | "";
@@ -73,16 +73,16 @@ export interface FilterValuesUI {
 }
 
 export interface FilterValues {
-  order_type: string;
-  order_status: string;
-  market_type: string;
-  position: string;
+  direction: string | null;
+  order_status: string | null;
+  market_type: string | null;
+  position: string | null;
   fromDate: Date | null;
   toDate: Date | null;
   year: number | null;
   month: number | null;
-  pnlSort: string;
-  dateTimeSort: string;
+  pnlSort: string | null;
+  dateTimeSort: string | null;
 }
 
 export interface FormDataUIType {

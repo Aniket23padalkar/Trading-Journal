@@ -27,8 +27,6 @@ function TradeRow({
     handleSetViewModal((prev) => !prev);
   }, [[trade, setCurrentViewTrade, handleSetViewModal]]);
 
-  console.log(pagination);
-
   const startIndex = (pagination.page - 1) * pagination.limit;
   return (
     <tr onClick={handleViewModal}>
