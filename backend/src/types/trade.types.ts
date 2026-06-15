@@ -47,7 +47,7 @@ export interface GetTradeQueryResult {
   direction: "long" | "short";
   trade_rating: "worst" | "poor" | "average" | "good" | "best";
   entry_time: Date;
-  exit_time: Date;
+  exit_time: Date | null;
   created_at: Date;
   updated_at: Date;
 }
