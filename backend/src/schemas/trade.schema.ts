@@ -26,7 +26,7 @@ const baseTradeSchema = z.object({
   risk: z.coerce.number().positive(),
   trade_rating: z.enum(["worst", "poor", "average", "good", "best"]).optional(),
   entry_time: z.coerce.date(),
-  exit_time: z.coerce.date().optional(),
+  exit_time: z.coerce.date().optional().nullable(),
   executions: z.array(executionsSchema).min(1),
   description: z.string().trim().optional(),
 });

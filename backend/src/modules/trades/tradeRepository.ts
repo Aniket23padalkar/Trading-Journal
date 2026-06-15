@@ -349,15 +349,10 @@ export const getTradeStatsFromDB = async (
       ROUND(
         (
           CASE
-            WHEN t.order_status = 'closed' AND t.direction = 'long' THEN
+            WHEN t.order_status = 'closed' THEN
               ((AVG(e.price) FILTER (WHERE e.order_type = 'sell'))
               - AVG(e.price) FILTER (WHERE e.order_type = 'buy'))
               * SUM(e.quantity) FILTER (WHERE e.order_type = 'buy')
-
-            WHEN t.order_status = 'closed' AND t.direction = 'short' THEN
-              (AVG(e.price) FILTER (WHERE e.order_type = 'buy')
-              - AVG(e.price) FILTER (WHERE e.order_type = 'sell'))
-              * SUM(e.quantity) FILTER (WHERE e.order_type = 'sell')
 
             ELSE 0
           END)::NUMERIC,2) AS pnl,
@@ -369,15 +364,10 @@ export const getTradeStatsFromDB = async (
             ELSE
               (
                 CASE
-                  WHEN t.order_status = 'closed' AND t.direction = 'long' THEN
+                  WHEN t.order_status = 'closed' THEN
                     (AVG(e.price) FILTER (WHERE e.order_type = 'sell')
                     - AVG(e.price) FILTER (WHERE e.order_type = 'buy'))
                     * SUM(e.quantity) FILTER (WHERE e.order_type = 'buy')
-
-                  WHEN t.order_status = 'closed' AND t.direction = 'short' THEN
-                    (AVG(e.price) FILTER (WHERE e.order_type = 'buy')
-                    - AVG(e.price) FILTER (WHERE e.order_type = 'sell'))
-                    * SUM(e.quantity) FILTER (WHERE e.order_type = 'sell')
 
                   ELSE 0
                 END
@@ -454,15 +444,10 @@ export const getCompleteTradeFromDB = async (
       ROUND(
         (
           CASE
-            WHEN t.order_status = 'closed' AND t.direction = 'long' THEN
+            WHEN t.order_status = 'closed' THEN
               ((AVG(e.price) FILTER (WHERE e.order_type = 'sell'))
               - AVG(e.price) FILTER (WHERE e.order_type = 'buy'))
               * SUM(e.quantity) FILTER (WHERE e.order_type = 'buy')
-
-            WHEN t.order_status = 'closed' AND t.direction = 'short' THEN
-              (AVG(e.price) FILTER (WHERE e.order_type = 'buy')
-              - AVG(e.price) FILTER (WHERE e.order_type = 'sell'))
-              * SUM(e.quantity) FILTER (WHERE e.order_type = 'sell')
 
             ELSE 0
           END)::NUMERIC,2) AS pnl,
@@ -474,15 +459,10 @@ export const getCompleteTradeFromDB = async (
             ELSE
               (
                 CASE
-                  WHEN t.order_status = 'closed' AND t.direction = 'long' THEN
+                  WHEN t.order_status = 'closed' THEN
                     (AVG(e.price) FILTER (WHERE e.order_type = 'sell')
                     - AVG(e.price) FILTER (WHERE e.order_type = 'buy'))
                     * SUM(e.quantity) FILTER (WHERE e.order_type = 'buy')
-
-                  WHEN t.order_status = 'closed' AND t.direction = 'short' THEN
-                    (AVG(e.price) FILTER (WHERE e.order_type = 'buy')
-                    - AVG(e.price) FILTER (WHERE e.order_type = 'sell'))
-                    * SUM(e.quantity) FILTER (WHERE e.order_type = 'sell')
 
                   ELSE 0
                 END
