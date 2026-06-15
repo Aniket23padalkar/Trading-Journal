@@ -64,7 +64,7 @@ export default function AddModal({
     trade_rating: formData.trade_rating || null,
     description: formData.description,
     entry_time: new Date(formData.entry_time),
-    exit_time: formData.exit_time ? new Date(formData.exit_time) : null,
+    exit_time: !formData.exit_time ? null : new Date(formData.exit_time),
   };
   console.log(formDataPayload);
 
