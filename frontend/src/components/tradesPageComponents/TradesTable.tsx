@@ -11,7 +11,7 @@ import type { TradesData } from "../../types/trades.types.js";
 interface TradesTableParams {
   handleSetViewModal: React.Dispatch<React.SetStateAction<boolean>>;
   handleSetEditTrade: (trade: TradesData) => void;
-  setCurrentViewTrade: React.Dispatch<React.SetStateAction<TradesData>>;
+  setCurrentViewTrade: React.Dispatch<React.SetStateAction<TradesData | null>>;
 }
 
 function TradesTable({

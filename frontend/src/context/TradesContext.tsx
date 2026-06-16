@@ -25,12 +25,12 @@ export default function TradeProvider({ children }: ContextProviderProps) {
   });
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [filterValues, setFilterValues] = useState<FilterValuesUI>({
-    order_type: "",
+    direction: "",
     order_status: "",
     market_type: "",
     position: "",
-    fromDate: null,
-    toDate: null,
+    fromDate: "",
+    toDate: "",
     year: "",
     month: "",
     pnlSort: "",
@@ -38,16 +38,16 @@ export default function TradeProvider({ children }: ContextProviderProps) {
   });
 
   const payload: FilterValues = {
-    order_type: filterValues.order_type,
-    order_status: filterValues.order_status,
-    market_type: filterValues.market_type,
-    position: filterValues.position,
+    direction: filterValues.direction || null,
+    order_status: filterValues.order_status || null,
+    market_type: filterValues.market_type || null,
+    position: filterValues.position || null,
     fromDate: filterValues.fromDate ? filterValues.fromDate : null,
-    toDate: filterValues.toDate ? filterValues.fromDate : null,
+    toDate: filterValues.toDate === "" ? null : filterValues.toDate,
     year: filterValues.year === "" ? null : Number(filterValues.year),
-    month: filterValues.month === "" ? null : filterValues.month,
-    pnlSort: filterValues.pnlSort,
-    dateTimeSort: filterValues.dateTimeSort,
+    month: filterValues.month || null,
+    pnlSort: filterValues.pnlSort || null,
+    dateTimeSort: filterValues.dateTimeSort || null,
   };
 
   const params = cleanParams({
@@ -55,8 +55,6 @@ export default function TradeProvider({ children }: ContextProviderProps) {
     limit: 9,
     ...payload,
   });
-
-  console.log(trades);
 
   async function fetchTrades() {
     try {

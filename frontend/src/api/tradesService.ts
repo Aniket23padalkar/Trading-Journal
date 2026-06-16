@@ -38,6 +38,8 @@ export async function getTradesData(
 ): Promise<Data> {
   const query = new URLSearchParams(params).toString();
 
+  console.log(query);
+
   try {
     const res = await fetch(`${API}/api/trades?${query}`, {
       method: "GET",

@@ -9,6 +9,7 @@ export function cleanParams(obj: Record<string, any>): Record<string, any> {
     }
 
     if (value instanceof Date) {
+      if (isNaN(value.getTime())) continue;
       result[key] = value.toISOString();
     } else {
       result[key] = value;

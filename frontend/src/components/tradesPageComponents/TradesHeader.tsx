@@ -20,6 +20,7 @@ function TradesHeader({ setAddModal }: TradesHeaderParams) {
   const [viewFilters, setViewFilters] = useState<boolean>(false);
   const [yearsMonths, setYearsMonths] =
     useState<GetYearAndMonthResponse | null>(null);
+  console.log(yearsMonths);
 
   const handleChange = useCallback(
     (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -37,7 +38,7 @@ function TradesHeader({ setAddModal }: TradesHeaderParams) {
 
   const handleClearFilters = useCallback(() => {
     setFilterValues({
-      order_type: "",
+      direction: "",
       order_status: "",
       market_type: "",
       position: "",
@@ -96,20 +97,20 @@ function TradesHeader({ setAddModal }: TradesHeaderParams) {
         >
           <option value="">All month</option>
           {yearsMonths?.months?.map((month) => (
-            <option key={month.value} value={month.value}>
+            <option key={month.value} value={month.label}>
               {month.label}
             </option>
           ))}
         </select>
         <select
-          name="status"
+          name="order_status"
           value={filterValues.order_status}
           className="filter-select"
           onChange={handleChange}
         >
           <option value="">Status</option>
-          <option value="Open">Open</option>
-          <option value="Closed">Closed</option>
+          <option value="open">Open</option>
+          <option value="closed">Closed</option>
         </select>
       </div>
       {viewFilters && (

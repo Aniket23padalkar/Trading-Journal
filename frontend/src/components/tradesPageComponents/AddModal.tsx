@@ -2,13 +2,13 @@ import { useContext, useEffect, useState } from "react";
 import useDrag from "../../hooks/useDrag.jsx";
 import { FaExclamation } from "react-icons/fa6";
 import ExecutionRow from "./ExecutionRow.js";
-import QtyRow from "./QtyRow.js";
 import { insertTrade, updateTrade } from "../../api/tradesService.js";
 import { toast } from "react-toastify";
 import { ClipLoader } from "react-spinners";
 import { useTradesContext } from "../../hooks/useTradesContext.js";
 import { getErrorMessage } from "../../utils/error.handler.js";
 import type {
+  EditTrade,
   ExecutionsType,
   ExecutionsUIType,
   FormDataType,
@@ -19,8 +19,8 @@ import type {
 import formatDateTimeLocal from "../../utils/formatDateTimeLocal.js";
 
 interface AddModalParams {
-  editTrade: TradesData;
-  setEditTrade: React.Dispatch<React.SetStateAction<TradesData | null>>;
+  editTrade: EditTrade | null;
+  setEditTrade: React.Dispatch<React.SetStateAction<EditTrade | null>>;
   setAddModal: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
@@ -51,7 +51,6 @@ export default function AddModal({
       executed_at: "",
     },
   ]);
-  const [executionModal, setExecutionModal] = useState(false);
   const { fetchTrades } = useTradesContext();
 
   const formDataPayload: FormDataType = {
@@ -66,7 +65,6 @@ export default function AddModal({
     entry_time: new Date(formData.entry_time),
     exit_time: !formData.exit_time ? null : new Date(formData.exit_time),
   };
-  console.log(formDataPayload);
 
   function handleChange(
     e: React.ChangeEvent<
@@ -143,7 +141,7 @@ export default function AddModal({
     if (editTrade) {
       try {
         const res = await updateTrade({
-          trade_id: editTrade.trade.trade_id,
+          trade_id: editTrade.trade_id,
           formData: formDataPayload,
           executions,
         });
@@ -153,12 +151,13 @@ export default function AddModal({
         console.log(res);
         resetForm();
         setAddModal(false);
-        setExecutionModal(false);
         toast.success("Trade Updated Successfully!");
       } catch (err: unknown) {
         const message = getErrorMessage(err);
         toast.error(message);
         console.log(err);
+      } finally {
+        setLoading(false);
       }
     } else {
       try {
@@ -172,13 +171,13 @@ export default function AddModal({
         console.log(res);
         resetForm();
         setAddModal(false);
-        setExecutionModal(false);
         setEditTrade(null);
         toast.success("Trade Added Successfullly");
       } catch (err: unknown) {
         const message = getErrorMessage(err);
         toast.error(message);
         console.log(err);
+      } finally {
         setLoading(false);
       }
     }
@@ -188,7 +187,6 @@ export default function AddModal({
     setAddModal(false);
     resetForm();
     setEditTrade(null);
-    setExecutionModal(false);
   }
 
   function onDelete(index: number) {
@@ -198,16 +196,16 @@ export default function AddModal({
   useEffect(() => {
     if (editTrade) {
       setFormData({
-        symbol: editTrade.trade.symbol,
-        order_status: editTrade.trade.order_status,
-        market_type: editTrade.trade.market_type || "",
-        position: editTrade.trade.position || "",
-        trade_rating: editTrade.trade.trade_rating || "",
-        risk: editTrade.trade.risk || "",
-        direction: editTrade.trade.direction || "",
-        description: editTrade.trade_logs.description || "",
-        entry_time: editTrade.trade.entry_time || "",
-        exit_time: editTrade.trade.exit_time || "",
+        symbol: editTrade.symbol,
+        order_status: editTrade.order_status,
+        market_type: editTrade.market_type || "",
+        position: editTrade.position || "",
+        trade_rating: editTrade.trade_rating || "",
+        risk: editTrade.risk || "",
+        direction: editTrade.direction || "",
+        description: editTrade.description || "",
+        entry_time: editTrade.entry_time || "",
+        exit_time: editTrade.exit_time || "",
       });
 
       setExecutions(
@@ -227,7 +225,7 @@ export default function AddModal({
 
   return (
     <div
-      className="flex flex-col overflow-visible fixed inset-0 top-1/6 left-1/8 sm:top-1/5 sm:left-1/5 md:top-1/5 md:left-1/4 lg:top-1/6 lg:left-1/3 h-120 w-140 z-10 bg-white dark:bg-gray-800 rounded-xl shadow-2xl"
+      className="flex flex-col overflow-visible fixed inset-0 top-1/8 left-1/8 sm:top-1/5 sm:left-1/5 md:top-1/5 md:left-1/4 lg:top-1/8 lg:left-1/3 h-130 w-150 z-10 bg-white dark:bg-gray-800 rounded-xl shadow-2xl"
       ref={modalRef}
     >
       <div
@@ -329,13 +327,6 @@ export default function AddModal({
               <option value="good">Good</option>
               <option value="best">Best</option>
             </select>
-            <button
-              type="button"
-              onClick={() => setExecutionModal(true)}
-              className="text-sm w-20 h-full self-end text-green-800 font-bold dark:shadow-none shadow shadow-gray-300 hover:bg-green-400 whitespace-nowrap bg-green-300 px-2 cursor-pointer rounded"
-            >
-              Add Qty
-            </button>
           </div>
           <div className="flex w-full gap-2">
             <input
@@ -374,70 +365,33 @@ export default function AddModal({
                 onChange={handleChange}
               />
             </div>
+            <button
+              type="button"
+              onClick={handleExecutionQtyModal}
+              className="text-sm w-20 h-7 self-end text-green-800 font-bold dark:shadow-none shadow shadow-gray-300 hover:bg-green-400 whitespace-nowrap bg-green-300 px-2 cursor-pointer rounded"
+            >
+              Add Qty
+            </button>
           </div>
-          {executions.length > 0 &&
-            executions.map((exe, i) => {
-              return (
-                i === 0 && (
+          <div className="overflow-y-auto max-h-35 pr-2 py-1">
+            {executions.length > 0 &&
+              executions.map((exe, i) => {
+                return (
                   <ExecutionRow
                     key={i}
                     execution={exe}
                     formData={formData}
                     index={i}
+                    onDelete={onDelete}
                     handleExecutionEntries={handleExecutionEntries}
                   />
-                )
-              );
-            })}
-
-          {executionModal && (
-            <div className="flex flex-col rounded-2xl absolute overflow-hidden right-14 top-0 lg:-right-90 z-10 h-full w-85 bg-white dark:shadow-none dark:bg-gray-800 shadow shadow-gray-500">
-              <div className="flex items-center px-4 justify-between h-10 bg-teal-700">
-                <h1 className="text-white text-shadow-lg">Add Quantity</h1>
-                <button
-                  onClick={handleExecutionQtyModal}
-                  className="cursor-pointer hover:scale-105 bg-green-300 px-2 rounded text-sm font-bold text-teal-800"
-                >
-                  + Add
-                </button>
-              </div>
-              <div className="flex-1 relative w-full p-2 overflow-y-auto">
-                {executions.length > 1 &&
-                  executions.map((exe, i) => {
-                    if (i === 0) return null;
-                    return (
-                      <QtyRow
-                        key={i}
-                        execution={exe}
-                        order_status={formData.order_status}
-                        direction={formData.direction}
-                        index={i}
-                        onDelete={onDelete}
-                        handleExecutionEntries={handleExecutionEntries}
-                      />
-                    );
-                  })}
-                {executions.length === 1 && (
-                  <div className="flex items-center absolute justify-center h-full w-full left-0 top-0 text-xl text-blue-500 text-shadow-lg">
-                    <h1>No added Qty!</h1>
-                  </div>
-                )}
-              </div>
-
-              <div className="flex items-center justify-center h-12">
-                <button
-                  onClick={() => setExecutionModal(false)}
-                  className="px-8  bg-red-300 text-red-600 hover:bg-red-200 font-bold rounded"
-                >
-                  Close
-                </button>
-              </div>
-            </div>
-          )}
+                );
+              })}
+          </div>
           <div className=" flex-1 relative">
             <p className="flex items-center absolute right-0 text-xs font-medium text-gray-500">
               <FaExclamation className="text-red-500 text-sm" />
-              To style use #, **Bold** - List item {">"} Quote
+              Markup Supported
             </p>
             <textarea
               value={formData.description}

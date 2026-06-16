@@ -1,4 +1,5 @@
 import { useTradesContext } from "../../hooks/useTradesContext.js";
+import formatDateTimeLocal from "../../utils/formatDateTimeLocal.js";
 
 export default function Filters() {
   const { filterValues, setFilterValues } = useTradesContext();
@@ -17,13 +18,13 @@ export default function Filters() {
     <div className="flex items-center gap-2 absolute rounded-2xl h-full w-86 lg:w-120 xl:w-180 dark:bg-gray-950 pr-2 bg-white">
       <select
         className="filter-select"
-        name="order_type"
-        value={filterValues.order_type}
+        name="direction"
+        value={filterValues.direction}
         onChange={handleChange}
       >
-        <option value="">Order</option>
-        <option value="BUY">BUY</option>
-        <option value="SELL">SELL</option>
+        <option value="">Direction</option>
+        <option value="long">Long</option>
+        <option value="short">Short</option>
       </select>
 
       <select
@@ -33,9 +34,9 @@ export default function Filters() {
         onChange={handleChange}
       >
         <option value="">Market-Type</option>
-        <option value="Equity">Equity</option>
-        <option value="Options">Options</option>
-        <option value="Futures">Futures</option>s
+        <option value="equity">Equity</option>
+        <option value="options">Options</option>
+        <option value="futures">Futures</option>s
       </select>
       <select
         className="filter-select"
@@ -44,12 +45,12 @@ export default function Filters() {
         onChange={handleChange}
       >
         <option value="">Position</option>
-        <option value="Intraday">Intraday</option>
-        <option value="BTST">BTST</option>
-        <option value="STBT">STBT</option>
-        <option value="Swing">Swing</option>
-        <option value="Positional">Positional</option>
-        <option value="Long-Term">Long-Term</option>
+        <option value="intraday">Intraday</option>
+        <option value="btst">BTST</option>
+        <option value="stbt">STBT</option>
+        <option value="swing">Swing</option>
+        <option value="positional">Positional</option>
+        <option value="longterm">Long-Term</option>
       </select>
       <div className="md:flex py-1 items-center hidden ml-1 text-violet-400 dark:text-blue-300 bg-violet-50 dark:bg-blue-900 rounded-md">
         {/* <label>Date Range:</label> */}
@@ -58,11 +59,7 @@ export default function Filters() {
           name="fromDate"
           className="px-2 outline-none text-xs text-violet-400 dark:text-blue-300 uppercase"
           onChange={handleChange}
-          value={
-            typeof filterValues.fromDate === "string"
-              ? filterValues.fromDate
-              : ""
-          }
+          value={formatDateTimeLocal(filterValues.fromDate)}
         />
         <span className="text-sm">to</span>
         <input
@@ -70,9 +67,7 @@ export default function Filters() {
           name="toDate"
           className="px-2 outline-none text-xs text-violet-400 dark:text-blue-300 uppercase"
           onChange={handleChange}
-          value={
-            typeof filterValues.toDate === "string" ? filterValues.toDate : ""
-          }
+          value={formatDateTimeLocal(filterValues.toDate)}
         />
       </div>
     </div>
