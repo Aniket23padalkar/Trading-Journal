@@ -1,20 +1,21 @@
 import React, { Suspense, useContext } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
-import { AuthContext } from "./context/AuthContext";
-import ProtectedRoute from "./layouts/ProtectedRoute";
-import Dashboard from "./pages/Dashboard";
-const Trades = React.lazy(() => import("./pages/Trades"));
-const Charts = React.lazy(() => import("./pages/Charts"));
-const Calender = React.lazy(() => import("./pages/Calender"));
-const ContactUs = React.lazy(() => import("./pages/ContactUs"));
-import MainLayout from "./layouts/MainLayout";
-import AuthLayout from "./layouts/AuthLayout";
-import SignUp from "./pages/SignUp";
-import SignIn from "./pages/SignIn";
+import { AuthContext } from "./context/AuthContext.js";
+import ProtectedRoute from "./layouts/ProtectedRoute.js";
+import Dashboard from "./pages/Dashboard.jsx";
+const Trades = React.lazy(() => import("./pages/Trades.js"));
+const Charts = React.lazy(() => import("./pages/Charts.jsx"));
+const Calender = React.lazy(() => import("./pages/Calender.jsx"));
+const ContactUs = React.lazy(() => import("./pages/ContactUs.jsx"));
+import MainLayout from "./layouts/MainLayout.jsx";
+import AuthLayout from "./layouts/AuthLayout.jsx";
+import SignUp from "./pages/SignUp.js";
+import SignIn from "./pages/SignIn.js";
 import { ScaleLoader } from "react-spinners";
+import { useAuthContext } from "./hooks/useAuthContext.js";
 
 export default function App() {
-  const { user } = useContext(AuthContext);
+  const { user } = useAuthContext();
   return (
     <Suspense
       fallback={

@@ -61,6 +61,7 @@ export default function ExecutionRow({
         />
         <select
           name="order_type"
+          required
           className="add-modal-select"
           id="order_type"
           value={execution.order_type}

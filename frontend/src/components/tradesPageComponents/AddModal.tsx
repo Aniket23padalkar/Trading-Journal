@@ -8,6 +8,7 @@ import { ClipLoader } from "react-spinners";
 import { useTradesContext } from "../../hooks/useTradesContext.js";
 import { getErrorMessage } from "../../utils/error.handler.js";
 import type {
+  EditTrade,
   ExecutionsType,
   ExecutionsUIType,
   FormDataType,
@@ -18,8 +19,8 @@ import type {
 import formatDateTimeLocal from "../../utils/formatDateTimeLocal.js";
 
 interface AddModalParams {
-  editTrade: TradesData;
-  setEditTrade: React.Dispatch<React.SetStateAction<TradesData | null>>;
+  editTrade: EditTrade | null;
+  setEditTrade: React.Dispatch<React.SetStateAction<EditTrade | null>>;
   setAddModal: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
@@ -30,7 +31,6 @@ export default function AddModal({
 }: AddModalParams) {
   const { modalRef, handleMouseDown } = useDrag();
   const [loading, setLoading] = useState<boolean>(false);
-  const [original, setOriginal] = useState(null);
   const [formData, setFormData] = useState<FormDataUIType>({
     symbol: "",
     order_status: "",
@@ -51,7 +51,6 @@ export default function AddModal({
       executed_at: "",
     },
   ]);
-  const [executionModal, setExecutionModal] = useState(false);
   const { fetchTrades } = useTradesContext();
 
   const formDataPayload: FormDataType = {
@@ -142,7 +141,7 @@ export default function AddModal({
     if (editTrade) {
       try {
         const res = await updateTrade({
-          trade_id: editTrade.trade.trade_id,
+          trade_id: editTrade.trade_id,
           formData: formDataPayload,
           executions,
         });
@@ -188,7 +187,6 @@ export default function AddModal({
     setAddModal(false);
     resetForm();
     setEditTrade(null);
-    setExecutionModal(false);
   }
 
   function onDelete(index: number) {
@@ -198,16 +196,16 @@ export default function AddModal({
   useEffect(() => {
     if (editTrade) {
       setFormData({
-        symbol: editTrade.trade.symbol,
-        order_status: editTrade.trade.order_status,
-        market_type: editTrade.trade.market_type || "",
-        position: editTrade.trade.position || "",
-        trade_rating: editTrade.trade.trade_rating || "",
-        risk: editTrade.trade.risk || "",
-        direction: editTrade.trade.direction || "",
-        description: editTrade.trade_logs.description || "",
-        entry_time: editTrade.trade.entry_time || "",
-        exit_time: editTrade.trade.exit_time || "",
+        symbol: editTrade.symbol,
+        order_status: editTrade.order_status,
+        market_type: editTrade.market_type || "",
+        position: editTrade.position || "",
+        trade_rating: editTrade.trade_rating || "",
+        risk: editTrade.risk || "",
+        direction: editTrade.direction || "",
+        description: editTrade.description || "",
+        entry_time: editTrade.entry_time || "",
+        exit_time: editTrade.exit_time || "",
       });
 
       setExecutions(

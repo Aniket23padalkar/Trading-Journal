@@ -9,7 +9,7 @@ interface TradeRowParams {
   index: number;
   handleSetEditTrade: (trade: TradesData) => void;
   handleDeleteTrade: (trade_id: string) => void;
-  setCurrentViewTrade: React.Dispatch<React.SetStateAction<TradesData>>;
+  setCurrentViewTrade: React.Dispatch<React.SetStateAction<TradesData | null>>;
   handleSetViewModal: React.Dispatch<React.SetStateAction<boolean>>;
 }
 

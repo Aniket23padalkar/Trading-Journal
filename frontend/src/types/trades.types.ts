@@ -174,3 +174,20 @@ export interface HandleExecutionEntries<T extends keyof ExecutionsUIType> {
   field: T;
   value: ExecutionsUIType[T];
 }
+
+export interface EditTrade {
+  trade_id: string;
+  symbol: string;
+  market_type: "equity" | "options" | "futures";
+  order_status: "open" | "closed";
+  position: "intraday" | "btst" | "stbt" | "swing" | "positional" | "longterm";
+  risk: number;
+  direction: "long" | "short";
+  trade_rating: "worst" | "poor" | "average" | "good" | "best";
+  entry_time: Date;
+  exit_time: Date;
+  created_at: Date;
+  updated_at: Date;
+  description: string;
+  executions: ExecutionsUIType[];
+}
