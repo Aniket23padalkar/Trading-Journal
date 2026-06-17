@@ -38,7 +38,8 @@ export const getTradeFromDB = async ({
       entry_time,
       exit_time
     FROM trades 
-    WHERE trade_id = $1 AND user_id = $2`;
+    WHERE trade_id = $1 AND user_id = $2
+    ORDER BY exit_time DESC`;
 
   const result = await pool.query<GetTradeQueryResult>(query, [
     trade_id,
@@ -64,6 +65,7 @@ export const getExecutionsFromDB = async ({
       executed_at
     FROM executions
     WHERE trade_id = $1
+    ORDER BY executed_at ASC
   `;
 
   const result = await db.query<GetExecutionsQueryResult>(query, [trade_id]);

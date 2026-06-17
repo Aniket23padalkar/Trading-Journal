@@ -82,3 +82,21 @@ export const validateQuantities = ({
     );
   }
 };
+
+export const validateOpenClose = ({
+  executions,
+  order_status,
+}: ValidateOrderTypeParams) => {
+  if (executions === undefined) return;
+  const totalBuy: number = executions
+    .filter((exe) => exe.order_type === "buy")
+    .reduce((sum, exe) => sum + exe.quantity, 0);
+
+  const totalSell: number = executions
+    .filter((exe) => exe.order_type === "sell")
+    .reduce((sum, exe) => sum + exe.quantity, 0);
+
+  if (order_status === "closed" && totalBuy !== totalSell) {
+    throw new AppError("Quantity should be equal on closed trade", 400);
+  }
+};

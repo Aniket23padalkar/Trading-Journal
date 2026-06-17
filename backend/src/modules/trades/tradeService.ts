@@ -34,6 +34,7 @@ import type {
 import {
   validateDirection,
   validateExecutionTime,
+  validateOpenClose,
   validateOrderTypes,
   validateQuantities,
 } from "./trade.validator.js";
@@ -67,6 +68,8 @@ export const createTradeService = async (
   validateOrderTypes({ executions, order_status });
 
   validateQuantities({ executions, direction });
+
+  validateOpenClose({ executions, order_status });
 
   const client = await pool.connect();
 
@@ -152,12 +155,7 @@ export const updateTradeService = async ({
 
   const updatedTrade = safeMerge(existingTrade, cleanedBody);
 
-  const merged = {
-    ...existingTrade,
-    ...updatedTrade,
-  };
-
-  const validatedTrade = createTradeSchema.parse(merged);
+  const validatedTrade = createTradeSchema.parse(updatedTrade);
 
   validateDirection({
     executions: validatedTrade.executions,
@@ -177,6 +175,11 @@ export const updateTradeService = async ({
   validateQuantities({
     executions: validatedTrade.executions,
     direction: validatedTrade.direction,
+  });
+
+  validateOpenClose({
+    executions: validatedTrade.executions,
+    order_status: validatedTrade.order_status,
   });
 
   const client = await pool.connect();
@@ -220,13 +223,7 @@ export const updateTradeService = async ({
 
     if (inserts.length) {
       const values: string[] = [];
-      const rows: ExecutionsRow[] = inserts.map((exe) => [
-        trade_id,
-        exe.order_type,
-        exe.price,
-        exe.quantity,
-        exe.executed_at,
-      ]);
+      const rows: ExecutionsRow[] = [];
       const params = rows.flat();
 
       inserts.forEach((exe, i) => {
