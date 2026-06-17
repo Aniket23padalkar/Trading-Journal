@@ -17,7 +17,6 @@ export default function Trades() {
   const [currentViewTrade, setCurrentViewTrade] = useState<TradesData | null>(
     null,
   );
-  console.log(editTrade);
 
   useEffect(() => {
     setCurrentPage(1);

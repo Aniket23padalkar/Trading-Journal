@@ -98,7 +98,11 @@ export default function ExecutionRow({
         </div>
 
         {index > 0 && (
-          <button onClick={() => onDelete(index)} className="cursor-pointer">
+          <button
+            type="button"
+            onClick={() => onDelete(index)}
+            className="cursor-pointer"
+          >
             <FaTrash className="text-red-400 text-xs" />
           </button>
         )}

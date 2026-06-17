@@ -9,6 +9,7 @@ import { useTradesContext } from "../../hooks/useTradesContext.js";
 import { getErrorMessage } from "../../utils/error.handler.js";
 import type {
   EditTrade,
+  Executions,
   ExecutionsType,
   ExecutionsUIType,
   FormDataType,
@@ -17,6 +18,7 @@ import type {
   TradesData,
 } from "../../types/trades.types.js";
 import formatDateTimeLocal from "../../utils/formatDateTimeLocal.js";
+import getChangedFields from "../../utils/getChangedFields.js";
 
 interface AddModalParams {
   editTrade: EditTrade | null;
@@ -43,7 +45,9 @@ export default function AddModal({
     entry_time: "",
     exit_time: "",
   });
-  const [executions, setExecutions] = useState<ExecutionsUIType[]>([
+  const [executions, setExecutions] = useState<
+    ExecutionsUIType[] | Executions[]
+  >([
     {
       order_type: "",
       price: "",
@@ -53,18 +57,18 @@ export default function AddModal({
   ]);
   const { fetchTrades } = useTradesContext();
 
-  const formDataPayload: FormDataType = {
-    symbol: formData.symbol,
-    order_status: formData.order_status || null,
-    market_type: formData.market_type || null,
-    risk: Number(formData.risk),
-    position: formData.position || null,
-    direction: formData.direction || null,
-    trade_rating: formData.trade_rating || null,
-    description: formData.description,
-    entry_time: new Date(formData.entry_time),
-    exit_time: !formData.exit_time ? null : new Date(formData.exit_time),
-  };
+  // const formDataPayload: FormDataType = {
+  //   symbol: formData.symbol,
+  //   order_status: formData.order_status || null,
+  //   market_type: formData.market_type || null,
+  //   risk: Number(formData.risk),
+  //   position: formData.position || null,
+  //   direction: formData.direction || null,
+  //   trade_rating: formData.trade_rating || null,
+  //   description: formData.description,
+  //   entry_time: new Date(formData.entry_time),
+  //   exit_time: !formData.exit_time ? null : new Date(formData.exit_time),
+  // };
 
   function handleChange(
     e: React.ChangeEvent<
@@ -77,8 +81,13 @@ export default function AddModal({
 
     if (target instanceof HTMLInputElement && target.type === "number") {
       value = Number(target.value) as FormDataUIType[typeof name];
-    } else if (target instanceof HTMLInputElement && target.type === "date") {
-      value = new Date(target.value) as FormDataUIType[typeof name];
+    } else if (
+      target instanceof HTMLInputElement &&
+      target.type === "datetime-local"
+    ) {
+      value = target.value
+        ? (new Date(target.value) as FormDataUIType[typeof name])
+        : null;
     } else {
       value = target.value as FormDataUIType[typeof name];
     }
@@ -140,10 +149,17 @@ export default function AddModal({
     setLoading(true);
     if (editTrade) {
       try {
+        const completeTrade = {
+          ...formData,
+          executions,
+        };
+        const changedFields = getChangedFields(editTrade, completeTrade);
+
+        console.log(changedFields);
+
         const res = await updateTrade({
           trade_id: editTrade.trade_id,
-          formData: formDataPayload,
-          executions,
+          formData: changedFields,
         });
 
         fetchTrades();
@@ -162,7 +178,7 @@ export default function AddModal({
     } else {
       try {
         const res = await insertTrade({
-          formData: formDataPayload,
+          formData,
           executions,
         });
 
