@@ -1,13 +1,13 @@
-import Header from "../components/header/Header";
-import Aside from "../components/aside/Aside";
+import Header from "../components/header/Header.js";
+import Aside from "../components/aside/Aside.jsx";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { useContext } from "react";
 import { useState } from "react";
-import { TradeContext } from "../context/TradesContext";
+import type { ContextProviderProps } from "../types/context.types.js";
+import { useThemeContext } from "../hooks/useThemeContext.js";
 
-export default function MainLayout({ children }) {
-  const { theme } = useContext(TradeContext);
+export default function MainLayout({ children }: ContextProviderProps) {
+  const { theme } = useThemeContext();
   const [isAsideOpen, setIsAsideOpen] = useState(false);
   return (
     <main className="grid h-full w-full grid-cols-[14rem_1fr] grid-rows-[4rem_1fr] bg-white dark:bg-gray-950">

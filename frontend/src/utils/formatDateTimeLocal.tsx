@@ -1,4 +1,6 @@
-export default function formatDateTimeLocal(date: Date | string | undefined) {
+export default function formatDateTimeLocal(
+  date: Date | string | undefined | null,
+) {
   if (date === null || date === undefined) return "";
 
   const d = new Date(date);

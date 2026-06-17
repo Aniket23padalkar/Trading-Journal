@@ -101,8 +101,8 @@ export interface FormDataUIType {
   direction: "long" | "short" | "";
   trade_rating: "worst" | "poor" | "average" | "good" | "best" | "";
   description: string;
-  entry_time: Date | "";
-  exit_time?: Date | "";
+  entry_time: Date | "" | null;
+  exit_time?: Date | "" | null;
 }
 
 export interface FormDataType {
@@ -121,8 +121,8 @@ export interface FormDataType {
   direction: "long" | "short" | null;
   trade_rating: "worst" | "poor" | "average" | "good" | "best" | null;
   description: string | null;
-  entry_time: Date | null;
-  exit_time?: Date | null;
+  entry_time: Date | null | string;
+  exit_time?: Date | null | string;
 }
 
 export interface ExecutionsUIType {
@@ -145,12 +145,11 @@ interface ExecutionsTypeWithID extends ExecutionsUIType {
 
 export interface UpdateTradeParams {
   trade_id: string;
-  formData: FormDataType;
-  executions: ExecutionsTypeWithID[];
+  formData: ChangedFields;
 }
 
 export interface InsertTradeParams {
-  formData: FormDataType;
+  formData: FormDataUIType;
   executions: ExecutionsUIType[];
 }
 
@@ -189,5 +188,19 @@ export interface EditTrade {
   created_at: Date;
   updated_at: Date;
   description: string;
-  executions: ExecutionsUIType[];
+  executions: Executions[];
+}
+
+export interface ChangedFields {
+  symbol?: string;
+  market_type?: "equity" | "options" | "futures";
+  order_status?: "open" | "closed";
+  position?: "intraday" | "btst" | "stbt" | "swing" | "positional" | "longterm";
+  risk?: number;
+  direction?: "long" | "short";
+  trade_rating?: "worst" | "poor" | "average" | "good" | "best";
+  entry_time?: Date;
+  exit_time?: Date;
+  description?: string;
+  executions?: Executions[] | ExecutionsUIType[];
 }

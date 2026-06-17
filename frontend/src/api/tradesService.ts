@@ -59,18 +59,14 @@ export async function getTradesData(
   }
 }
 
-export async function updateTrade({
-  trade_id,
-  formData,
-  executions,
-}: UpdateTradeParams) {
+export async function updateTrade({ trade_id, formData }: UpdateTradeParams) {
   try {
     const res = await fetch(`${API}/api/trades/${trade_id}`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ ...formData, executions: executions }),
+      body: JSON.stringify({ ...formData }),
       credentials: "include",
     });
 
