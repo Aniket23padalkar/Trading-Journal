@@ -42,6 +42,7 @@ import { safeMerge } from "../../utils/merge.utils.js";
 import { removeUndefined } from "../../utils/removeundefined.utils.js";
 import pool from "../../config/db.js";
 import { groupBy, mapBy } from "../../utils/array.utils.js";
+import calculateStats from "../../utils/calculateStats.js";
 
 export const createTradeService = async (
   body: CreateTradeData,
@@ -76,6 +77,8 @@ export const createTradeService = async (
   try {
     await client.query("BEGIN");
 
+    const { pnl } = calculateStats({ executions, order_status });
+
     const trade_id = await createTradeInDB({
       user_id,
       symbol,
@@ -88,6 +91,7 @@ export const createTradeService = async (
       entry_time,
       exit_time,
       client,
+      pnl,
     });
 
     if (trade_id === undefined) {
@@ -187,7 +191,12 @@ export const updateTradeService = async ({
   try {
     await client.query("BEGIN");
 
-    await updateTradeInDB({ validatedTrade, trade_id, user_id, client });
+    const { pnl } = calculateStats({
+      executions: validatedTrade.executions,
+      order_status: validatedTrade.order_status,
+    });
+
+    await updateTradeInDB({ validatedTrade, trade_id, user_id, client, pnl });
 
     const existingExecutions = await getExecutionsFromDB({
       db: client,
@@ -265,6 +274,7 @@ export const updateTradeService = async ({
         trade_rating: updatedTrade_raw.trade_rating,
         entry_time: updatedTrade_raw.entry_time,
         exit_time: updatedTrade_raw.exit_time,
+        pnl: updatedTrade_raw.pnl,
         created_at: updatedTrade_raw.created_at,
         updated_at: updatedTrade_raw.updated_at,
       },
@@ -275,7 +285,6 @@ export const updateTradeService = async ({
         avg_sell_price: updatedTrade_raw.avg_sell_price,
         total_buy_qty: updatedTrade_raw.total_buy_qty,
         total_sell_qty: updatedTrade_raw.total_sell_qty,
-        pnl: updatedTrade_raw.pnl,
         total_qty: updatedTrade_raw.total_qty,
         rr_ratio: updatedTrade_raw.rr_ratio,
       },
@@ -400,7 +409,6 @@ export const getTradesService = async ({
       total_buy_qty: Number(stats_raw?.total_buy_qty),
       total_sell_qty: Number(stats_raw?.total_sell_qty),
       total_qty: Number(stats_raw?.total_qty),
-      pnl: Number(stats_raw?.pnl),
       rr_ratio: Number(stats_raw?.rr_ratio),
     };
 
@@ -416,6 +424,7 @@ export const getTradesService = async ({
         trade_rating: trade.trade_rating,
         entry_time: new Date(trade.entry_time),
         exit_time: trade.exit_time ? new Date(trade.exit_time) : null,
+        pnl: trade.pnl,
         created_at: new Date(trade.created_at),
         updated_at: new Date(trade.updated_at),
       },
