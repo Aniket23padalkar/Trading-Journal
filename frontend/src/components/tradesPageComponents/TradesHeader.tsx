@@ -20,7 +20,6 @@ function TradesHeader({ setAddModal }: TradesHeaderParams) {
   const [viewFilters, setViewFilters] = useState<boolean>(false);
   const [yearsMonths, setYearsMonths] =
     useState<GetYearAndMonthResponse | null>(null);
-  console.log(yearsMonths);
 
   const handleChange = useCallback(
     (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -72,7 +71,7 @@ function TradesHeader({ setAddModal }: TradesHeaderParams) {
   return (
     <header className="flex w-full justify-between items-center p-2 lg:py-2 lg:px-6 relative rounded-xl shadow shadow-gray-400 bg-white dark:bg-gray-950 dark:shadow-none dark:text-white">
       <div className="flex items-center gap-2">
-        <p className="drop-shadow-lg font-medium mr-2 text-sm  xl:text-lg">
+        <p className="drop-shadow-lg font-medium mr-2 text-l">
           Yearly/Monthly Trades :
         </p>
         <select

@@ -112,7 +112,7 @@ function TradesTable({
                 )}{" "}
                 <p>Entry Time</p>
               </th>
-              <th>risk/trade</th>
+              <th>risk</th>
               <th
                 className="flex items-center gap-3 justify-center cursor-pointer select-none"
                 onClick={handleFilterChange}
