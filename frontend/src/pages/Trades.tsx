@@ -1,6 +1,6 @@
 import { useCallback, useContext, useEffect, useState } from "react";
 import AddModal from "../components/tradesPageComponents/AddModal.js";
-import ViewModal from "../components/tradesPageComponents/ViewModal.jsx";
+import ViewModal from "../components/tradesPageComponents/ViewModal.js";
 import Pagination from "../components/tradesPageComponents/Pagination.jsx";
 import TradesTable from "../components/tradesPageComponents/TradesTable.js";
 import TableFooter from "../components/tradesPageComponents/TableFooter.jsx";

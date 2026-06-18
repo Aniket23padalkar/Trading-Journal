@@ -37,6 +37,8 @@ export default function TradeProvider({ children }: ContextProviderProps) {
     dateTimeSort: "",
   });
 
+  console.log(trades);
+
   const payload: FilterValues = {
     direction: filterValues.direction || null,
     order_status: filterValues.order_status || null,

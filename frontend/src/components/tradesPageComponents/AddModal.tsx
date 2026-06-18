@@ -178,7 +178,10 @@ export default function AddModal({
     } else {
       try {
         const res = await insertTrade({
-          formData,
+          formData: {
+            ...formData,
+            exit_time: formData.exit_time ? formData.exit_time : null,
+          },
           executions,
         });
 

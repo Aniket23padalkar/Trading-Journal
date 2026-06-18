@@ -1,31 +1,40 @@
-import { useContext, useState } from "react";
-import formatDateTime from "../../utils/formatDateTime";
-import useDrag from "../../hooks/useDrag";
+import { useState } from "react";
+import formatDateTime from "../../utils/formatDateTime.js";
+import useDrag from "../../hooks/useDrag.jsx";
 import { FaIndianRupeeSign } from "react-icons/fa6";
 import ReactMarkdown from "react-markdown";
-import calculatePnL from "../../utils/CalculatePnl";
-import FormatPnL from "../../utils/FormatPnL";
-import { TradeContext } from "../../context/TradesContext";
+import { useThemeContext } from "../../hooks/useThemeContext.js";
+import type { TradesData } from "../../types/trades.types.js";
 
-export default function ViewModal({ setViewModal, currentViewTrade }) {
-  const { theme } = useContext(TradeContext);
+interface ViewModalParams {
+  setViewModal: React.Dispatch<React.SetStateAction<boolean>>;
+  currentViewTrade: TradesData | null;
+}
+
+export default function ViewModal({
+  setViewModal,
+  currentViewTrade,
+}: ViewModalParams) {
+  if (!currentViewTrade) return;
+
+  const { theme } = useThemeContext();
   const [description, setDescription] = useState(false);
 
   const { modalRef, handleMouseDown } = useDrag();
 
   function handleViewOrderColor() {
-    if (currentViewTrade.trade.order_type === "BUY") return "#44ca80ff";
-    if (currentViewTrade.trade.order_type === "SELL") return "#ff7779ff";
+    if (currentViewTrade?.trade.direction === "long") return "#44ca80ff";
+    if (currentViewTrade?.trade.direction === "short") return "#ff7779ff";
     return "white";
   }
 
   function handleRatingColor() {
-    if (currentViewTrade.trade.rating === "Worst") return "red";
-    if (currentViewTrade.trade.rating === "Poor") return "#ff787aff";
-    if (currentViewTrade.trade.rating === "Average")
+    if (currentViewTrade?.trade.trade_rating === "worst") return "red";
+    if (currentViewTrade?.trade.trade_rating === "poor") return "#ff787aff";
+    if (currentViewTrade?.trade.trade_rating === "average")
       return theme === "dark" ? "gray" : "#000000";
-    if (currentViewTrade.trade.rating === "Good") return "#66c43bff";
-    if (currentViewTrade.trade.rating === "Best") return "green";
+    if (currentViewTrade?.trade.trade_rating === "good") return "#66c43bff";
+    if (currentViewTrade?.trade.trade_rating === "best") return "green";
     return "black";
   }
 
@@ -43,13 +52,13 @@ export default function ViewModal({ setViewModal, currentViewTrade }) {
         onMouseDown={handleMouseDown}
       >
         <h1 className="uppercase text-white text-xl font-bold text-shadow-lg tracking-widest text-shadow-gray-600">
-          {currentViewTrade.trade.symbol}
+          {currentViewTrade?.trade.symbol}
         </h1>
         <span
-          className="px-2 rounded shadow-sm shadow-gray-700"
+          className="px-2 rounded shadow-sm shadow-gray-700 capitalize"
           style={{ backgroundColor: handleViewOrderColor(), color: "white" }}
         >
-          {currentViewTrade.trade.order_type}
+          {currentViewTrade?.trade.direction}
         </span>
       </div>
       <div className="flex flex-1 flex-col gap-3 relative p-2">
@@ -57,36 +66,38 @@ export default function ViewModal({ setViewModal, currentViewTrade }) {
           <div className="view-modal-section border-none">
             <span className="view-modal-span">Avg-Buy-Price</span>
             <h1 className="view-modal-h1">
-              {Number(currentViewTrade.stats.avg_buy_price).toFixed(2)}
+              {Number(currentViewTrade?.stats.avg_buy_price).toFixed(2)}
             </h1>
           </div>
           <div className="view-modal-section">
             <span className="view-modal-span">Avg-Sell-Price</span>
             <h1 className="view-modal-h1">
-              {Number(currentViewTrade.stats.avg_sell_price).toFixed(2)}
+              {Number(currentViewTrade?.stats.avg_sell_price).toFixed(2)}
             </h1>
           </div>
           <div className="view-modal-section">
             <span className="view-modal-span">Total-Quantity</span>
             <h1 className="view-modal-h1">
-              {Number(currentViewTrade.stats.total_qty).toFixed(2)}
+              {Number(currentViewTrade?.stats.total_qty).toFixed(2)}
             </h1>
           </div>
           <div className="view-modal-section">
             <span className="view-modal-span">Avg-Risk</span>
             <h1 className="flex items-center justify-center view-modal-h1">
               <FaIndianRupeeSign />
-              {Number(currentViewTrade.stats.avg_risk).toFixed(2)}
+              {Number(currentViewTrade?.trade.risk).toFixed(2)}
             </h1>
           </div>
           <div className="view-modal-section">
             <span className="view-modal-span">Status</span>
-            <h1 className="view-modal-h1">{currentViewTrade.trade.status}</h1>
+            <h1 className="view-modal-h1 capitalize">
+              {currentViewTrade?.trade.order_status}
+            </h1>
           </div>
           <div className="view-modal-section">
             <span className="view-modal-span">Market-Type</span>
-            <h1 className="view-modal-h1">
-              {currentViewTrade.trade.market_type}
+            <h1 className="view-modal-h1 capitalize">
+              {currentViewTrade?.trade.market_type}
             </h1>
           </div>
         </div>
@@ -94,13 +105,15 @@ export default function ViewModal({ setViewModal, currentViewTrade }) {
         <div className="flex w-full">
           <div className="view-modal-section border-none">
             <span className="view-modal-span">Position</span>
-            <h1 className="view-modal-h1">{currentViewTrade.trade.position}</h1>
+            <h1 className="view-modal-h1 uppercase">
+              {currentViewTrade?.trade.position}
+            </h1>
           </div>
 
           <div className="view-modal-section">
             <span className="view-modal-span">Entry-Time</span>
             <h1 className="view-modal-h1 font-light text-sm pt-1 text-indigo-600 dark:text-blue-400">
-              {formatDateTime(currentViewTrade.executions[0].entry_time)}
+              {formatDateTime(currentViewTrade.trade.entry_time)}
             </h1>
           </div>
 
@@ -108,13 +121,15 @@ export default function ViewModal({ setViewModal, currentViewTrade }) {
             <span className="view-modal-span">Total PnL</span>
             <h1
               className={`view-modal-h1 flex items-center justify-center gap-1 ${
-                currentViewTrade.stats.pnl > 0
-                  ? "text-green-500"
-                  : "text-red-400"
+                currentViewTrade?.trade.pnl
+                  ? currentViewTrade?.trade.pnl > 0
+                    ? "text-green-500"
+                    : "text-red-400"
+                  : null
               }`}
             >
               <FaIndianRupeeSign />
-              {Number(currentViewTrade.stats.pnl).toLocaleString("en-IN", {
+              {Number(currentViewTrade.trade.pnl).toLocaleString("en-IN", {
                 maximumFractionDigits: 2,
                 minimumFractionDigits: 2,
               })}
@@ -124,24 +139,24 @@ export default function ViewModal({ setViewModal, currentViewTrade }) {
           <div className="view-modal-section">
             <span className="view-modal-span">R:R Ratio</span>
             <h1 className="view-modal-h1 pt-1">
-              {Number(currentViewTrade.stats.avg_rr).toFixed(2)}X
+              {Number(currentViewTrade.stats.rr_ratio).toFixed(2)}X
             </h1>
           </div>
 
           <div className="view-modal-section">
             <span className="view-modal-span">Exit-Time</span>
             <h1 className="view-modal-h1 font-light pt-1 text-indigo-600 dark:text-blue-400">
-              {formatDateTime(currentViewTrade.executions[0].exit_time)}
+              {formatDateTime(currentViewTrade.trade.exit_time)}
             </h1>
           </div>
 
           <div className="view-modal-section">
-            <span className="view-modal-span">Trade-Rating</span>
+            <span className="view-modal-span ">Trade-Rating</span>
             <h1
-              className="view-modal-h1 pt-1"
+              className="view-modal-h1 pt-1 capitalize"
               style={{ color: handleRatingColor() }}
             >
-              {currentViewTrade.trade.rating}
+              {currentViewTrade.trade.trade_rating}
             </h1>
           </div>
         </div>
@@ -165,8 +180,8 @@ export default function ViewModal({ setViewModal, currentViewTrade }) {
             </span>
             <div className="prose prose-sm max-w-none pt-2">
               <ReactMarkdown>
-                {currentViewTrade.trade.description
-                  ? currentViewTrade.trade.description
+                {currentViewTrade.trade_logs.description
+                  ? currentViewTrade.trade_logs.description
                   : "## No Description!"}
               </ReactMarkdown>
             </div>
@@ -180,62 +195,34 @@ export default function ViewModal({ setViewModal, currentViewTrade }) {
                 <thead>
                   <tr className="bg-gray-100 dark:bg-gray-900">
                     <th className="font-bold text-xs">#</th>
-                    <th className="font-bold text-xs">Buy</th>
-                    <th className="font-bold text-xs">Sell</th>
+                    <th className="font-bold text-xs">Executed_at</th>
+                    <th className="font-bold text-xs">Price</th>
                     <th className="font-bold text-xs">Qty</th>
-                    <th className="font-bold text-xs">Risk</th>
-                    <th className="font-bold text-xs">Enter</th>
-                    <th className="font-bold text-xs">Exit</th>
-                    <th className="font-bold text-xs">Label</th>
-                    <th className="font-bold text-xs">Pnl</th>
+                    <th className="font-bold text-xs">Order_type</th>
                   </tr>
                 </thead>
                 <tbody>
                   {currentViewTrade?.executions?.map((entry, index) => {
                     return (
-                      <tr className="" key={entry.trade_logs_id}>
+                      <tr className="" key={entry.execution_id}>
                         <td className="text-xs bg-gray-100 dark:bg-gray-900">
                           {index + 1}
                         </td>
-                        <td className="text-xs text-green-700">
-                          {entry.buy_price}
-                        </td>
-                        <td className="text-xs text-red-500">
-                          {entry.sell_price}
-                        </td>
-                        <td className="text-xs">{entry.quantity}</td>
-                        <td className="text-xs">{entry.risk}</td>
                         <td className="text-xs text-blue-700 dark:text-blue-400">
-                          {formatDateTime(entry.entry_time)}
-                        </td>
-                        <td className="text-xs text-blue-700 dark:text-blue-400">
-                          {formatDateTime(entry.exit_time)}
-                        </td>
-                        <td>
-                          <p className="bg-violet-300 text-violet-800 px-1 rounded">
-                            {index === 0 ? "Initial" : "Added"}
-                          </p>
+                          {formatDateTime(entry.executed_at)}
                         </td>
                         <td
-                          style={{
-                            color:
-                              calculatePnL(
-                                entry.buy_price,
-                                entry.sell_price,
-                                entry.quantity,
-                              ) > 0
-                                ? "green"
-                                : "red",
-                            fontWeight: "bold",
-                          }}
+                          className={`text-xs ${entry.order_type === "buy" ? "text-green-700" : "text-red-500"}`}
                         >
-                          {FormatPnL(
-                            calculatePnL(
-                              entry.buy_price,
-                              entry.sell_price,
-                              entry.quantity,
-                            ),
-                          )}
+                          {entry.price}
+                        </td>
+                        <td className="text-xs">{entry.quantity}</td>
+                        <td>
+                          <p
+                            className={`capitalize text-xs w-15 mx-auto px-1 rounded ${entry.order_type === "buy" ? "bg-green-200 border-green-400 border-2 text-green-600" : "bg-red-100 border-2 border-red-300 text-red-500"}`}
+                          >
+                            {entry.order_type}
+                          </p>
                         </td>
                       </tr>
                     );

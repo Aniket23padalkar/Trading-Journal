@@ -31,12 +31,12 @@ function TradeRow({
   return (
     <tr onClick={handleViewModal}>
       <td className="bg-gray-200 dark:bg-gray-900">{startIndex + index + 1}</td>
-      <td className="text-left whitespace-nowrap w-30 font-medium text-base capitalize px-1 bg-gray-100 dark:bg-gray-800">
+      <td className="text-left whitespace-nowrap w-30 font-medium text-sm capitalize px-1 bg-gray-100 dark:bg-gray-800">
         {trade.trade.symbol}
       </td>
       <td>
         <p
-          className={`text-xs px-1 border rounded font-medium uppercase ${
+          className={`text-xs px-1 border rounded font-medium capitalize ${
             trade.trade.direction === "long"
               ? "text-[#03c988] border-[#03c988]"
               : trade.trade.direction === "short"
@@ -47,12 +47,16 @@ function TradeRow({
           {trade.trade.direction}
         </p>
       </td>
-      <td className="text-xs dark:text-gray-300">{trade.trade.order_status}</td>
-      <td className="dark:text-gray-300">{trade.trade.market_type}</td>
+      <td className="text-xs capitalize dark:text-gray-300">
+        {trade.trade.order_status}
+      </td>
+      <td className="dark:text-gray-300 capitalize text-xs">
+        {trade.trade.market_type}
+      </td>
       <td>{trade.stats.total_qty}</td>
 
       <td>
-        <p className="text-xs bg-blue-100 dark:text-black dark:bg-blue-400 rounded">
+        <p className="text-xs bg-blue-100 dark:text-black dark:bg-blue-400 capitalize rounded">
           {trade.trade.position}
         </p>
       </td>
@@ -62,16 +66,18 @@ function TradeRow({
       <td>{trade.trade.risk}</td>
       <td
         className={`text-sm font-bold ${
-          trade.stats.pnl >= 0
-            ? "text-green-600 dark:text-green-500"
-            : "text-red-500 dark:text-red-400"
+          trade.trade.pnl
+            ? trade.trade.pnl >= 0
+              ? "text-green-600 dark:text-green-500"
+              : "text-red-500 dark:text-red-400"
+            : null
         }`}
       >
         {" "}
-        {trade.stats.pnl > 0 && "+"}
+        {trade.trade.pnl && trade.trade.pnl > 0 && "+"}
         {trade.trade.order_status === "open"
           ? "-"
-          : Number(trade.stats.pnl).toLocaleString("en-IN", {
+          : Number(trade.trade.pnl).toLocaleString("en-IN", {
               minimumFractionDigits: 2,
               maximumFractionDigits: 2,
             })}
@@ -83,7 +89,7 @@ function TradeRow({
           : Number(trade.stats.rr_ratio).toFixed(1)}
         {trade.trade.order_status === "open" ? "-" : "X"}
       </td>
-      <td>{trade.trade.trade_rating}</td>
+      <td className="capitalize text-xs">{trade.trade.trade_rating}</td>
       <td>
         <button
           onClick={(e) => {

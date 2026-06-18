@@ -7,6 +7,7 @@ export interface Trades {
   risk: number;
   direction: "long" | "short";
   trade_rating: "worst" | "poor" | "average" | "good" | "best";
+  pnl: number | null;
   entry_time: Date;
   exit_time: Date;
   created_at: Date;
