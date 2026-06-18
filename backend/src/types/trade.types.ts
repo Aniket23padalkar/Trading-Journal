@@ -14,6 +14,7 @@ export type CreateTradeParams = Omit<
 > & {
   client: PoolClient;
   user_id: string;
+  pnl: number | null;
 };
 
 export interface InsertIntoTradeLogsParams {
@@ -48,6 +49,7 @@ export interface GetTradeQueryResult {
   trade_rating: "worst" | "poor" | "average" | "good" | "best";
   entry_time: Date;
   exit_time: Date | null;
+  pnl: number | null;
   created_at: Date;
   updated_at: Date;
 }
@@ -72,6 +74,7 @@ export interface UpdateTradeRepoParams {
   validatedTrade: UpdateTradeData;
   trade_id: string;
   user_id: string;
+  pnl: number | null;
 }
 
 export interface GetTradesServicesParams {
@@ -136,7 +139,6 @@ export interface GetTradeStatsQueryResult {
   avg_sell_price: number;
   total_buy_qty: number;
   total_sell_qty: number;
-  pnl: number;
   total_qty: number;
   rr_ratio: number;
 }

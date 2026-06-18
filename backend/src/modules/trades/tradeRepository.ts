@@ -116,12 +116,13 @@ export const createTradeInDB = async ({
   entry_time,
   exit_time,
   client,
+  pnl,
 }: CreateTradeParams): Promise<string | undefined> => {
   const query: string = `
     INSERT INTO trades
-      (user_id, symbol, market_type, order_status, position, trade_rating, risk, direction, entry_time, exit_time) 
+      (user_id, symbol, market_type, order_status, position, trade_rating, risk, direction, entry_time, exit_time, pnl) 
     VALUES 
-      ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10) 
+      ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11) 
     RETURNING trade_id
   `;
 
@@ -177,6 +178,7 @@ export const updateTradeInDB = async ({
   validatedTrade,
   trade_id,
   user_id,
+  pnl,
 }: UpdateTradeRepoParams): Promise<void> => {
   const query = `
     UPDATE trades
@@ -189,9 +191,10 @@ export const updateTradeInDB = async ({
       risk = $6,
       entry_time = $7,
       exit_time = $8,
+      pnl = $9
       updated_at = NOW()
     WHERE
-      trade_id = $9 AND user_id = $10
+      trade_id = $10 AND user_id = $11
   `;
 
   await client.query(query, [
@@ -203,6 +206,7 @@ export const updateTradeInDB = async ({
     validatedTrade.risk,
     validatedTrade.entry_time,
     validatedTrade.exit_time,
+    pnl,
     trade_id,
     user_id,
   ]);
@@ -276,6 +280,7 @@ export const getTradesWithPaginationFromDB = async ({
             trade_rating,
             entry_time,
             exit_time,
+            pnl,
             created_at,
             updated_at
         FROM trades
@@ -351,30 +356,10 @@ export const getTradeStatsFromDB = async (
       ROUND(
         (
           CASE
-            WHEN t.order_status = 'closed' THEN
-              ((AVG(e.price) FILTER (WHERE e.order_type = 'sell'))
-              - AVG(e.price) FILTER (WHERE e.order_type = 'buy'))
-              * SUM(e.quantity) FILTER (WHERE e.order_type = 'buy')
-
-            ELSE 0
-          END)::NUMERIC,2) AS pnl,
-
-      ROUND(
-        (
-          CASE
             WHEN t.risk = 0 THEN NULL
             ELSE
-              (
-                CASE
-                  WHEN t.order_status = 'closed' THEN
-                    (AVG(e.price) FILTER (WHERE e.order_type = 'sell')
-                    - AVG(e.price) FILTER (WHERE e.order_type = 'buy'))
-                    * SUM(e.quantity) FILTER (WHERE e.order_type = 'buy')
-
-                  ELSE 0
-                END
-          ) / t.risk
-        END
+              t.pnl / t.risk
+          END
         )::NUMERIC,
         2) AS rr_ratio
     FROM trades t
@@ -408,6 +393,7 @@ export const getCompleteTradeFromDB = async (
       t.trade_rating,
       t.entry_time,
       t.exit_time,
+      t.pnl,
       t.created_at,
       t.updated_at,
     COALESCE(
@@ -446,30 +432,10 @@ export const getCompleteTradeFromDB = async (
       ROUND(
         (
           CASE
-            WHEN t.order_status = 'closed' THEN
-              ((AVG(e.price) FILTER (WHERE e.order_type = 'sell'))
-              - AVG(e.price) FILTER (WHERE e.order_type = 'buy'))
-              * SUM(e.quantity) FILTER (WHERE e.order_type = 'buy')
-
-            ELSE 0
-          END)::NUMERIC,2) AS pnl,
-
-      ROUND(
-        (
-          CASE
             WHEN t.risk = 0 THEN NULL
             ELSE
-              (
-                CASE
-                  WHEN t.order_status = 'closed' THEN
-                    (AVG(e.price) FILTER (WHERE e.order_type = 'sell')
-                    - AVG(e.price) FILTER (WHERE e.order_type = 'buy'))
-                    * SUM(e.quantity) FILTER (WHERE e.order_type = 'buy')
-
-                  ELSE 0
-                END
-          ) / t.risk
-        END
+              t.pnl / t.risk
+          END
         )::NUMERIC,
         2) AS rr_ratio
     FROM trades t
