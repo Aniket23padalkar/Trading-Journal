@@ -59,8 +59,8 @@ export default function buildTradeFilters(
 
   let orderByArr = [];
 
-  // if (pnlSort === "asc") orderByArr.push("pnl ASC");
-  // if (pnlSort === "desc") orderByArr.push("pnl DESC");
+  if (pnlSort === "asc") orderByArr.push("pnl ASC");
+  if (pnlSort === "desc") orderByArr.push("pnl DESC");
 
   if (dateTimeSort === "asc") orderByArr.push("entry_time ASC");
   if (dateTimeSort === "desc") orderByArr.push("entry_time DESC");
