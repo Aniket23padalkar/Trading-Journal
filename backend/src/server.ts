@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
 import authRoutes from "./modules/auth/auth.routes.js";
 import tradeRoutes from "./modules/trades/trade.routes.js";
+import statsRoutes from "../src/modules/stats/stats.routes.js";
 import { errorHandler } from "./middleware/error.middleware.js";
 import { globalLimiter } from "./middleware/rate.limiter.js";
 import { corsMiddleware } from "./middleware/cors.middleware.js";
@@ -20,6 +21,7 @@ app.use(globalLimiter);
 
 app.use("/api/auth", authRoutes);
 app.use("/api/trades", tradeRoutes);
+app.use("/api/stats", statsRoutes);
 
 app.use(errorHandler);
 

@@ -137,6 +137,7 @@ export const createTradeInDB = async ({
     direction,
     entry_time,
     exit_time,
+    pnl,
   ]);
 
   return result.rows[0]?.trade_id;
@@ -191,7 +192,7 @@ export const updateTradeInDB = async ({
       risk = $6,
       entry_time = $7,
       exit_time = $8,
-      pnl = $9
+      pnl = $9,
       updated_at = NOW()
     WHERE
       trade_id = $10 AND user_id = $11
