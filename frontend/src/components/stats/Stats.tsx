@@ -9,12 +9,12 @@ import {
 } from "react-icons/fa6";
 import { FaBullseye, FaChartLine, FaExclamation } from "react-icons/fa";
 import { BiBarChartAlt2 } from "react-icons/bi";
-import { TradeContext } from "../../context/TradesContext";
-import FormatNumbers from "../../utils/FormatNumbers";
+import FormatNumbers from "../../utils/FormatNumbers.js";
 import { ScaleLoader } from "react-spinners";
+import { useStatsContext } from "../../hooks/useStatsContext.js";
 
 export default function Stats() {
-  const { overallStats } = useContext(TradeContext);
+  const { overallStats } = useStatsContext();
 
   if (!overallStats) {
     return (
@@ -30,7 +30,7 @@ export default function Stats() {
         <div className="flex flex-col gap-4 ">
           <div className="flex gap-4 h-15">
             <div className="flex items-center justify-center h-15 w-15 bg-white rounded-2xl">
-              {overallStats.overall_pnl >= 0 ? (
+              {overallStats.total_pnl >= 0 ? (
                 <FaArrowTrendUp className="text-2xl text-green-500 font-extralight" />
               ) : (
                 <FaArrowTrendDown className="text-2xl text-red-500 font-extralight" />
@@ -45,7 +45,7 @@ export default function Stats() {
           <div className="flex-1 relative">
             <h1 className=" flex gap-2 items-center font-bold text-4xl absolute left-0 text-white bottom-3">
               <FaIndianRupeeSign className="text-3xl" />{" "}
-              {FormatNumbers(overallStats.overall_pnl)}
+              {FormatNumbers(overallStats.total_pnl)}
             </h1>
           </div>
         </div>

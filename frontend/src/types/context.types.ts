@@ -1,4 +1,5 @@
 import type { User } from "./auth.types.js";
+import type { GetOverallStatsData } from "./stats.types.js";
 import type { FilterValuesUI, Pagination, TradesData } from "./trades.types.js";
 
 export interface ContextProviderProps {
@@ -29,4 +30,8 @@ export interface TradesContextType {
   setFilterValues: React.Dispatch<React.SetStateAction<FilterValuesUI>>;
   fetchLoading: boolean;
   fetchTrades: () => void;
+}
+
+export interface StatsContextType {
+  overallStats: GetOverallStatsData | null;
 }

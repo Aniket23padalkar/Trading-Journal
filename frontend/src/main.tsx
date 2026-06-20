@@ -5,6 +5,7 @@ import { BrowserRouter } from "react-router-dom";
 import AuthProvider from "./context/AuthContext.js";
 import TradeProvider from "./context/TradesContext.js";
 import ThemeProvider from "./context/ThemeContext.js";
+import StatsProvider from "./context/StatsContext.js";
 
 const root = document.getElementById("root");
 
@@ -13,9 +14,11 @@ if (root) {
     <BrowserRouter>
       <ThemeProvider>
         <AuthProvider>
-          <TradeProvider>
-            <App />
-          </TradeProvider>
+          <StatsProvider>
+            <TradeProvider>
+              <App />
+            </TradeProvider>
+          </StatsProvider>
         </AuthProvider>
       </ThemeProvider>
     </BrowserRouter>,
