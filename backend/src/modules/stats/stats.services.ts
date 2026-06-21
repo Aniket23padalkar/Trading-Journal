@@ -1,13 +1,21 @@
-import type { GetOverallStatsData } from "../../types/stats.types.js";
+import type {
+  GetFilteredStatsData,
+  GetFilteredStatsServiceParams,
+  GetOverallStatsData,
+} from "../../types/stats.types.js";
 import { AppError } from "../../utils/AppError.js";
-import { getOverallStatsRepo } from "./stats.repository.js";
+import buildTradeFilters from "../../utils/build.trade.filters.js";
+import {
+  getFilteredStatsRepo,
+  getOverallStatsRepo,
+} from "./stats.repository.js";
 
-export const GetOverallStatsService = async (
+export const getOverallStatsService = async (
   user_id: string,
 ): Promise<GetOverallStatsData> => {
   const result = await getOverallStatsRepo(user_id);
 
-  if (result === undefined) {
+  if (!result || result === undefined) {
     throw new AppError("Error while getting overall stats", 500);
   }
 
@@ -27,4 +35,26 @@ export const GetOverallStatsService = async (
   };
 
   return overallStats;
+};
+
+export const getFilteredStatsService = async ({
+  user_id,
+  query,
+}: GetFilteredStatsServiceParams): Promise<GetFilteredStatsData> => {
+  const { whereClause, values } = buildTradeFilters(query, user_id);
+
+  const result = await getFilteredStatsRepo({ whereClause, values });
+
+  if (!result || result === undefined) {
+    throw new AppError("Error while fetching filtered stats", 500);
+  }
+
+  const filteredstats: GetFilteredStatsData = {
+    trades_count: Number(result.trades_count),
+    win_rate: Number(result.win_rate),
+    total_pnl: Number(result.total_pnl),
+    total_rr: Number(result.total_rr),
+  };
+
+  return filteredstats;
 };
