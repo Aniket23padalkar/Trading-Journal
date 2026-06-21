@@ -1,29 +1,37 @@
-import React, { useContext, useEffect, useMemo, useState } from "react";
-import FormatPnL from "../../utils/FormatPnL";
-import { TradeContext } from "../../context/TradesContext";
-import { getFilterStats } from "../../api/tradesService";
+import React, { useEffect, useState } from "react";
+import FormatPnL from "../../utils/FormatPnL.js";
 import { ScaleLoader } from "react-spinners";
+import { useTradesContext } from "../../hooks/useTradesContext.js";
+import type { GetFilteredStatsData } from "../../types/stats.types.js";
+import { cleanParams } from "../../utils/cleanParams.js";
+import { getErrorMessage } from "../../utils/error.handler.js";
+import { getFilteredStats } from "../../api/statsApi.js";
 
 function TableFooter() {
-  const { filterValue, trades } = useContext(TradeContext);
-  const [filterStats, setFilterStats] = useState({});
+  const { filterValues, trades, payload } = useTradesContext();
+  const [filteredStats, setFilteredStats] =
+    useState<GetFilteredStatsData | null>(null);
   const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    async function fetchFilterStats() {
-      try {
-        setLoading(true);
-        const res = await getFilterStats(filterValue);
+  const params = cleanParams(payload);
 
-        setFilterStats(res);
-      } catch (err) {
-        console.error(err);
-      } finally {
-        setLoading(false);
-      }
+  async function fetchFilteredStats() {
+    setLoading(true);
+    try {
+      const res = await getFilteredStats(params);
+
+      setFilteredStats(res);
+    } catch (err: unknown) {
+      const message = getErrorMessage(err);
+      console.log(message);
+    } finally {
+      setLoading(false);
     }
-    fetchFilterStats();
-  }, [filterValue, trades]);
+  }
+
+  useEffect(() => {
+    fetchFilteredStats();
+  }, [filterValues, trades]);
 
   return (
     <footer className="flex items-center justify-between h-10 lg:h-10 w-full py-2 px-2 lg:px-6 bg-white dark:bg-gray-950 dark:shadow-none rounded-xl shadow shadow-gray-400">
@@ -39,7 +47,7 @@ function TableFooter() {
                 Trades Count :
               </p>
               <h1 className="font-medium text-blue-500 dark:text-blue-400">
-                {filterStats?.trades_count}
+                {filteredStats?.trades_count}
               </h1>
             </div>
             <div className="flex items-center gap-2">
@@ -47,7 +55,7 @@ function TableFooter() {
                 Win Rate :
               </p>
               <h1 className="font-bold text-blue-500 dark:text-blue-400">
-                {filterStats?.trades_win_rate} %
+                {filteredStats?.win_rate} %
               </h1>
             </div>
           </div>
@@ -58,13 +66,19 @@ function TableFooter() {
               </p>
               <h1
                 className={`font-bold text-lg lg:text-xl ${
-                  filterStats?.trades_pnl >= 0
-                    ? "text-green-600 dark:text-green-500"
-                    : "text-red-500 dark:text-red-400"
+                  filteredStats?.total_pnl
+                    ? filteredStats?.total_pnl >= 0
+                      ? "text-green-600 dark:text-green-500"
+                      : "text-red-500 dark:text-red-400"
+                    : null
                 }`}
               >
-                {filterStats?.trades_pnl > 0 ? "+" : ""}
-                {FormatPnL(filterStats?.trades_pnl)}
+                {filteredStats?.total_pnl
+                  ? filteredStats?.total_pnl > 0
+                    ? "+"
+                    : ""
+                  : null}
+                {FormatPnL(filteredStats?.total_pnl)}
               </h1>
             </div>
             <div className="flex items-center gap-2">
@@ -72,7 +86,7 @@ function TableFooter() {
                 Total RR :
               </p>
               <h1 className="font-bold text-md lg:text-lg text-blue-500 dark:text-blue-400">
-                {filterStats?.trade_rr}X
+                {filteredStats?.total_rr}X
               </h1>
             </div>
           </div>

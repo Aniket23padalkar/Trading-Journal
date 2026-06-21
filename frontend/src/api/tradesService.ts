@@ -165,24 +165,3 @@ export async function getMonthlyPnl(year: number) {
     throw err;
   }
 }
-
-export async function getFilterStats(params) {
-  const query = new URLSearchParams(params).toString();
-  try {
-    const res = await fetch(`${API}/api/trades/stats?${query}`, {
-      method: "GET",
-      credentials: "include",
-    });
-
-    const data = await res.json();
-
-    if (!res.ok) {
-      throw new Error(data.message);
-    }
-
-    return data;
-  } catch (err) {
-    console.log(err);
-    throw err;
-  }
-}

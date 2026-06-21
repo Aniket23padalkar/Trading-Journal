@@ -13,8 +13,6 @@ export default function StatsProvider({ children }: ContextProviderProps) {
     null,
   );
 
-  console.log(overallStats);
-
   async function fetchOverallStats() {
     try {
       const result = await GetOverallStats();
