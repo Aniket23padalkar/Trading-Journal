@@ -1,15 +1,22 @@
 import { useEffect } from "react";
-import { getYearAndMonth } from "../../services/tradesService";
+import { getYearAndMonth } from "../../api/tradesService.js";
 import { useState } from "react";
+import type { MonthlyPnlDataType } from "../../types/stats.types.js";
+
+interface ChartsHeaderParams {
+  selectedYear: number;
+  setSelectedYear: React.Dispatch<React.SetStateAction<number>>;
+  monthlyPnl: MonthlyPnlDataType[];
+}
 
 export default function ChartsHeader({
   selectedYear,
   setSelectedYear,
   monthlyPnl,
-}) {
-  const [years, setYears] = useState();
+}: ChartsHeaderParams) {
+  const [years, setYears] = useState<number[]>([]);
   const yearlyPnl = monthlyPnl?.reduce(
-    (acc, data) => acc + Number(data.pnl),
+    (acc, data) => acc + Number(data.total_pnl),
     0,
   );
 

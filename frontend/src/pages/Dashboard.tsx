@@ -1,7 +1,7 @@
 import React, { Suspense } from "react";
 import { ScaleLoader } from "react-spinners";
 
-const Stats = React.lazy(() => import("../components/stats/Stats"));
+const Stats = React.lazy(() => import("../components/stats/Stats.js"));
 
 export default function Dashboard() {
   return (

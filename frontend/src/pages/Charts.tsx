@@ -1,12 +1,15 @@
-import BarPnLChart from "../components/chartsPageComponents/BarPnLChart";
-import ChartsHeader from "../components/chartsPageComponents/ChartsHeader";
-import AreaChartFillValue from "../components/chartsPageComponents/AreaChartFillValue";
+import BarPnLChart from "../components/chartsPageComponents/BarPnLChart.js";
+import ChartsHeader from "../components/chartsPageComponents/ChartsHeader.jsx";
+import AreaChartFillValue from "../components/chartsPageComponents/AreaChartFillValue.js";
 import { useEffect, useState } from "react";
-import { getMonthlyPnl } from "../services/tradesService";
+import { getMonthlyPnl } from "../api/statsApi.js";
+import type { MonthlyPnlDataType } from "../types/stats.types.js";
 
 export default function Charts() {
-  const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
-  const [monthlyPnl, setMonthlyPnl] = useState([]);
+  const [selectedYear, setSelectedYear] = useState<number>(
+    new Date().getFullYear(),
+  );
+  const [monthlyPnl, setMonthlyPnl] = useState<MonthlyPnlDataType[]>([]);
 
   useEffect(() => {
     async function fetchMonthlyPnl() {
@@ -36,7 +39,7 @@ export default function Charts() {
 
       const formatted = monthsName.map((m, i) => ({
         month: m,
-        pnl: months[i],
+        total_pnl: Number(months[i]),
       }));
 
       setMonthlyPnl(formatted);
