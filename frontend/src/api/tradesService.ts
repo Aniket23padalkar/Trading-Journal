@@ -145,23 +145,3 @@ export async function getYearAndMonth(): Promise<GetYearAndMonthResponse> {
     throw err;
   }
 }
-
-export async function getMonthlyPnl(year: number) {
-  try {
-    const res = await fetch(`${API}/api/trades/monthly-pnl?year=${year}`, {
-      method: "GET",
-      credentials: "include",
-    });
-
-    const data = await res.json();
-
-    if (!res.ok) {
-      throw new Error(data.message);
-    }
-
-    return data;
-  } catch (err) {
-    console.log(err);
-    throw err;
-  }
-}

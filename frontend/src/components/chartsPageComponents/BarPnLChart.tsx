@@ -1,4 +1,3 @@
-import { useContext } from "react";
 import { BiBarChartAlt2 } from "react-icons/bi";
 import {
   BarChart,
@@ -11,10 +10,15 @@ import {
   ResponsiveContainer,
   Cell,
 } from "recharts";
-import { TradeContext } from "../../context/TradesContext";
+import type { MonthlyPnlDataType } from "../../types/stats.types.js";
+import { useThemeContext } from "../../hooks/useThemeContext.js";
 
-export default function BarPnlChart({ selectedYear, monthlyPnl }) {
-  const { theme } = useContext(TradeContext);
+interface BarChartParams {
+  monthlyPnl: MonthlyPnlDataType[];
+}
+
+export default function BarPnlChart({ monthlyPnl }: BarChartParams) {
+  const { theme } = useThemeContext();
 
   return (
     <div className=" col-start-1 col-end-9 lg:col-end-5 h-110 p-4 pr-6 bg-linear-to-b from-cyan-300 dark:from-teal-900 dark:to-teal-700 rounded-2xl shadow dark:shadow-none shadow-gray-400 to-white">
@@ -56,12 +60,12 @@ export default function BarPnlChart({ selectedYear, monthlyPnl }) {
             }}
             cursor={{ fill: "rgba(0,0,0,0.1)" }}
           />
-          <Bar dataKey="pnl" radius={[6, 6, 0, 0]}>
+          <Bar dataKey="total_pnl" radius={[6, 6, 0, 0]}>
             {monthlyPnl.map((entry, index) => (
               <Cell
                 key={index}
                 fill={
-                  entry.pnl > 0
+                  entry.total_pnl > 0
                     ? "oklch(79.2% 0.209 151.711)"
                     : "oklch(63.7% 0.237 25.331)"
                 }

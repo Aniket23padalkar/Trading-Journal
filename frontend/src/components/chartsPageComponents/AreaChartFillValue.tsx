@@ -1,4 +1,3 @@
-import { useContext } from "react";
 import { FaChartArea } from "react-icons/fa";
 import {
   AreaChart,
@@ -9,14 +8,19 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
-import { TradeContext } from "../../context/TradesContext";
+import type { MonthlyPnlDataType } from "../../types/stats.types.js";
+import { useThemeContext } from "../../hooks/useThemeContext.js";
 
-export default function AreaChartFillValue({ monthlyPnl }) {
-  const { theme } = useContext(TradeContext);
+interface AreaChartParams {
+  monthlyPnl: MonthlyPnlDataType[];
+}
+
+export default function AreaChartFillValue({ monthlyPnl }: AreaChartParams) {
+  const { theme } = useThemeContext();
 
   const gradientOffset = () => {
-    const dataMax = Math.max(...monthlyPnl?.map((d) => d.pnl));
-    const dataMin = Math.min(...monthlyPnl?.map((d) => d.pnl));
+    const dataMax = Math.max(...monthlyPnl?.map((d) => d.total_pnl));
+    const dataMin = Math.min(...monthlyPnl?.map((d) => d.total_pnl));
 
     if (dataMax <= 0) {
       return 0;
@@ -97,7 +101,7 @@ export default function AreaChartFillValue({ monthlyPnl }) {
           </defs>
           <Area
             type="monotone"
-            dataKey="pnl"
+            dataKey="total_pnl"
             stroke="blue"
             fill="url(#splitcolor)"
           />
