@@ -180,3 +180,9 @@ export const getTradeQuerySchema = z.object({
 });
 
 export type GetTradeQueryData = z.infer<typeof getTradeQuerySchema>;
+
+export const getMonthlyPnlQuerySchema = z.object({
+  year: yearSchema,
+});
+
+export type GetMonthlyPnlQueryData = z.infer<typeof getMonthlyPnlQuerySchema>;
