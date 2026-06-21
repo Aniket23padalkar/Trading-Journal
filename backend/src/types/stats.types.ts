@@ -42,6 +42,6 @@ export interface GetMonthlyPnlParams {
 }
 
 export interface GetMonthlyPnlData {
-  month: string;
+  month: number;
   total_pnl: number;
 }
