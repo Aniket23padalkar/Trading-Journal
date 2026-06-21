@@ -1,5 +1,5 @@
 import BarPnLChart from "../components/chartsPageComponents/BarPnLChart.js";
-import ChartsHeader from "../components/chartsPageComponents/ChartsHeader.jsx";
+import ChartsHeader from "../components/chartsPageComponents/ChartsHeader.js";
 import AreaChartFillValue from "../components/chartsPageComponents/AreaChartFillValue.js";
 import { useEffect, useState } from "react";
 import { getMonthlyPnl } from "../api/statsApi.js";
@@ -54,8 +54,8 @@ export default function Charts() {
         setSelectedYear={setSelectedYear}
         monthlyPnl={monthlyPnl}
       />
-      <BarPnLChart selectedYear={selectedYear} monthlyPnl={monthlyPnl} />
-      <AreaChartFillValue selectedYear={selectedYear} monthlyPnl={monthlyPnl} />
+      <BarPnLChart monthlyPnl={monthlyPnl} />
+      <AreaChartFillValue monthlyPnl={monthlyPnl} />
     </section>
   );
 }

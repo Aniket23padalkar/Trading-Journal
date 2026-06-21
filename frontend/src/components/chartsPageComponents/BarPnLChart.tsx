@@ -14,14 +14,10 @@ import type { MonthlyPnlDataType } from "../../types/stats.types.js";
 import { useThemeContext } from "../../hooks/useThemeContext.js";
 
 interface BarChartParams {
-  selectedYear: number;
   monthlyPnl: MonthlyPnlDataType[];
 }
 
-export default function BarPnlChart({
-  selectedYear,
-  monthlyPnl,
-}: BarChartParams) {
+export default function BarPnlChart({ monthlyPnl }: BarChartParams) {
   const { theme } = useThemeContext();
 
   return (
