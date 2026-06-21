@@ -1,4 +1,7 @@
-import type { GetTradeQueryData } from "../schemas/trade.schema.js";
+import type {
+  GetMonthlyPnlQueryData,
+  GetTradeQueryData,
+} from "../schemas/trade.schema.js";
 import type { BuildFilterValues } from "./trade.types.js";
 
 export interface GetOverallStatsData {
@@ -31,4 +34,14 @@ export interface GetFilteredStatsData {
   win_rate: number;
   total_pnl: number;
   total_rr: number;
+}
+
+export interface GetMonthlyPnlParams {
+  user_id: string;
+  querydata: GetMonthlyPnlQueryData;
+}
+
+export interface GetMonthlyPnlData {
+  month: string;
+  total_pnl: number;
 }

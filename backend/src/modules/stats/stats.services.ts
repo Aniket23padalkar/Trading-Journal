@@ -1,12 +1,15 @@
 import type {
   GetFilteredStatsData,
   GetFilteredStatsServiceParams,
+  GetMonthlyPnlData,
+  GetMonthlyPnlParams,
   GetOverallStatsData,
 } from "../../types/stats.types.js";
 import { AppError } from "../../utils/AppError.js";
 import buildTradeFilters from "../../utils/build.trade.filters.js";
 import {
   getFilteredStatsRepo,
+  getMonthlyPnlRepo,
   getOverallStatsRepo,
 } from "./stats.repository.js";
 
@@ -57,4 +60,24 @@ export const getFilteredStatsService = async ({
   };
 
   return filteredstats;
+};
+
+export const getMonthlyPnlService = async ({
+  user_id,
+  querydata,
+}: GetMonthlyPnlParams): Promise<GetMonthlyPnlData[]> => {
+  const result = await getMonthlyPnlRepo({ user_id, querydata });
+
+  if (!result || result === undefined || result.length === 0) {
+    throw new AppError("Error while fetching monthlypnl", 500);
+  }
+
+  const monthlyPnl: GetMonthlyPnlData[] = result.map((item) => {
+    return {
+      month: item.month,
+      total_pnl: Number(item.total_pnl),
+    };
+  });
+
+  return monthlyPnl;
 };

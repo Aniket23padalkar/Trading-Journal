@@ -1,9 +1,16 @@
 import express from "express";
-import { getFilteredStats, getOverallStats } from "./stats.controller.js";
+import {
+  getFilteredStats,
+  getMonthlyPnl,
+  getOverallStats,
+} from "./stats.controller.js";
 import { protect } from "../../middleware/auth.middleware.js";
 import { asyncHandler } from "../../utils/async.handler.js";
 import { validate } from "../../middleware/validate.js";
-import { getTradeQuerySchema } from "../../schemas/trade.schema.js";
+import {
+  getMonthlyPnlQuerySchema,
+  getTradeQuerySchema,
+} from "../../schemas/trade.schema.js";
 
 const router = express.Router();
 
@@ -13,6 +20,12 @@ router.get(
   validate(getTradeQuerySchema, "query"),
   protect,
   asyncHandler(getFilteredStats),
+);
+router.get(
+  "/monthlypnl",
+  validate(getMonthlyPnlQuerySchema, "query"),
+  protect,
+  asyncHandler(getMonthlyPnl),
 );
 
 export default router;

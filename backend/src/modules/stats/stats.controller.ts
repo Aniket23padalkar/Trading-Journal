@@ -1,11 +1,19 @@
 import type { Request, Response } from "express";
 import {
   getFilteredStatsService,
+  getMonthlyPnlService,
   getOverallStatsService,
 } from "./stats.services.js";
 import { AppError } from "../../utils/AppError.js";
-import type { GetOverallStatsData } from "../../types/stats.types.js";
-import { success } from "zod";
+import type {
+  GetFilteredStatsData,
+  GetMonthlyPnlData,
+  GetOverallStatsData,
+} from "../../types/stats.types.js";
+import type {
+  GetMonthlyPnlQueryData,
+  GetTradeQueryData,
+} from "../../schemas/trade.schema.js";
 
 export const getOverallStats = async (
   req: Request,
@@ -27,7 +35,14 @@ export const getOverallStats = async (
   });
 };
 
-export const getFilteredStats = async (req: Request, res: Response) => {
+export const getFilteredStats = async (
+  req: Request<{}, {}, {}, GetTradeQueryData>,
+  res: Response<{
+    success: boolean;
+    data: GetFilteredStatsData;
+    message: string;
+  }>,
+) => {
   if (!req.user.user_id) {
     throw new AppError("Unauthorized", 401);
   }
@@ -37,11 +52,33 @@ export const getFilteredStats = async (req: Request, res: Response) => {
     query: req.validated?.query,
   });
 
-  return res
-    .status(200)
-    .json({
-      success: true,
-      data: result,
-      message: "Filtered stats fetched successfully",
-    });
+  return res.status(200).json({
+    success: true,
+    data: result,
+    message: "Filtered stats fetched successfully",
+  });
+};
+
+export const getMonthlyPnl = async (
+  req: Request<{}, {}, {}, GetMonthlyPnlQueryData>,
+  res: Response<{
+    success: boolean;
+    data: GetMonthlyPnlData[];
+    message: string;
+  }>,
+) => {
+  if (!req.user.user_id) {
+    throw new AppError("Unauthorized", 401);
+  }
+
+  const result = await getMonthlyPnlService({
+    user_id: req.user.user_id,
+    querydata: req.validated?.query,
+  });
+
+  return res.status(200).json({
+    success: true,
+    data: result,
+    message: "Monthly pnl fetched successfully",
+  });
 };
