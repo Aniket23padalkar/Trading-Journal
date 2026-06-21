@@ -74,7 +74,7 @@ export const getMonthlyPnlService = async ({
 
   const monthlyPnl: GetMonthlyPnlData[] = result.map((item) => {
     return {
-      month: item.month,
+      month: Number(item.month),
       total_pnl: Number(item.total_pnl),
     };
   });
