@@ -1,3 +1,6 @@
+import type { GetTradeQueryData } from "../schemas/trade.schema.js";
+import type { BuildFilterValues } from "./trade.types.js";
+
 export interface GetOverallStatsData {
   total_pnl: number;
   max_profit: number;
@@ -11,4 +14,21 @@ export interface GetOverallStatsData {
   ctc_trades: number;
   closed_trades: number;
   win_rate: number;
+}
+
+export interface GetFilteredStatsServiceParams {
+  user_id: string;
+  query: GetTradeQueryData;
+}
+
+export interface GetFilteredStatsRepoParams {
+  whereClause: string;
+  values: BuildFilterValues[];
+}
+
+export interface GetFilteredStatsData {
+  trades_count: number;
+  win_rate: number;
+  total_pnl: number;
+  total_rr: number;
 }
