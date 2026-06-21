@@ -89,6 +89,7 @@ export default function TradeProvider({ children }: ContextProviderProps) {
         setFilterValues,
         fetchTrades,
         fetchLoading,
+        payload,
       }}
     >
       {children}

@@ -3,7 +3,7 @@ import AddModal from "../components/tradesPageComponents/AddModal.js";
 import ViewModal from "../components/tradesPageComponents/ViewModal.js";
 import Pagination from "../components/tradesPageComponents/Pagination.jsx";
 import TradesTable from "../components/tradesPageComponents/TradesTable.js";
-import TableFooter from "../components/tradesPageComponents/TableFooter.jsx";
+import TableFooter from "../components/tradesPageComponents/TableFooter.js";
 import TradesHeader from "../components/tradesPageComponents/TradesHeader.js";
 import { TradeContext } from "../context/TradesContext.js";
 import { useTradesContext } from "../hooks/useTradesContext.js";

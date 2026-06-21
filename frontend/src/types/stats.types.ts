@@ -12,3 +12,10 @@ export interface GetOverallStatsData {
   closed_trades: number;
   win_rate: number;
 }
+
+export interface GetFilteredStatsData {
+  trades_count: number;
+  win_rate: number;
+  total_pnl: number;
+  total_rr: number;
+}

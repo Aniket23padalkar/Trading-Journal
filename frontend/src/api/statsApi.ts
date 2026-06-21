@@ -1,5 +1,8 @@
 import type { ApiResponse } from "../types/api.response.js";
-import type { GetOverallStatsData } from "../types/stats.types.js";
+import type {
+  GetFilteredStatsData,
+  GetOverallStatsData,
+} from "../types/stats.types.js";
 
 const API = import.meta.env.VITE_API_URL;
 
@@ -21,3 +24,26 @@ export const GetOverallStats = async (): Promise<GetOverallStatsData> => {
     throw err;
   }
 };
+
+export async function getFilteredStats(
+  params: Record<string, any>,
+): Promise<GetFilteredStatsData> {
+  const query = new URLSearchParams(params).toString();
+  try {
+    const res = await fetch(`${API}/api/stats/filteredstats?${query}`, {
+      method: "GET",
+      credentials: "include",
+    });
+
+    const result: ApiResponse<GetFilteredStatsData> = await res.json();
+
+    if (!result.success) {
+      throw new Error(result.message);
+    }
+
+    return result.data;
+  } catch (err) {
+    console.log(err);
+    throw err;
+  }
+}

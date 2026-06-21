@@ -1,6 +1,11 @@
 import type { User } from "./auth.types.js";
 import type { GetOverallStatsData } from "./stats.types.js";
-import type { FilterValuesUI, Pagination, TradesData } from "./trades.types.js";
+import type {
+  FilterValues,
+  FilterValuesUI,
+  Pagination,
+  TradesData,
+} from "./trades.types.js";
 
 export interface ContextProviderProps {
   children: React.ReactNode;
@@ -30,6 +35,7 @@ export interface TradesContextType {
   setFilterValues: React.Dispatch<React.SetStateAction<FilterValuesUI>>;
   fetchLoading: boolean;
   fetchTrades: () => void;
+  payload: FilterValues;
 }
 
 export interface StatsContextType {

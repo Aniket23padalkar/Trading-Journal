@@ -1,4 +1,4 @@
-export default function FormatPnL(value = 0) {
+export default function FormatPnL(value: number = 0) {
   const num = Number(value);
 
   if (isNaN(num)) return "0.00";
