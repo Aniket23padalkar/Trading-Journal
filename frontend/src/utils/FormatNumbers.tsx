@@ -1,4 +1,4 @@
-export default function FormatNumbers(value: number) {
+export default function FormatNumbers(value: number | null) {
   if (value == null || isNaN(value)) return "-";
 
   return Number(value).toLocaleString("en-IN", {

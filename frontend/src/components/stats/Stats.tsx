@@ -14,9 +14,10 @@ import { ScaleLoader } from "react-spinners";
 import { useStatsContext } from "../../hooks/useStatsContext.js";
 
 export default function Stats() {
-  const { overallStats } = useStatsContext();
+  const { overallStats, overallStatsLoading } = useStatsContext();
 
-  if (!overallStats) {
+
+  if (overallStatsLoading) {
     return (
       <div className="col-start-1 col-end-8 row-start-1 row-end-2 flex items-center justify-center h-full w-full">
         <ScaleLoader color="#20dfbc" />

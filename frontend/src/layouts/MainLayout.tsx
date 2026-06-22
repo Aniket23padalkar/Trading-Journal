@@ -10,7 +10,7 @@ export default function MainLayout({ children }: ContextProviderProps) {
   const { theme } = useThemeContext();
   const [isAsideOpen, setIsAsideOpen] = useState(false);
   return (
-    <main className="grid h-full w-full grid-cols-[14rem_1fr] grid-rows-[4rem_1fr] bg-white dark:bg-gray-950">
+    <main className="grid h-screen w-full grid-cols-[14rem_1fr] grid-rows-[4rem_1fr] bg-white dark:bg-gray-950">
       <Header setIsAsideOpen={setIsAsideOpen} isAsideOpen={isAsideOpen} />
 
       <Aside isAsideOpen={isAsideOpen} />
