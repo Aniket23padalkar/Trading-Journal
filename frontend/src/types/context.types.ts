@@ -1,5 +1,5 @@
 import type { User } from "./auth.types.js";
-import type { GetOverallStatsData } from "./stats.types.js";
+import type { GetFilteredStatsData, GetOverallStatsData } from "./stats.types.js";
 import type {
   FilterValues,
   FilterValuesUI,
@@ -35,7 +35,7 @@ export interface TradesContextType {
   setFilterValues: React.Dispatch<React.SetStateAction<FilterValuesUI>>;
   fetchLoading: boolean;
   fetchTrades: () => void;
-  payload: FilterValues;
+  filteredStats: GetFilteredStatsData | null;
 }
 
 export interface StatsContextType {

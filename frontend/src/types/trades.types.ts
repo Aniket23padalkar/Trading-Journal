@@ -1,3 +1,5 @@
+import type { GetFilteredStatsData } from "./stats.types.js";
+
 export interface Trades {
   trade_id: string;
   symbol: string;
@@ -58,6 +60,7 @@ export interface Pagination {
 export interface Data {
   trades_data: TradesData[] | [];
   pagination: Pagination;
+  filtered_stats: GetFilteredStatsData;
 }
 
 export interface FilterValuesUI {
