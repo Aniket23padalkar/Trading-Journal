@@ -11,6 +11,7 @@ import type {
   TradesData,
 } from "../types/trades.types.js";
 import { cleanParams } from "../utils/cleanParams.js";
+import type { GetFilteredStatsData } from "../types/stats.types.js";
 
 export const TradeContext = createContext<TradesContextType | null>(null);
 
@@ -36,8 +37,10 @@ export default function TradeProvider({ children }: ContextProviderProps) {
     pnlSort: "",
     dateTimeSort: "",
   });
+  const [filteredStats, setFilteredStats] =
+    useState<GetFilteredStatsData | null>(null);
 
-  console.log(trades);
+  console.log(fetchLoading);
 
   const payload: FilterValues = {
     direction: filterValues.direction || null,
@@ -59,12 +62,15 @@ export default function TradeProvider({ children }: ContextProviderProps) {
   });
 
   async function fetchTrades() {
+    setFetchLoading(true);
     try {
       const data = await getTradesData(params);
 
       setTrades(data?.trades_data);
 
       setPagination(data?.pagination);
+
+      setFilteredStats(data?.filtered_stats)
     } catch (err) {
       console.log(err);
     } finally {
@@ -89,7 +95,7 @@ export default function TradeProvider({ children }: ContextProviderProps) {
         setFilterValues,
         fetchTrades,
         fetchLoading,
-        payload,
+        filteredStats
       }}
     >
       {children}

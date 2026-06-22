@@ -2,40 +2,13 @@ import React, { useEffect, useState } from "react";
 import FormatPnL from "../../utils/FormatPnL.js";
 import { ScaleLoader } from "react-spinners";
 import { useTradesContext } from "../../hooks/useTradesContext.js";
-import type { GetFilteredStatsData } from "../../types/stats.types.js";
-import { cleanParams } from "../../utils/cleanParams.js";
-import { getErrorMessage } from "../../utils/error.handler.js";
-import { getFilteredStats } from "../../api/statsApi.js";
 
 function TableFooter() {
-  const { filterValues, trades, payload } = useTradesContext();
-  const [filteredStats, setFilteredStats] =
-    useState<GetFilteredStatsData | null>(null);
-  const [loading, setLoading] = useState(false);
-
-  const params = cleanParams(payload);
-
-  async function fetchFilteredStats() {
-    setLoading(true);
-    try {
-      const res = await getFilteredStats(params);
-
-      setFilteredStats(res);
-    } catch (err: unknown) {
-      const message = getErrorMessage(err);
-      console.log(message);
-    } finally {
-      setLoading(false);
-    }
-  }
-
-  useEffect(() => {
-    fetchFilteredStats();
-  }, [filterValues, trades]);
+  const { fetchLoading,filteredStats } = useTradesContext();
 
   return (
     <footer className="flex items-center justify-between h-10 lg:h-10 w-full py-2 px-2 lg:px-6 bg-white dark:bg-gray-950 dark:shadow-none rounded-xl shadow shadow-gray-400">
-      {loading ? (
+      {fetchLoading ? (
         <div className="flex w-full h-full items-center justify-center">
           <ScaleLoader height={20} width={10} />
         </div>

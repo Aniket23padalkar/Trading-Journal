@@ -84,12 +84,11 @@ function TradesTable({
   return (
     <section className="flex h-full w-full items-center bg-transparent relative">
       <div className="w-full min-h-102 h shadow shadow-gray-500 dark:shadow-none overflow-x-auto scrollbar-thin-x">
-        {fetchLoading && (
+        {fetchLoading ? (
           <div className="flex absolute left-0 top-0 items-center justify-center h-full w-full">
             <ScaleLoader color="#20dfbc" />
           </div>
-        )}
-        <table className="w-full border-collapse bg-white dark:bg-sky-950 dark:text-white ">
+        ) : <table className="w-full border-collapse bg-white dark:bg-sky-950 dark:text-white ">
           <thead>
             <tr className="text-center whitespace-nowrap bg-gray-100 dark:bg-gray-800 dark:text-gray-300">
               <th className="w-8 bg-gray-200 dark:bg-gray-950">#</th>
@@ -145,7 +144,7 @@ function TradesTable({
                 />
               ))}
           </tbody>
-        </table>
+        </table>}
       </div>
       {trades.length === 0 && !fetchLoading && (
         <div className="flex items-center justify-center top-0 dark:text-white left-0 absolute h-full w-full">
