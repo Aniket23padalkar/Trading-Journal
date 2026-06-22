@@ -39,5 +39,6 @@ export interface TradesContextType {
 }
 
 export interface StatsContextType {
-  overallStats: GetOverallStatsData | null;
+  overallStats: GetOverallStatsData;
+  overallStatsLoading : boolean;
 }
