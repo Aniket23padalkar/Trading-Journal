@@ -29,14 +29,14 @@ function TradeRow({
 
   const startIndex = (pagination.page - 1) * pagination.limit;
   return (
-    <tr onClick={handleViewModal}>
+    <tr className="hover:bg-gray-100 h-10 lg:h-5" onClick={handleViewModal}>
       <td className="bg-gray-200 dark:bg-gray-900">{startIndex + index + 1}</td>
-      <td className="text-left whitespace-nowrap w-30 font-medium text-sm capitalize px-1 bg-gray-100 dark:bg-gray-800">
+      <td className="text-left whitespace-nowrap w-30 font-medium capitalize px-1 bg-gray-100 dark:bg-gray-800">
         {trade.trade.symbol}
       </td>
       <td>
         <p
-          className={`text-xs px-1 border rounded font-medium capitalize ${
+          className={` px-1 border rounded font-medium capitalize ${
             trade.trade.direction === "long"
               ? "text-[#03c988] border-[#03c988]"
               : trade.trade.direction === "short"
@@ -47,25 +47,25 @@ function TradeRow({
           {trade.trade.direction}
         </p>
       </td>
-      <td className="text-xs capitalize dark:text-gray-300">
+      <td className=" capitalize dark:text-gray-300">
         {trade.trade.order_status}
       </td>
-      <td className="dark:text-gray-300 capitalize text-xs">
+      <td className="dark:text-gray-300 capitalize ">
         {trade.trade.market_type}
       </td>
-      <td>{trade.stats.total_qty}</td>
+      <td className="2xl:text-sm">{trade.stats.total_qty}</td>
 
       <td>
         <p className="text-xs bg-blue-100 dark:text-black dark:bg-blue-400 capitalize rounded">
           {trade.trade.position}
         </p>
       </td>
-      <td className="text-xs text-blue-700 dark:text-sky-500 whitespace-nowrap">
+      <td className=" text-blue-700 dark:text-sky-500 whitespace-nowrap">
         {formatDateTime(trade.trade.entry_time)}
       </td>
-      <td>{trade.trade.risk}</td>
+      <td className="2xl:text-sm">{trade.trade.risk}</td>
       <td
-        className={`text-sm font-bold ${
+        className={`font-bold ${
           trade.trade.pnl
             ? trade.trade.pnl >= 0
               ? "text-green-600 dark:text-green-500"
@@ -83,13 +83,13 @@ function TradeRow({
             })}
         {trade.trade.order_status === "open" ? "-" : "/-"}
       </td>
-      <td style={{ fontWeight: 600 }}>
+      <td className="2xl:text-sm" style={{ fontWeight: 600 }}>
         {trade.trade.order_status === "open"
           ? "-"
           : Number(trade.stats.rr_ratio).toFixed(1)}
         {trade.trade.order_status === "open" ? "-" : "X"}
       </td>
-      <td className="capitalize text-xs">{trade.trade.trade_rating}</td>
+      <td className="capitalize ">{trade.trade.trade_rating}</td>
       <td>
         <button
           onClick={(e) => {

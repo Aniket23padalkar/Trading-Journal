@@ -161,7 +161,7 @@ export default function ViewModal({
           </div>
         </div>
 
-        <div className="flex flex-col lg:flex-row flex-1 h-[255px] border-t pt-2 border-blue-300">
+        <div className="flex flex-col lg:flex-row flex-1 h-63.75 border-t pt-2 border-blue-300">
           <div
             className={`flex flex-col lg:flex-1 h-50 overflow-y-auto p-2 ${
               description
@@ -186,7 +186,7 @@ export default function ViewModal({
               </ReactMarkdown>
             </div>
           </div>
-          <div className="flex items-center h-[254px] flex-col w-full lg:w-[610px] sm:border-t lg:border-t-0 lg:border-l border-blue-300 dark:border-blue-600 p-2">
+          <div className="flex items-center h-63.5 flex-col w-full lg:w-152.5 sm:border-t lg:border-t-0 lg:border-l border-blue-300 dark:border-blue-600 p-2">
             <div className="flex w-full">
               <h1 className="font-medium pb-2 pl-2">Added Qty Details :</h1>
             </div>
