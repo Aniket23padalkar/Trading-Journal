@@ -1,19 +1,26 @@
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import React from "react";
 import { useContext } from "react";
-import { TradeContext } from "../../context/TradesContext";
+import { TradeContext } from "../../context/TradesContext.js";
+import { useTradesContext } from "../../hooks/useTradesContext.js";
 
-function Pagination({ handleNextPage, handlePrevPage, handleSetPage }) {
-  const { pagination, currentPage, trades } = useContext(TradeContext);
-  const maxVisible = 3;
-  let start = Math.max(1, currentPage - Math.floor(maxVisible / 2));
-  let end = Math.min(pagination?.totalPages, start + maxVisible - 1);
+interface PaginationParams {
+  handleNextPage: () => void;
+  handlePrevPage: () => void;
+  handleSetPage: React.Dispatch<React.SetStateAction<number>>;
+}
+
+function Pagination({ handleNextPage, handlePrevPage, handleSetPage } : PaginationParams) {
+  const { pagination, currentPage, trades } = useTradesContext();
+  const maxVisible : number = 3;
+  let start : number = Math.max(1, currentPage - Math.floor(maxVisible / 2));
+  let end : number = Math.min(pagination?.totalPages, start + maxVisible - 1);
 
   if (end - start + 1 < maxVisible) {
     start = Math.max(1, end - maxVisible + 1);
   }
 
-  const pages = [];
+  const pages : number[] = [];
   for (let i = start; i <= end; i++) {
     pages.push(i);
   }
@@ -32,7 +39,7 @@ function Pagination({ handleNextPage, handlePrevPage, handleSetPage }) {
         <FaChevronLeft />
         <p>Prev</p>
       </button>
-      <div className="flex items-center justify-center gap-2 min-w-[300px]">
+      <div className="flex items-center justify-center gap-2 min-w-75">
         {start > 1 && (
           <button
             onClick={() => handleSetPage(1)}

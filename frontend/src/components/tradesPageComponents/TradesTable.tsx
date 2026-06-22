@@ -82,7 +82,7 @@ function TradesTable({
   }
 
   return (
-    <section className="flex h-full w-full items-center bg-transparent relative">
+    <section className="flex h-full w-full items-center bg-transparent relative my-4">
       <div className="w-full h-full h shadow shadow-gray-500 dark:shadow-none overflow-x-auto scrollbar-thin-x">
         {fetchLoading ? (
           <div className="flex absolute left-0 top-0 items-center justify-center h-full w-full">
@@ -93,8 +93,8 @@ function TradesTable({
             <tr className="text-center whitespace-nowrap bg-gray-100 dark:bg-gray-800 dark:text-gray-300">
               <th className="w-8 bg-gray-200 dark:bg-gray-950">#</th>
               <th className="text-left">symbol</th>
-              <th>order</th>
-              <th>status</th>
+              <th>Direction</th>
+              <th>order_status</th>
               <th>market-type</th>
               <th>quantity</th>
               <th>position</th>

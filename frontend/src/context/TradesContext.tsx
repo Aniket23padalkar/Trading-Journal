@@ -20,7 +20,7 @@ export default function TradeProvider({ children }: ContextProviderProps) {
   const [trades, setTrades] = useState<TradesData[]>([]);
   const [pagination, setPagination] = useState<Pagination>({
     page: 1,
-    limit: 9,
+    limit: 15,
     total: 0,
     totalPages: 1,
   });
@@ -57,7 +57,7 @@ export default function TradeProvider({ children }: ContextProviderProps) {
 
   const params = cleanParams({
     page: currentPage,
-    limit: 9,
+    limit: 15,
     ...payload,
   });
 
