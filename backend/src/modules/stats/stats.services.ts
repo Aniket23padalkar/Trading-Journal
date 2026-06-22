@@ -8,7 +8,6 @@ import type {
 import { AppError } from "../../utils/AppError.js";
 import buildTradeFilters from "../../utils/build.trade.filters.js";
 import {
-  getFilteredStatsRepo,
   getMonthlyPnlRepo,
   getOverallStatsRepo,
 } from "./stats.repository.js";
@@ -38,28 +37,6 @@ export const getOverallStatsService = async (
   };
 
   return overallStats;
-};
-
-export const getFilteredStatsService = async ({
-  user_id,
-  query,
-}: GetFilteredStatsServiceParams): Promise<GetFilteredStatsData> => {
-  const { whereClause, values } = buildTradeFilters(query, user_id);
-
-  const result = await getFilteredStatsRepo({ whereClause, values });
-
-  if (!result || result === undefined) {
-    throw new AppError("Error while fetching filtered stats", 500);
-  }
-
-  const filteredstats: GetFilteredStatsData = {
-    trades_count: Number(result.trades_count),
-    win_rate: Number(result.win_rate),
-    total_pnl: Number(result.total_pnl),
-    total_rr: Number(result.total_rr),
-  };
-
-  return filteredstats;
 };
 
 export const getMonthlyPnlService = async ({

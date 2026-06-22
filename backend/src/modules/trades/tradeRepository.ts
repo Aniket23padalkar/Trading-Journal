@@ -17,6 +17,7 @@ import type {
   UpdateTradeRepoParams,
 } from "../../types/trade.types.js";
 import { AppError } from "../../utils/AppError.js";
+import type { GetFilteredStatsData, GetFilteredStatsRepoParams } from "../../types/stats.types.js";
 
 export const getTradeFromDB = async ({
   trade_id,
@@ -376,6 +377,32 @@ export const getTradeStatsFromDB = async (
   ]);
 
   return result.rows;
+};
+
+export const getFilteredStatsRepo = async ({
+  whereClause,
+  values,
+}: GetFilteredStatsRepoParams): Promise<GetFilteredStatsData | undefined> => {
+  const query: string = `
+    SELECT
+      COUNT(trade_id) AS trades_count,
+
+      COALESCE(
+        CAST( 
+          (COUNT(*) FILTER (WHERE pnl > 0) * 100)
+          / NULLIF(COUNT(*) FILTER (WHERE order_status = 'closed'),0)
+        AS NUMERIC(5,2))
+      ,0) AS win_rate,
+
+      COALESCE(SUM(pnl) FILTER (WHERE order_status = 'closed'),0) AS total_pnl,
+      COALESCE(SUM(pnl / risk),0) AS total_rr
+    FROM trades
+    WHERE ${whereClause}
+  `;
+
+  const result = await pool.query<GetFilteredStatsData>(query, values);
+
+  return result.rows[0] || undefined;
 };
 
 export const getCompleteTradeFromDB = async (
