@@ -6,6 +6,7 @@ import {
   getCompleteTradeFromDB,
   getExecutionsByIdsFromDB,
   getExecutionsFromDB,
+  getFilteredStatsRepo,
   getTradeFromDB,
   getTradeLogsByIdFromDB,
   getTradeLogsFromDB,
@@ -43,6 +44,7 @@ import { removeUndefined } from "../../utils/removeundefined.utils.js";
 import pool from "../../config/db.js";
 import { groupBy, mapBy } from "../../utils/array.utils.js";
 import calculateStats from "../../utils/calculateStats.js";
+import type { GetFilteredStatsData } from "../../types/stats.types.js";
 
 export const createTradeService = async (
   body: CreateTradeData,
@@ -377,6 +379,19 @@ export const getTradesService = async ({
 
   const totalPages: number = Math.ceil(total / limit);
 
+  const filteredStatsRaw = await getFilteredStatsRepo({whereClause, values});
+
+  if(!filteredStatsRaw || filteredStatsRaw === undefined) {
+    throw new AppError('Error while fetching filtered stats',500)
+  }
+
+  const filtered_stats : GetFilteredStatsData = {
+    trades_count: Number(filteredStatsRaw.trades_count),
+    win_rate: Number(filteredStatsRaw.win_rate),
+    total_pnl: Number(filteredStatsRaw.total_pnl),
+    total_rr: Number(filteredStatsRaw.total_rr),
+  }
+
   const trades_data: TradesDataType[] = tradesRes.map((trade) => {
     const executions_raw = logsMap[trade.trade_id] || [];
     const trade_logs_raw = tradeLogsMap[trade.trade_id] || null;
@@ -442,6 +457,7 @@ export const getTradesService = async ({
       page,
       totalPages,
     },
+    filtered_stats
   };
 };
 

@@ -5,6 +5,7 @@ import type {
   GetTradeQueryData,
   UpdateTradeData,
 } from "../schemas/trade.schema.js";
+import type { GetFilteredStatsData } from "./stats.types.js";
 
 export type DB = Pool | PoolClient;
 
@@ -165,6 +166,7 @@ interface PaginationType {
 export interface GetTradesResponse {
   trades_data: TradesDataType[];
   pagination: PaginationType;
+  filtered_stats: GetFilteredStatsData;
 }
 
 export interface GetCompleteTradeQueryResult {
