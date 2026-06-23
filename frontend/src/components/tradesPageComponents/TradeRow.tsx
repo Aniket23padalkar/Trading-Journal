@@ -29,7 +29,7 @@ function TradeRow({
 
   const startIndex = (pagination.page - 1) * pagination.limit;
   return (
-    <tr className="hover:bg-gray-100 h-10 lg:h-5" onClick={handleViewModal}>
+    <tr className="hover:bg-gray-100 dark:hover:bg-sky-900 h-10 lg:h-5" onClick={handleViewModal}>
       <td className="bg-gray-200 dark:bg-gray-900">{startIndex + index + 1}</td>
       <td className="text-left whitespace-nowrap w-30 font-medium capitalize px-1 bg-gray-100 dark:bg-gray-800">
         {trade.trade.symbol}

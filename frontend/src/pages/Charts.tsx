@@ -4,8 +4,10 @@ import AreaChartFillValue from "../components/chartsPageComponents/AreaChartFill
 import { useEffect, useState } from "react";
 import { getMonthlyPnl } from "../api/statsApi.js";
 import type { MonthlyPnlDataType } from "../types/stats.types.js";
+import { useTradesContext } from "../hooks/useTradesContext.js";
 
 export default function Charts() {
+  const {trades} = useTradesContext();
   const [selectedYear, setSelectedYear] = useState<number>(
     new Date().getFullYear(),
   );
@@ -45,7 +47,7 @@ export default function Charts() {
       setMonthlyPnl(formatted);
     }
     fetchMonthlyPnl();
-  }, [selectedYear]);
+  }, [selectedYear,trades]);
 
   return (
     <section className="grid grid-cols-8 gap-6 h-full w-full p-6">
