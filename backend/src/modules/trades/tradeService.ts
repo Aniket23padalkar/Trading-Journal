@@ -17,6 +17,7 @@ import {
   insertIntoTradeLogsInDB,
   updateExecutionsFromDB,
   updateTradeInDB,
+  updateTradeLogsInDB,
 } from "./tradeRepository.js";
 import buildTradeFilters from "../../utils/build.trade.filters.js";
 import {
@@ -200,6 +201,13 @@ export const updateTradeService = async ({
 
     await updateTradeInDB({ validatedTrade, trade_id, user_id, client, pnl });
 
+    await updateTradeLogsInDB({
+      client,
+      trade_id,
+      user_id,
+      description: validatedTrade.description,
+    });
+
     const existingExecutions = await getExecutionsFromDB({
       db: client,
       trade_id,
@@ -379,18 +387,18 @@ export const getTradesService = async ({
 
   const totalPages: number = Math.ceil(total / limit);
 
-  const filteredStatsRaw = await getFilteredStatsRepo({whereClause, values});
+  const filteredStatsRaw = await getFilteredStatsRepo({ whereClause, values });
 
-  if(!filteredStatsRaw || filteredStatsRaw === undefined) {
-    throw new AppError('Error while fetching filtered stats',500)
+  if (!filteredStatsRaw || filteredStatsRaw === undefined) {
+    throw new AppError("Error while fetching filtered stats", 500);
   }
 
-  const filtered_stats : GetFilteredStatsData = {
+  const filtered_stats: GetFilteredStatsData = {
     trades_count: Number(filteredStatsRaw.trades_count),
     win_rate: Number(filteredStatsRaw.win_rate),
     total_pnl: Number(filteredStatsRaw.total_pnl),
     total_rr: Number(filteredStatsRaw.total_rr),
-  }
+  };
 
   const trades_data: TradesDataType[] = tradesRes.map((trade) => {
     const executions_raw = logsMap[trade.trade_id] || [];
@@ -457,7 +465,7 @@ export const getTradesService = async ({
       page,
       totalPages,
     },
-    filtered_stats
+    filtered_stats,
   };
 };
 
