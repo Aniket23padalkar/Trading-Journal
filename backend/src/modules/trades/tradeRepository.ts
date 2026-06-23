@@ -17,7 +17,10 @@ import type {
   UpdateTradeRepoParams,
 } from "../../types/trade.types.js";
 import { AppError } from "../../utils/AppError.js";
-import type { GetFilteredStatsData, GetFilteredStatsRepoParams } from "../../types/stats.types.js";
+import type {
+  GetFilteredStatsData,
+  GetFilteredStatsRepoParams,
+} from "../../types/stats.types.js";
 
 export const getTradeFromDB = async ({
   trade_id,
@@ -212,6 +215,21 @@ export const updateTradeInDB = async ({
     trade_id,
     user_id,
   ]);
+};
+
+export const updateTradeLogsInDB = async ({
+  client,
+  trade_id,
+  description,
+  user_id,
+}: InsertIntoTradeLogsParams) => {
+  const query: string = `
+    UPDATE trade_logs 
+    SET description = $1
+    WHERE user_id = $2 AND trade_id = $3
+  `;
+
+  await client.query(query, [description, user_id, trade_id]);
 };
 
 export const updateExecutionsFromDB = async (
@@ -511,50 +529,3 @@ export const extractYearMonthFromDB = async (
 
   return result.rows[0] || undefined;
 };
-
-// export const getFilteredStatsFromDB = async ({ whereClause, values }) => {
-//   const query = `
-//     WITH first_logs AS (
-//         SELECT trade_id, MIN(entry_time) AS first_entry
-//         FROM trade_logs
-//         GROUP BY trade_id
-//       )
-//       SELECT
-//         COALESCE(COUNT(t.trade_id),0) AS trades_count,
-//         COALESCE(SUM(t.pnl) FILTER(WHERE t.status = 'Closed'),0) AS trades_pnl,
-//         COALESCE(SUM(t.avg_rr) FILTER(WHERE t.status = 'Closed'),0) AS trade_rr,
-//         COALESCE(
-//           CAST(
-//             (COUNT(*) FILTER(WHERE t.pnl > 0 AND t.status = 'Closed') * 100.0)
-//             / NULLIF(COUNT(*) FILTER(WHERE t.status = 'Closed'),0)
-//           AS NUMERIC(5,2))
-//         ,0) AS trades_win_rate
-//       FROM trades t
-//       JOIN first_logs l ON t.trade_id = l.trade_id
-//       WHERE ${whereClause}
-//   `;
-
-//   return pool.query(query, values);
-// };
-
-// export const getMonthlyPnlFromDB = async ({ year, userId }) => {
-//   const query = `
-//     WITH first_logs AS (
-//       SELECT trade_id, MIN(entry_time) AS first_entry
-//       FROM trade_logs
-//       GROUP BY trade_id
-//     )
-//     SELECT
-//       EXTRACT(MONTH FROM fl.first_entry) AS month,
-//       SUM(t.pnl) AS total_pnl
-//     FROM first_logs fl
-//     JOIN trades t ON t.trade_id = fl.trade_id
-//     WHERE t.user_id = $1
-//       AND EXTRACT(YEAR FROM fl.first_entry) = $2
-//       AND t.status = 'Closed'
-//     GROUP BY month
-//     ORDER BY month
-//   `;
-
-//   return pool.query(query, [userId, year]);
-// };
