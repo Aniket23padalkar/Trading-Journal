@@ -56,6 +56,7 @@ export default function AddModal({
     },
   ]);
   const { fetchTrades } = useTradesContext();
+  
 
   // const formDataPayload: FormDataType = {
   //   symbol: formData.symbol,
