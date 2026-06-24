@@ -158,7 +158,7 @@ export interface InsertTradeParams {
 }
 
 export interface GetYearAndMonthData {
-  years: number[];
+  year: number;
   months: number[];
 }
 
@@ -168,6 +168,11 @@ export interface FormattedMonthsData {
 }
 
 export interface GetYearAndMonthResponse {
+  years: number[];
+  raw: GetYearAndMonthData[];
+}
+
+export interface YearMonthsData {
   years: number[];
   months: FormattedMonthsData[];
 }

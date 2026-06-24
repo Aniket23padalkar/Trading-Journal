@@ -40,8 +40,6 @@ export default function TradeProvider({ children }: ContextProviderProps) {
   const [filteredStats, setFilteredStats] =
     useState<GetFilteredStatsData | null>(null);
 
-  console.log(fetchLoading);
-
   const payload: FilterValues = {
     direction: filterValues.direction || null,
     order_status: filterValues.order_status || null,
@@ -70,7 +68,7 @@ export default function TradeProvider({ children }: ContextProviderProps) {
 
       setPagination(data?.pagination);
 
-      setFilteredStats(data?.filtered_stats)
+      setFilteredStats(data?.filtered_stats);
     } catch (err) {
       console.log(err);
     } finally {
@@ -95,7 +93,7 @@ export default function TradeProvider({ children }: ContextProviderProps) {
         setFilterValues,
         fetchTrades,
         fetchLoading,
-        filteredStats
+        filteredStats,
       }}
     >
       {children}

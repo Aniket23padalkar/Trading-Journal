@@ -8,8 +8,11 @@ import { getYearAndMonth } from "../../api/tradesService.js";
 import type {
   FilterValues,
   GetYearAndMonthResponse,
+  YearMonthsData,
 } from "../../types/trades.types.js";
 import { useTradesContext } from "../../hooks/useTradesContext.js";
+import { getErrorMessage } from "../../utils/error.handler.js";
+import { getFormattedMonths } from "../../utils/formattedMonths.js";
 
 interface TradesHeaderParams {
   setAddModal: React.Dispatch<React.SetStateAction<boolean>>;
@@ -18,8 +21,7 @@ interface TradesHeaderParams {
 function TradesHeader({ setAddModal }: TradesHeaderParams) {
   const { filterValues, setFilterValues } = useTradesContext();
   const [viewFilters, setViewFilters] = useState<boolean>(false);
-  const [yearsMonths, setYearsMonths] =
-    useState<GetYearAndMonthResponse | null>(null);
+  const [yearsMonths, setYearsMonths] = useState<YearMonthsData | null>(null);
 
   const handleChange = useCallback(
     (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -51,14 +53,24 @@ function TradesHeader({ setAddModal }: TradesHeaderParams) {
   }, [setFilterValues]);
 
   async function fetchYearMonth() {
-    const res = await getYearAndMonth();
+    try {
+      const res = await getYearAndMonth();
 
-    setYearsMonths(res);
+      const months = getFormattedMonths({
+        data: res.raw,
+        selectedYear: Number(filterValues.year),
+      });
+
+      setYearsMonths({ years: res.years, months: months });
+    } catch (err: unknown) {
+      const message = getErrorMessage(err);
+      console.log(message);
+    }
   }
 
   useEffect(() => {
     fetchYearMonth();
-  }, []);
+  }, [filterValues.year]);
 
   const handleOpen = useCallback(() => {
     setAddModal(true);

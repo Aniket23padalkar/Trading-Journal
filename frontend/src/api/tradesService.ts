@@ -38,8 +38,6 @@ export async function getTradesData(
 ): Promise<Data> {
   const query = new URLSearchParams(params).toString();
 
-  console.log(query);
-
   try {
     const res = await fetch(`${API}/api/trades?${query}`, {
       method: "GET",
@@ -109,37 +107,15 @@ export async function getYearAndMonth(): Promise<GetYearAndMonthResponse> {
       credentials: "include",
     });
 
-    const result: ApiResponse<GetYearAndMonthData> = await res.json();
+    const result: ApiResponse<GetYearAndMonthData[]> = await res.json();
 
     if (!result.success) {
       throw new Error(result.message);
     }
 
-    console.log(result);
+    const years = result.data.map((item) => item.year);
 
-    const monthOrder = [
-      "Jan",
-      "Feb",
-      "Mar",
-      "Apr",
-      "May",
-      "Jun",
-      "Jul",
-      "Aug",
-      "Sep",
-      "Oct",
-      "Nov",
-      "Dec",
-    ];
-
-    const formattedMonths: FormattedMonthsData[] = result.data.months.map(
-      (m) => ({
-        label: monthOrder[m - 1],
-        value: m,
-      }),
-    );
-
-    return { years: result.data.years, months: formattedMonths };
+    return { raw: result.data, years };
   } catch (err) {
     console.log(err);
     throw err;
