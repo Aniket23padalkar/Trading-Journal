@@ -99,31 +99,3 @@ export const getYearMonth = async (req: Request, res: Response) => {
     message: "Trades fetched successfully",
   });
 };
-
-// export const getStats = async (req, res) => {
-//   try {
-//     const data = await getStatsService(req.query, req.user.user_id);
-
-//     res.status(200).json(data);
-//   } catch (err) {
-//     console.error(err);
-//     if (err.statusCode) {
-//       return res.status(err.statusCode).json({ message: err.message });
-//     }
-//     res.status(500).json({ message: "Server Error" });
-//   }
-// };
-
-// export const getMonthlyPnl = async (req, res) => {
-//   try {
-//     const data = await getMonthlyPnlService(req.query, req.user.user_id);
-
-//     res.status(200).json(data);
-//   } catch (err) {
-//     console.error(err);
-//     if (err.statusCode) {
-//       return res.status(err.statusCode).json({ message: err.message });
-//     }
-//     res.status(500).json({ message: "Server Error" });
-//   }
-// };

@@ -1,16 +1,10 @@
 import type {
-  GetFilteredStatsData,
-  GetFilteredStatsServiceParams,
   GetMonthlyPnlData,
   GetMonthlyPnlParams,
   GetOverallStatsData,
 } from "../../types/stats.types.js";
 import { AppError } from "../../utils/AppError.js";
-import buildTradeFilters from "../../utils/build.trade.filters.js";
-import {
-  getMonthlyPnlRepo,
-  getOverallStatsRepo,
-} from "./stats.repository.js";
+import { getMonthlyPnlRepo, getOverallStatsRepo } from "./stats.repository.js";
 
 export const getOverallStatsService = async (
   user_id: string,

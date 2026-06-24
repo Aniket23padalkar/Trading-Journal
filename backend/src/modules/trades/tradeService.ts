@@ -29,6 +29,7 @@ import type {
   ExecutionsRow,
   GetTradesResponse,
   GetTradesServicesParams,
+  GetYearAndMonthType,
   TradesDataType,
   UpdateExecutionsData,
   UpdateTradeServiceParams,
@@ -472,20 +473,16 @@ export const getTradesService = async ({
 export const getYearMonthService = async (user_id: string) => {
   const result = await extractYearMonthFromDB(user_id);
 
-  return result;
+  if (!result || result.length === 0) {
+    throw new AppError("Error fetching year months", 500);
+  }
+
+  const yearMonths: GetYearAndMonthType[] = result.map((item) => {
+    return {
+      year: Number(item.year),
+      months: item.months,
+    };
+  });
+
+  return yearMonths;
 };
-
-// export const getStatsService = async (query, userId) => {
-//   const { whereClause, values } = buildTradeFilters(query, userId);
-
-//   const result = await getFilteredStatsFromDB({ whereClause, values });
-
-//   return result.rows[0];
-// };
-
-// export const getMonthlyPnlService = async (query, userId) => {
-//   const { year } = query;
-//   const result = await getMonthlyPnlFromDB({ year, userId });
-
-//   return result.rows;
-// };

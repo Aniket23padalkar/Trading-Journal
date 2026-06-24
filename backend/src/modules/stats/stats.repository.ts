@@ -1,7 +1,5 @@
 import pool from "../../config/db.js";
 import type {
-  GetFilteredStatsData,
-  GetFilteredStatsRepoParams,
   GetMonthlyPnlData,
   GetMonthlyPnlParams,
   GetOverallStatsData,

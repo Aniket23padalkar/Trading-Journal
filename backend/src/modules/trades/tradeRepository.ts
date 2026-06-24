@@ -16,7 +16,6 @@ import type {
   UpdateExecutionsData,
   UpdateTradeRepoParams,
 } from "../../types/trade.types.js";
-import { AppError } from "../../utils/AppError.js";
 import type {
   GetFilteredStatsData,
   GetFilteredStatsRepoParams,
@@ -516,16 +515,18 @@ export const getTradesCountFromDB = async ({
 
 export const extractYearMonthFromDB = async (
   user_id: string,
-): Promise<GetYearAndMonthType | undefined> => {
+): Promise<GetYearAndMonthType[] | undefined> => {
   const query: string = `
     SELECT
-      ARRAY_AGG(DISTINCT EXTRACT(YEAR FROM entry_time)) AS years,
+      EXTRACT(YEAR FROM entry_time) AS year,
       ARRAY_AGG(DISTINCT EXTRACT(MONTH FROM entry_time)) AS months
     FROM trades
     WHERE user_id = $1
+    GROUP BY year
+    ORDER BY year
   `;
 
   const result = await pool.query<GetYearAndMonthType>(query, [user_id]);
 
-  return result.rows[0] || undefined;
+  return result.rows || undefined;
 };
