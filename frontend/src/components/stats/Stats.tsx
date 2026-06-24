@@ -18,7 +18,7 @@ export default function Stats() {
 
   if (overallStatsLoading || !overallStats) {
     return (
-      <div className="col-start-1 col-end-8 row-start-1 row-end-2 flex items-center justify-center h-full w-full">
+      <div className="col-start-1 col-end-9 row-start-1 row-end-2 flex items-center justify-center h-full w-full">
         <ScaleLoader color="#20dfbc" />
       </div>
     );
