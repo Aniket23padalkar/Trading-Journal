@@ -5,14 +5,10 @@ import {
 } from "./stats.services.js";
 import { AppError } from "../../utils/AppError.js";
 import type {
-  GetFilteredStatsData,
   GetMonthlyPnlData,
   GetOverallStatsData,
 } from "../../types/stats.types.js";
-import type {
-  GetMonthlyPnlQueryData,
-  GetTradeQueryData,
-} from "../../schemas/trade.schema.js";
+import type { GetMonthlyPnlQueryData } from "../../schemas/trade.schema.js";
 
 export const getOverallStats = async (
   req: Request,

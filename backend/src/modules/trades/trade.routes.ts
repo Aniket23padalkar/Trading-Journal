@@ -44,7 +44,5 @@ router.get(
   asyncHandler(getTrades),
 );
 router.get("/yearmonth", protect, getYearMonth);
-// router.get("/stats", protect, getStats);
-// router.get("/monthly-pnl", protect, getMonthlyPnl);
 
 export default router;

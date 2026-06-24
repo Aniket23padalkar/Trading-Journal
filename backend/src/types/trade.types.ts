@@ -197,6 +197,6 @@ export interface GetCompleteTradeQueryResult {
 }
 
 export interface GetYearAndMonthType {
-  years: number[];
+  year: number;
   months: number[];
 }
