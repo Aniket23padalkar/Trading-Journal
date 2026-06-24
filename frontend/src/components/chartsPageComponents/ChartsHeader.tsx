@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { getYearAndMonth } from "../../api/tradesService.js";
 import { useState } from "react";
 import type { MonthlyPnlDataType } from "../../types/stats.types.js";
+import { getErrorMessage } from "../../utils/error.handler.js";
 
 interface ChartsHeaderParams {
   selectedYear: number;
@@ -22,9 +23,14 @@ export default function ChartsHeader({
 
   useEffect(() => {
     async function fetchYears() {
-      const res = await getYearAndMonth();
+      try {
+        const res = await getYearAndMonth();
 
-      setYears(res.years);
+        setYears(res.years);
+      } catch (err) {
+        const message = getErrorMessage(err);
+        console.log(message);
+      }
     }
     fetchYears();
   }, []);

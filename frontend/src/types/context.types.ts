@@ -1,5 +1,8 @@
 import type { User } from "./auth.types.js";
-import type { GetFilteredStatsData, GetOverallStatsData } from "./stats.types.js";
+import type {
+  GetFilteredStatsData,
+  GetOverallStatsData,
+} from "./stats.types.js";
 import type {
   FilterValues,
   FilterValuesUI,
@@ -39,6 +42,6 @@ export interface TradesContextType {
 }
 
 export interface StatsContextType {
-  overallStats: GetOverallStatsData;
-  overallStatsLoading : boolean;
+  overallStats: GetOverallStatsData | null;
+  overallStatsLoading: boolean;
 }

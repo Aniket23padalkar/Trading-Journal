@@ -43,7 +43,7 @@ export default function Trades() {
   }, [setCurrentPage]);
 
   return (
-    <section className="flex flex-col gap-2 items-center justify-between h-full w-full lg:w-248 xl:w-285 2xl:w-full py-4 px-2 lg:p-4 rounded-3xl bg-gray-100 dark:bg-gray-800">
+    <section className="flex flex-col gap-2 items-center justify-between h-full w-full py-4 px-2 lg:p-4 rounded-3xl bg-gray-100 dark:bg-gray-800">
       {/* Header Section */}
       <TradesHeader setAddModal={setAddModal} />
 
