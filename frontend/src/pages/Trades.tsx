@@ -5,7 +5,6 @@ import Pagination from "../components/tradesPageComponents/Pagination.js";
 import TradesTable from "../components/tradesPageComponents/TradesTable.js";
 import TableFooter from "../components/tradesPageComponents/TableFooter.js";
 import TradesHeader from "../components/tradesPageComponents/TradesHeader.js";
-import { TradeContext } from "../context/TradesContext.js";
 import { useTradesContext } from "../hooks/useTradesContext.js";
 import type { EditTrade, TradesData } from "../types/trades.types.js";
 

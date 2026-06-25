@@ -1,4 +1,10 @@
-import React, { Suspense, useCallback, useContext, useState } from "react";
+import React, {
+  Suspense,
+  useCallback,
+  useContext,
+  useMemo,
+  useState,
+} from "react";
 import { FaFilter } from "react-icons/fa";
 const Filters = React.lazy(() => import("./Filters.js"));
 import { ScaleLoader } from "react-spinners";
@@ -7,6 +13,7 @@ import { useEffect } from "react";
 import { getYearAndMonth } from "../../api/tradesService.js";
 import type {
   FilterValues,
+  FormattedMonthsData,
   GetYearAndMonthResponse,
   YearMonthsData,
 } from "../../types/trades.types.js";
@@ -21,7 +28,8 @@ interface TradesHeaderParams {
 function TradesHeader({ setAddModal }: TradesHeaderParams) {
   const { filterValues, setFilterValues } = useTradesContext();
   const [viewFilters, setViewFilters] = useState<boolean>(false);
-  const [yearsMonths, setYearsMonths] = useState<YearMonthsData | null>(null);
+  const [yearsMonths, setYearsMonths] =
+    useState<GetYearAndMonthResponse | null>(null);
 
   const handleChange = useCallback(
     (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -56,12 +64,7 @@ function TradesHeader({ setAddModal }: TradesHeaderParams) {
     try {
       const res = await getYearAndMonth();
 
-      const months = getFormattedMonths({
-        data: res.raw,
-        selectedYear: Number(filterValues.year),
-      });
-
-      setYearsMonths({ years: res.years, months: months });
+      setYearsMonths({ years: res.years, raw: res.raw });
     } catch (err: unknown) {
       const message = getErrorMessage(err);
       console.log(message);
@@ -70,7 +73,16 @@ function TradesHeader({ setAddModal }: TradesHeaderParams) {
 
   useEffect(() => {
     fetchYearMonth();
-  }, [filterValues.year]);
+  }, []);
+
+  const formattedMonths: FormattedMonthsData[] = useMemo(() => {
+    if (!yearsMonths) return [];
+
+    return getFormattedMonths({
+      data: yearsMonths.raw,
+      selectedYear: Number(filterValues.year),
+    });
+  }, [yearsMonths, filterValues.year]);
 
   const handleOpen = useCallback(() => {
     setAddModal(true);
@@ -107,7 +119,7 @@ function TradesHeader({ setAddModal }: TradesHeaderParams) {
           onChange={handleChange}
         >
           <option value="">All month</option>
-          {yearsMonths?.months?.map((month) => (
+          {formattedMonths.map((month) => (
             <option key={month.value} value={month.label}>
               {month.label}
             </option>

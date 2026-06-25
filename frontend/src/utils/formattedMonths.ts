@@ -21,31 +21,30 @@ const monthOrder = [
 
 interface GetFormattedMonthsParams {
   data: GetYearAndMonthData[];
-  selectedYear: number | "";
+  selectedYear: number;
 }
 
 export const getFormattedMonths = ({
   data,
   selectedYear,
 }: GetFormattedMonthsParams): FormattedMonthsData[] => {
-  if (selectedYear !== "") {
-    const found = data.find((item) => item.year === selectedYear);
+  if (!selectedYear || isNaN(selectedYear)) {
+    const allMonths: number[] = data.flatMap((item) => item.months);
 
-    if (!found) return [];
+    const uniqueMonths: number[] = [...new Set(allMonths)];
 
-    return found.months.map((m) => ({
+    uniqueMonths.sort((a, b) => a - b);
+
+    return uniqueMonths.map((m: number) => ({
       label: monthOrder[m - 1],
       value: m,
     }));
   }
+  const found = data.find((item) => item.year === selectedYear);
 
-  const allMonths: number[] = data.flatMap((item) => item.months);
+  if (!found) return [];
 
-  const uniqueMonths: number[] = [...new Set(allMonths)];
-
-  uniqueMonths.sort((a, b) => a - b);
-
-  return uniqueMonths.map((m: number) => ({
+  return found.months.map((m) => ({
     label: monthOrder[m - 1],
     value: m,
   }));

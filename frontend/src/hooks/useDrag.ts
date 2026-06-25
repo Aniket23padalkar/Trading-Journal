@@ -1,15 +1,20 @@
 import { useEffect, useRef, useState } from "react";
-import { ZIndexStacking } from "../utils/zIndexStacking";
+import { ZIndexStacking } from "../utils/zIndexStacking.js";
+
+type Offset = {
+  x: number;
+  y: number;
+};
 
 export default function useDrag() {
-  const [isDragging, setIsDragging] = useState(false);
-  const [offset, setOffset] = useState({ x: 0, y: 0 });
-  const modalRef = useRef(null);
+  const [isDragging, setIsDragging] = useState<boolean>(false);
+  const [offset, setOffset] = useState<Offset>({ x: 0, y: 0 });
+  const modalRef = useRef<HTMLDivElement | null>(null);
 
-  function handleMouseDown(e) {
+  function handleMouseDown(e: React.MouseEvent<HTMLDivElement>) {
     if (!modalRef.current) return;
 
-    modalRef.current.style.zIndex = ZIndexStacking();
+    modalRef.current.style.zIndex = String(ZIndexStacking());
     const rect = modalRef.current.getBoundingClientRect();
     setIsDragging(true);
     setOffset({
@@ -18,8 +23,8 @@ export default function useDrag() {
     });
   }
 
-  function handleMouseMove(e) {
-    if (!isDragging) return;
+  function handleMouseMove(e: MouseEvent) {
+    if (!isDragging || !modalRef.current) return;
     modalRef.current.style.left = `${e.clientX - offset.x}px`;
     modalRef.current.style.top = `${e.clientY - offset.y}px`;
     modalRef.current.style.transform = "none";
