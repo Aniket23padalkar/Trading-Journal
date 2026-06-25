@@ -1,6 +1,6 @@
 import { useState } from "react";
 import formatDateTime from "../../utils/formatDateTime.js";
-import useDrag from "../../hooks/useDrag.jsx";
+import useDrag from "../../hooks/useDrag.js";
 import { FaIndianRupeeSign } from "react-icons/fa6";
 import ReactMarkdown from "react-markdown";
 import { useThemeContext } from "../../hooks/useThemeContext.js";

@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from "react";
-import useDrag from "../../hooks/useDrag.jsx";
+import useDrag from "../../hooks/useDrag.js";
 import { FaExclamation } from "react-icons/fa6";
 import ExecutionRow from "./ExecutionRow.js";
 import { insertTrade, updateTrade } from "../../api/tradesService.js";
@@ -10,12 +10,9 @@ import { getErrorMessage } from "../../utils/error.handler.js";
 import type {
   EditTrade,
   Executions,
-  ExecutionsType,
   ExecutionsUIType,
-  FormDataType,
   FormDataUIType,
   HandleExecutionEntries,
-  TradesData,
 } from "../../types/trades.types.js";
 import formatDateTimeLocal from "../../utils/formatDateTimeLocal.js";
 import getChangedFields from "../../utils/getChangedFields.js";
@@ -56,20 +53,6 @@ export default function AddModal({
     },
   ]);
   const { fetchTrades } = useTradesContext();
-  
-
-  // const formDataPayload: FormDataType = {
-  //   symbol: formData.symbol,
-  //   order_status: formData.order_status || null,
-  //   market_type: formData.market_type || null,
-  //   risk: Number(formData.risk),
-  //   position: formData.position || null,
-  //   direction: formData.direction || null,
-  //   trade_rating: formData.trade_rating || null,
-  //   description: formData.description,
-  //   entry_time: new Date(formData.entry_time),
-  //   exit_time: !formData.exit_time ? null : new Date(formData.exit_time),
-  // };
 
   function handleChange(
     e: React.ChangeEvent<

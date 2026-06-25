@@ -1,4 +1,10 @@
-import React, { Suspense, useCallback, useContext, useState } from "react";
+import React, {
+  Suspense,
+  useCallback,
+  useContext,
+  useMemo,
+  useState,
+} from "react";
 import { FaFilter } from "react-icons/fa";
 const Filters = React.lazy(() => import("./Filters.js"));
 import { ScaleLoader } from "react-spinners";
@@ -7,9 +13,13 @@ import { useEffect } from "react";
 import { getYearAndMonth } from "../../api/tradesService.js";
 import type {
   FilterValues,
+  FormattedMonthsData,
   GetYearAndMonthResponse,
+  YearMonthsData,
 } from "../../types/trades.types.js";
 import { useTradesContext } from "../../hooks/useTradesContext.js";
+import { getErrorMessage } from "../../utils/error.handler.js";
+import { getFormattedMonths } from "../../utils/formattedMonths.js";
 
 interface TradesHeaderParams {
   setAddModal: React.Dispatch<React.SetStateAction<boolean>>;
@@ -51,14 +61,28 @@ function TradesHeader({ setAddModal }: TradesHeaderParams) {
   }, [setFilterValues]);
 
   async function fetchYearMonth() {
-    const res = await getYearAndMonth();
+    try {
+      const res = await getYearAndMonth();
 
-    setYearsMonths(res);
+      setYearsMonths({ years: res.years, raw: res.raw });
+    } catch (err: unknown) {
+      const message = getErrorMessage(err);
+      console.log(message);
+    }
   }
 
   useEffect(() => {
     fetchYearMonth();
   }, []);
+
+  const formattedMonths: FormattedMonthsData[] = useMemo(() => {
+    if (!yearsMonths) return [];
+
+    return getFormattedMonths({
+      data: yearsMonths.raw,
+      selectedYear: Number(filterValues.year),
+    });
+  }, [yearsMonths, filterValues.year]);
 
   const handleOpen = useCallback(() => {
     setAddModal(true);
@@ -95,7 +119,7 @@ function TradesHeader({ setAddModal }: TradesHeaderParams) {
           onChange={handleChange}
         >
           <option value="">All month</option>
-          {yearsMonths?.months?.map((month) => (
+          {formattedMonths.map((month) => (
             <option key={month.value} value={month.label}>
               {month.label}
             </option>
