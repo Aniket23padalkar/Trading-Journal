@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import FormatPnL from "../../utils/FormatPnL.js";
 import { ScaleLoader } from "react-spinners";
 import { useTradesContext } from "../../hooks/useTradesContext.js";
 
 function TableFooter() {
-  const { fetchLoading,filteredStats } = useTradesContext();
+  const { fetchLoading, filteredStats } = useTradesContext();
 
   return (
     <footer className="flex items-center justify-between h-10 lg:h-10 w-full py-2 px-2 lg:px-6 bg-white dark:bg-gray-950 dark:shadow-none rounded-xl shadow shadow-gray-400">

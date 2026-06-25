@@ -1,21 +1,13 @@
-import React, {
-  Suspense,
-  useCallback,
-  useContext,
-  useMemo,
-  useState,
-} from "react";
-import { FaFilter } from "react-icons/fa";
+import React, { Suspense, useCallback, useMemo, useState } from "react";
+import FilterIcon from "../../icons/FilterIcon.svg?react";
 const Filters = React.lazy(() => import("./Filters.js"));
 import { ScaleLoader } from "react-spinners";
-import { TradeContext } from "../../context/TradesContext.js";
 import { useEffect } from "react";
 import { getYearAndMonth } from "../../api/tradesService.js";
 import type {
   FilterValues,
   FormattedMonthsData,
   GetYearAndMonthResponse,
-  YearMonthsData,
 } from "../../types/trades.types.js";
 import { useTradesContext } from "../../hooks/useTradesContext.js";
 import { getErrorMessage } from "../../utils/error.handler.js";
@@ -162,7 +154,7 @@ function TradesHeader({ setAddModal }: TradesHeaderParams) {
           }
           onClick={handleViewFilter}
         >
-          <FaFilter className="text-lg lg:text-sm" />{" "}
+          <FilterIcon height={20} width={20} className="text-lg lg:text-sm" />{" "}
           <span className="hidden lg:block">Filters</span>
         </button>
 

@@ -1,4 +1,4 @@
-import { BiBarChartAlt2 } from "react-icons/bi";
+import PollIcon from "../../icons/PollIcon.svg?react";
 import {
   BarChart,
   Bar,
@@ -25,7 +25,11 @@ export default function BarPnlChart({ monthlyPnl }: BarChartParams) {
       <div className="flex w-full justify-between items-center h-10 mb-4">
         <div className="flex items-center  gap-2">
           <div className="flex items-center justify-center h-10 w-10 bg-cyan-600 dark:bg-blue-500 dark:shadow-none rounded-xl shadow shadow-gray-400">
-            <BiBarChartAlt2 className="text-white text-xl" />{" "}
+            <PollIcon
+              height={22}
+              width={22}
+              className="text-white text-xl"
+            />{" "}
           </div>
           <h1 className="font-medium text-lg text-shadow-lg dark:text-white">
             Bar Chart

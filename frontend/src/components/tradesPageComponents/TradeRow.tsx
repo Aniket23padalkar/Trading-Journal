@@ -1,5 +1,6 @@
 import React, { useCallback } from "react";
-import { FaEdit, FaTrash } from "react-icons/fa";
+import EditIcon from "../../icons/EditIcon.svg?react";
+import TrashIcon from "../../icons/TrashIcon.svg?react";
 import formatDateTime from "../../utils/formatDateTime.js";
 import type { TradesData } from "../../types/trades.types.js";
 import { useTradesContext } from "../../hooks/useTradesContext.js";
@@ -101,7 +102,12 @@ function TradeRow({
           }}
           className="cursor-pointer bg-transparent"
         >
-          <FaEdit className="text-blue-400" />
+          <EditIcon
+            height={12}
+            width={12}
+            strokeWidth={0.5}
+            className="text-blue-400"
+          />
         </button>
         <button
           onClick={(e) => {
@@ -110,7 +116,7 @@ function TradeRow({
           }}
           className="cursor-pointer bg-transparent xl:pl-2"
         >
-          <FaTrash className="text-red-400" />
+          <TrashIcon height={15} width={15} className="text-red-400" />
         </button>
       </td>
     </tr>
