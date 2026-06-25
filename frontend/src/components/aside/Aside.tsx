@@ -1,9 +1,13 @@
 import { NavLink } from "react-router-dom";
-import { MdContacts, MdDashboard } from "react-icons/md";
-import { BiBarChartAlt2, BiCalendar, BiChart } from "react-icons/bi";
+import ContactIcon from "../../icons/ContactIcon.svg?react";
+import DashBoardIcon from "../../icons/DashboardIcon.svg?react";
+import BarChartIcon from "../../icons/BarChartIcon.svg?react";
+import ChartIcon from "../../icons/ChartIcon.svg?react";
+import CalendarIcon from "../../icons/CalendarIcon.svg?react";
+import { BiCalendar } from "react-icons/bi";
 
 interface AsideParams {
-  isAsideOpen : boolean
+  isAsideOpen: boolean;
 }
 
 export default function Aside({ isAsideOpen }: AsideParams) {
@@ -27,7 +31,9 @@ export default function Aside({ isAsideOpen }: AsideParams) {
           {({ isActive }) => (
             <li className="flex items-center pl-2">
               <span>
-                <MdDashboard
+                <DashBoardIcon
+                  height={20}
+                  width={20}
                   className={`text-xl ${
                     isActive ? "text-teal-600" : "text-gray-400"
                   }`}
@@ -50,7 +56,10 @@ export default function Aside({ isAsideOpen }: AsideParams) {
           {({ isActive }) => (
             <li className="flex items-center pl-2">
               <span>
-                <BiBarChartAlt2
+                <BarChartIcon
+                  height={20}
+                  width={20}
+                  strokeWidth={0.5}
                   className={`text-xl ${
                     isActive ? "text-teal-600" : "text-gray-400"
                   }`}
@@ -74,7 +83,9 @@ export default function Aside({ isAsideOpen }: AsideParams) {
           {({ isActive }) => (
             <li className="flex items-center pl-2">
               <span>
-                <BiChart
+                <ChartIcon
+                  height={20}
+                  width={20}
                   className={`text-xl ${
                     isActive ? "text-teal-600" : "text-gray-400"
                   }`}
@@ -98,7 +109,9 @@ export default function Aside({ isAsideOpen }: AsideParams) {
           {({ isActive }) => (
             <li className="flex items-center pl-2">
               <span>
-                <BiCalendar
+                <CalendarIcon
+                  height={20}
+                  width={20}
                   className={`text-xl ${
                     isActive ? "text-teal-600" : "text-gray-400"
                   }`}
@@ -122,7 +135,9 @@ export default function Aside({ isAsideOpen }: AsideParams) {
           {({ isActive }) => (
             <li className="flex items-center pl-2">
               <span>
-                <MdContacts
+                <ContactIcon
+                  width={20}
+                  height={20}
                   className={`text-xl ${
                     isActive ? "text-teal-600" : "text-gray-400"
                   }`}
