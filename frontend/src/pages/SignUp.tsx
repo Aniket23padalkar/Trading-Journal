@@ -1,5 +1,4 @@
 import { Link, useNavigate } from "react-router-dom";
-import logo from "../assets/TradeLens-Logo2.png";
 import { useState } from "react";
 import { ScaleLoader } from "react-spinners";
 import DashboardImg from "../assets/Dashboard_V1.1.png";
@@ -69,7 +68,11 @@ export default function SignUp() {
     <div className="flex w-240 h-120 p-4 bg-linear-to-r from-teal-200 to-white rounded-lg shadow overflow-hidden shadow-gray-500">
       <div className="flex-1 flex flex-col">
         <div className="h-15 w-35">
-          <img src={logo} alt="logo" className="h-full w-full object-cover" />
+          <img
+            src="/TradeLens-Logo2.webp"
+            alt="logo"
+            className="h-full w-full object-cover"
+          />
         </div>
         <div className="flex-1 flex items-center justify-center relative">
           <div className="h-60 shadow-lg shadow-gray-500 absolute top-5 right-4 rounded-xl overflow-hidden">

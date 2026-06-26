@@ -1,4 +1,3 @@
-import candles from "../../assets/candles.png";
 import ArrowTrendUpIcon from "../../icons/ArrowTrendUpIcon.svg?react";
 import ArrowTrendDownIcon from "../../icons/ArrowTrendDownIcon.svg?react";
 import ArrowUpIcon from "../../icons/ArrowUpIcon.svg?react";
@@ -59,8 +58,10 @@ export default function Stats() {
         <div className="lg:flex-1  pl-8">
           <img
             className="h-full object-contain w-full"
-            src={candles}
+            src="/candles.webp"
             alt="candles"
+            loading="eager"
+            fetchPriority="high"
           />
         </div>
       </article>

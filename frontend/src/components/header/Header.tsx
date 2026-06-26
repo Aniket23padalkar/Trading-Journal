@@ -1,6 +1,4 @@
 import { Link, useNavigate } from "react-router-dom";
-import logo from "../../assets/TradeLens-Logo2.png";
-import logoDark from "../../assets/TradeLens-Dark.png";
 import MenuIcon from "../../icons/MenuIcon.svg?react";
 import MoonIcon from "../../icons/MoonIcon.svg?react";
 import SunIcon from "../../icons/SunIcon.svg?react";
@@ -48,8 +46,14 @@ export default function Header({ setIsAsideOpen }: HeaderProps) {
           <Link to="/">
             <img
               className="h-full w-full object-cover"
-              src={theme === "light" ? logo : logoDark}
+              src={
+                theme === "light"
+                  ? "/TradeLens-Logo2.webp"
+                  : "/TradeLens-Dark.webp"
+              }
               alt="Logo"
+              loading="eager"
+              fetchPriority="high"
             />
           </Link>
         </div>
