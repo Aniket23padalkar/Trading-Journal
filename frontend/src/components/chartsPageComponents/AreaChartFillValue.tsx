@@ -1,4 +1,4 @@
-import { FaChartArea } from "react-icons/fa";
+import AreaChartIcon from "../../icons/AreaChartIcon.svg?react";
 import {
   AreaChart,
   Area,
@@ -39,7 +39,11 @@ export default function AreaChartFillValue({ monthlyPnl }: AreaChartParams) {
       <div className="flex w-full justify-between items-center h-10 mb-4">
         <div className="flex items-center  gap-2">
           <div className="flex items-center justify-center h-10 w-10 bg-blue-500 dark:bg-teal-600 dark:shadow-none rounded-xl shadow shadow-gray-400">
-            <FaChartArea className="text-white text-xl" />{" "}
+            <AreaChartIcon
+              height={20}
+              width={20}
+              className="text-white text-xl"
+            />{" "}
           </div>
           <h1 className="font-medium text-shadow-lg text-lg dark:text-white">
             Area Fill by Value Chart

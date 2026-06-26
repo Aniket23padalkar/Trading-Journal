@@ -4,7 +4,6 @@ import DashBoardIcon from "../../icons/DashboardIcon.svg?react";
 import BarChartIcon from "../../icons/BarChartIcon.svg?react";
 import ChartIcon from "../../icons/ChartIcon.svg?react";
 import CalendarIcon from "../../icons/CalendarIcon.svg?react";
-import { BiCalendar } from "react-icons/bi";
 
 interface AsideParams {
   isAsideOpen: boolean;

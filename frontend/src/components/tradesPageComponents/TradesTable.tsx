@@ -1,5 +1,6 @@
-import React, { useContext } from "react";
-import { FaArrowDown, FaArrowUp } from "react-icons/fa6";
+import React from "react";
+import ArrowUpIcon from "../../icons/ArrowUpIcon.svg?react";
+import ArrowDownIcon from "../../icons/ArrowDownIcon.svg?react";
 import { ScaleLoader } from "react-spinners";
 import Swal from "sweetalert2";
 import TradeRow from "./TradeRow.js";
@@ -104,11 +105,11 @@ function TradesTable({
                   onClick={handleDateTimeSort}
                 >
                   {filterValues.dateTimeSort === "desc" ? (
-                    <FaArrowDown />
+                    <ArrowDownIcon height={12} width={12} />
                   ) : filterValues.dateTimeSort === "asc" ? (
-                    <FaArrowUp />
+                    <ArrowUpIcon height={12} width={12} />
                   ) : (
-                    <FaArrowDown />
+                    <ArrowDownIcon height={12} width={12} />
                   )}{" "}
                   <p>Entry Time</p>
                 </th>
@@ -118,11 +119,11 @@ function TradesTable({
                   onClick={handleFilterChange}
                 >
                   {filterValues.pnlSort === "desc" ? (
-                    <FaArrowDown />
+                    <ArrowDownIcon height={12} width={12} />
                   ) : filterValues.pnlSort === "asc" ? (
-                    <FaArrowUp />
+                    <ArrowDownIcon height={12} width={12} />
                   ) : (
-                    <FaArrowDown />
+                    <ArrowDownIcon height={12} width={12} />
                   )}{" "}
                   <p>P&L (₹)</p>
                 </th>

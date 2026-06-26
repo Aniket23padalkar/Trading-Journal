@@ -1,14 +1,13 @@
-import { useContext } from "react";
 import candles from "../../assets/candles.png";
-import {
-  FaArrowTrendDown,
-  FaArrowTrendUp,
-  FaArrowUp,
-  FaArrowDown,
-  FaIndianRupeeSign,
-} from "react-icons/fa6";
-import { FaBullseye, FaChartLine, FaExclamation } from "react-icons/fa";
-import { BiBarChartAlt2 } from "react-icons/bi";
+import ArrowTrendUpIcon from "../../icons/ArrowTrendUpIcon.svg?react";
+import ArrowTrendDownIcon from "../../icons/ArrowTrendDownIcon.svg?react";
+import ArrowUpIcon from "../../icons/ArrowUpIcon.svg?react";
+import ArrowDownIcon from "../../icons/ArrowDownIcon.svg?react";
+import RupeeIcon from "../../icons/RupeeIcon.svg?react";
+import GraphUpIcon from "../../icons/GraphUpIcon.svg?react";
+import BullsEyeIcon from "../../icons/BullsEyeIcon.svg?react";
+import ExclamationIcon from "../../icons/ExclamationIcon.svg?react";
+import BarChartIcon from "../../icons/BarChartIcon.svg?react";
 import FormatNumbers from "../../utils/FormatNumbers.js";
 import { ScaleLoader } from "react-spinners";
 import { useStatsContext } from "../../hooks/useStatsContext.js";
@@ -31,9 +30,17 @@ export default function Stats() {
           <div className="flex gap-4 h-15">
             <div className="flex items-center justify-center h-15 w-15 bg-white rounded-2xl">
               {overallStats.total_pnl >= 0 ? (
-                <FaArrowTrendUp className="text-2xl text-green-500 font-extralight" />
+                <ArrowTrendUpIcon
+                  height={32}
+                  width={32}
+                  className="text-2xl text-green-500 font-extralight"
+                />
               ) : (
-                <FaArrowTrendDown className="text-2xl text-red-500 font-extralight" />
+                <ArrowTrendDownIcon
+                  height={32}
+                  width={32}
+                  className="text-2xl text-red-500 font-extralight"
+                />
               )}{" "}
             </div>
             <div className="flex items-center w-30">
@@ -44,7 +51,7 @@ export default function Stats() {
           </div>
           <div className="flex-1 relative">
             <h1 className=" flex gap-2 items-center font-bold text-4xl absolute left-0 text-white bottom-3">
-              <FaIndianRupeeSign className="text-3xl" />{" "}
+              <RupeeIcon height={32} width={32} className="text-3xl" />{" "}
               {FormatNumbers(overallStats.total_pnl)}
             </h1>
           </div>
@@ -67,7 +74,7 @@ export default function Stats() {
             </h1>
           </div>
           <h1 className="flex mt-2 gap-2 items-center text-xl font-bold dark:text-white">
-            <FaIndianRupeeSign />
+            <RupeeIcon height={20} width={20} />
             {FormatNumbers(overallStats.max_profit)}
           </h1>
         </div>
@@ -79,7 +86,7 @@ export default function Stats() {
             </h1>
           </div>
           <h1 className="flex mt-2 font-bold gap-2 items-center text-xl dark:text-white">
-            <FaIndianRupeeSign />
+            <RupeeIcon height={20} width={20} />
             {FormatNumbers(overallStats.max_loss)}
           </h1>
         </div>
@@ -87,11 +94,21 @@ export default function Stats() {
 
       <article className="flex flex-col gap-4 items-center h-50 lg:h-60 xl:h-65 2xl:h-73 justify-center p-8 col-start-5 col-end-9 lg:col-start-7 lg:col-end-9 rounded-2xl shadow shadow-gray-400 dark:shadow-none bg-linear-to-b from-blue-300 to-blue-50 dark:from-blue-950 dark:to-blue-400">
         <div className="flex items-center justify-center h-12 w-12 rounded-md bg-green-500 shadow">
-          <FaChartLine className="text-white text-3xl" />
+          <GraphUpIcon
+            height={30}
+            width={30}
+            strokeWidth={1}
+            className="text-white text-3xl"
+          />
         </div>
         <p className="dark:text-gray-300">Win Rate</p>
         <h1 className="flex items-center gap-2 text-3xl font-medium dark:text-white">
-          <FaArrowUp className="text-xl" />
+          <ArrowUpIcon
+            height={20}
+            width={20}
+            strokeWidth={1}
+            className="text-xl"
+          />
           {overallStats.win_rate}%
         </h1>
       </article>
@@ -105,7 +122,7 @@ export default function Stats() {
             </h1>
           </div>
           <h1 className="flex mt-2 gap-2 items-center text-xl font-bold dark:text-white">
-            <FaIndianRupeeSign />
+            <RupeeIcon height={20} width={20} />
             {FormatNumbers(overallStats.total_profit)}
           </h1>
         </div>
@@ -117,7 +134,7 @@ export default function Stats() {
             </h1>
           </div>
           <h1 className="flex mt-2 gap-2 items-center text-xl font-bold dark:text-white">
-            <FaIndianRupeeSign />
+            <RupeeIcon height={20} width={20} />
             {FormatNumbers(overallStats.total_loss)}
           </h1>
         </div>
@@ -127,7 +144,11 @@ export default function Stats() {
         <div className="flex flex-col gap-3">
           <div className="flex items-center gap-2">
             <div className="flex items-center justify-center h-8 w-8 bg-red-200 rounded-md">
-              <FaBullseye className="text-xl text-red-500" />
+              <BullsEyeIcon
+                height={25}
+                width={25}
+                className="text-xl text-red-500"
+              />
             </div>
             <h1 className="font-medium pl-2 text-lg text-gray-600 dark:text-gray-400">
               OverAll RR
@@ -135,9 +156,19 @@ export default function Stats() {
           </div>
           <h1 className="flex items-center gap-2 pl-2 text-xl font-bold dark:text-white">
             {overallStats.overall_rr > 0 ? (
-              <FaArrowUp className="text-lg" />
+              <ArrowUpIcon
+                height={20}
+                width={20}
+                strokeWidth={1}
+                className="text-lg"
+              />
             ) : (
-              <FaArrowDown className="text-lg" />
+              <ArrowDownIcon
+                height={20}
+                width={20}
+                strokeWidth={1}
+                className="text-lg"
+              />
             )}
             {FormatNumbers(overallStats.overall_rr)} X
           </h1>
@@ -145,14 +176,19 @@ export default function Stats() {
         <div className="flex flex-col gap-3">
           <div className="flex items-center gap-2">
             <div className="flex items-center justify-center h-8 w-8 bg-emerald-200 shadow rounded-md">
-              <FaExclamation className="text-xl text-emerald-600" />
+              <ExclamationIcon
+                height={25}
+                width={25}
+                strokeWidth={1}
+                className="text-xl text-emerald-600"
+              />
             </div>
             <h1 className="font-medium pl-2 text-lg text-gray-600 dark:text-gray-400">
               Average Risk
             </h1>
           </div>
           <h1 className="flex items-center gap-2 pl-2 text-xl font-bold dark:text-white">
-            <FaIndianRupeeSign />
+            <RupeeIcon height={20} width={20} />
             {FormatNumbers(overallStats.average_risk_per_trade)}
           </h1>
         </div>
@@ -162,7 +198,12 @@ export default function Stats() {
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <div className="flex items-center justify-center h-12 w-12 bg-violet-500 dark:bg-purple-600 rounded-xl">
-              <BiBarChartAlt2 className="text-white text-2xl" />
+              <BarChartIcon
+                height={25}
+                width={25}
+                strokeWidth={0}
+                className="text-white text-2xl"
+              />
             </div>
             <h1 className="text-xl font-medium dark:text-white  ">
               Total Closed Trades

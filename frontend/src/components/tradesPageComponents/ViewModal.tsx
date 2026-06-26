@@ -1,7 +1,7 @@
 import { useState } from "react";
 import formatDateTime from "../../utils/formatDateTime.js";
 import useDrag from "../../hooks/useDrag.js";
-import { FaIndianRupeeSign } from "react-icons/fa6";
+import RupeeIcon from "../../icons/RupeeIcon.svg?react";
 import ReactMarkdown from "react-markdown";
 import { useThemeContext } from "../../hooks/useThemeContext.js";
 import type { TradesData } from "../../types/trades.types.js";
@@ -84,7 +84,7 @@ export default function ViewModal({
           <div className="view-modal-section">
             <span className="view-modal-span">Avg-Risk</span>
             <h1 className="flex items-center justify-center view-modal-h1">
-              <FaIndianRupeeSign />
+              <RupeeIcon height={15} width={15} />
               {Number(currentViewTrade?.trade.risk).toFixed(2)}
             </h1>
           </div>
@@ -128,7 +128,7 @@ export default function ViewModal({
                   : null
               }`}
             >
-              <FaIndianRupeeSign />
+              <RupeeIcon height={15} width={15} />
               {Number(currentViewTrade.trade.pnl).toLocaleString("en-IN", {
                 maximumFractionDigits: 2,
                 minimumFractionDigits: 2,

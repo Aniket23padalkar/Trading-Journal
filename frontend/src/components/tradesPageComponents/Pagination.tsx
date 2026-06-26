@@ -1,7 +1,6 @@
-import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
+import ChevronLeftIcon from "../../icons/ChevronLeftIcon.svg?react";
+import ChevronRightIcon from "../../icons/ChevronRightIcon.svg?react";
 import React from "react";
-import { useContext } from "react";
-import { TradeContext } from "../../context/TradesContext.js";
 import { useTradesContext } from "../../hooks/useTradesContext.js";
 
 interface PaginationParams {
@@ -10,17 +9,21 @@ interface PaginationParams {
   handleSetPage: React.Dispatch<React.SetStateAction<number>>;
 }
 
-function Pagination({ handleNextPage, handlePrevPage, handleSetPage } : PaginationParams) {
+function Pagination({
+  handleNextPage,
+  handlePrevPage,
+  handleSetPage,
+}: PaginationParams) {
   const { pagination, currentPage, trades } = useTradesContext();
-  const maxVisible : number = 3;
-  let start : number = Math.max(1, currentPage - Math.floor(maxVisible / 2));
-  let end : number = Math.min(pagination?.totalPages, start + maxVisible - 1);
+  const maxVisible: number = 3;
+  let start: number = Math.max(1, currentPage - Math.floor(maxVisible / 2));
+  let end: number = Math.min(pagination?.totalPages, start + maxVisible - 1);
 
   if (end - start + 1 < maxVisible) {
     start = Math.max(1, end - maxVisible + 1);
   }
 
-  const pages : number[] = [];
+  const pages: number[] = [];
   for (let i = start; i <= end; i++) {
     pages.push(i);
   }
@@ -36,7 +39,7 @@ function Pagination({ handleNextPage, handlePrevPage, handleSetPage } : Paginati
         onClick={handlePrevPage}
         disabled={currentPage === 1 || trades.length === 0}
       >
-        <FaChevronLeft />
+        <ChevronLeftIcon height={15} width={15} />
         <p>Prev</p>
       </button>
       <div className="flex items-center justify-center gap-2 min-w-75">
@@ -84,7 +87,7 @@ function Pagination({ handleNextPage, handlePrevPage, handleSetPage } : Paginati
         disabled={currentPage === pagination?.totalPages || trades.length === 0}
       >
         <p>Next</p>
-        <FaChevronRight />
+        <ChevronRightIcon height={15} width={15} />
       </button>
     </div>
   );

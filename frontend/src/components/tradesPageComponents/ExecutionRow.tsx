@@ -4,7 +4,7 @@ import type {
   HandleExecutionEntries,
 } from "../../types/trades.types.js";
 import formatDateTimeLocal from "../../utils/formatDateTimeLocal.js";
-import { FaTrash } from "react-icons/fa6";
+import TrashIcon from "../../icons/TrashIcon.svg?react";
 
 interface ExecutionRowParams {
   execution: ExecutionsUIType;
@@ -98,13 +98,19 @@ export default function ExecutionRow({
         </div>
 
         {index > 0 && (
-          <button
-            type="button"
-            onClick={() => onDelete(index)}
-            className="cursor-pointer"
-          >
-            <FaTrash className="text-red-400 text-xs" />
-          </button>
+          <div className="flex items-center justify-center h-9">
+            <button
+              type="button"
+              onClick={() => onDelete(index)}
+              className="cursor-pointer"
+            >
+              <TrashIcon
+                height={17}
+                width={17}
+                className="text-red-400 text-xs"
+              />
+            </button>
+          </div>
         )}
       </div>
     </>

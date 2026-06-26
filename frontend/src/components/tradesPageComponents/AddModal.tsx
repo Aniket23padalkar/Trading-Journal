@@ -1,6 +1,6 @@
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import useDrag from "../../hooks/useDrag.js";
-import { FaExclamation } from "react-icons/fa6";
+import ExclamationIcon from "../../icons/ExclamationIcon.svg?react";
 import ExecutionRow from "./ExecutionRow.js";
 import { insertTrade, updateTrade } from "../../api/tradesService.js";
 import { toast } from "react-toastify";
@@ -393,7 +393,12 @@ export default function AddModal({
           </div>
           <div className=" flex-1 relative">
             <p className="flex items-center absolute right-0 text-xs font-medium text-gray-500">
-              <FaExclamation className="text-red-500 text-sm" />
+              <ExclamationIcon
+                height={17}
+                width={17}
+                strokeWidth={0}
+                className="text-red-500 text-sm"
+              />
               Markup Supported
             </p>
             <textarea

@@ -1,8 +1,9 @@
 import { Link, useNavigate } from "react-router-dom";
 import logo from "../../assets/TradeLens-Logo2.png";
 import logoDark from "../../assets/TradeLens-Dark.png";
-import { FaBars } from "react-icons/fa6";
-import { BiMoon, BiSun } from "react-icons/bi";
+import MenuIcon from "../../icons/MenuIcon.svg?react";
+import MoonIcon from "../../icons/MoonIcon.svg?react";
+import SunIcon from "../../icons/SunIcon.svg?react";
 import { useState } from "react";
 import { logoutUser } from "../../api/authService.js";
 import { useThemeContext } from "../../hooks/useThemeContext.js";
@@ -41,7 +42,7 @@ export default function Header({ setIsAsideOpen }: HeaderProps) {
           onClick={() => setIsAsideOpen((prev) => !prev)}
           className="text-xl cursor-pointer dark:text-white lg:hidden"
         >
-          <FaBars />
+          <MenuIcon height={20} width={20} />
         </div>
         <div className="h-full w-40">
           <Link to="/">
@@ -59,9 +60,9 @@ export default function Header({ setIsAsideOpen }: HeaderProps) {
           className="mr-2 cursor-pointer p-2 bg-blue-50 dark:bg-gray-800 dark:text-amber-300 text-blue-800  hover:bg-blue-200 dark:hover:bg-indigo-900 rounded-full"
         >
           {theme === "light" ? (
-            <BiMoon className="text-2xl" />
+            <MoonIcon height={22} width={22} className="text-2xl" />
           ) : (
-            <BiSun className="text-2xl" />
+            <SunIcon height={22} width={22} className="text-2xl" />
           )}
         </button>
         <div className="flex items-center relative">
