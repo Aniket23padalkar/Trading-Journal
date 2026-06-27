@@ -8,18 +8,14 @@ import BullsEyeIcon from "../../icons/BullsEyeIcon.svg?react";
 import ExclamationIcon from "../../icons/ExclamationIcon.svg?react";
 import BarChartIcon from "../../icons/BarChartIcon.svg?react";
 import FormatNumbers from "../../utils/FormatNumbers.js";
-import { ScaleLoader } from "react-spinners";
 import { useStatsContext } from "../../hooks/useStatsContext.js";
+import StatsSkeleton from "./StatsSkeleton.js";
 
 export default function Stats() {
   const { overallStats, overallStatsLoading } = useStatsContext();
 
   if (overallStatsLoading || !overallStats) {
-    return (
-      <div className="col-start-1 col-end-9 row-start-1 row-end-2 flex items-center justify-center h-full w-full">
-        <ScaleLoader color="#20dfbc" />
-      </div>
-    );
+    return <StatsSkeleton />;
   }
 
   return (
@@ -74,7 +70,7 @@ export default function Stats() {
               Max-Profit
             </h1>
           </div>
-          <h1 className="flex mt-2 gap-2 items-center text-xl font-bold dark:text-white">
+          <h1 className="flex mt-2 gap-2 items-center text-xl font-medium dark:text-white">
             <RupeeIcon height={20} width={20} />
             {FormatNumbers(overallStats.max_profit)}
           </h1>
@@ -86,7 +82,7 @@ export default function Stats() {
               Max-Loss
             </h1>
           </div>
-          <h1 className="flex mt-2 font-bold gap-2 items-center text-xl dark:text-white">
+          <h1 className="flex mt-2 font-medium gap-2 items-center text-xl dark:text-white">
             <RupeeIcon height={20} width={20} />
             {FormatNumbers(overallStats.max_loss)}
           </h1>
@@ -102,8 +98,8 @@ export default function Stats() {
             className="text-white text-3xl"
           />
         </div>
-        <p className="dark:text-gray-300">Win Rate</p>
-        <h1 className="flex items-center gap-2 text-3xl font-medium dark:text-white">
+        <p className="dark:text-gray-300 text-blue-800">Win Rate</p>
+        <h1 className="flex items-center gap-2 text-3xl font-medium text-blue-900 dark:text-white">
           <ArrowUpIcon
             height={20}
             width={20}
@@ -122,7 +118,7 @@ export default function Stats() {
               Total-Profit
             </h1>
           </div>
-          <h1 className="flex mt-2 gap-2 items-center text-xl font-bold dark:text-white">
+          <h1 className="flex mt-2 gap-2 items-center text-xl font-medium dark:text-white">
             <RupeeIcon height={20} width={20} />
             {FormatNumbers(overallStats.total_profit)}
           </h1>
@@ -134,7 +130,7 @@ export default function Stats() {
               Total-Loss
             </h1>
           </div>
-          <h1 className="flex mt-2 gap-2 items-center text-xl font-bold dark:text-white">
+          <h1 className="flex mt-2 gap-2 items-center text-xl font-medium dark:text-white">
             <RupeeIcon height={20} width={20} />
             {FormatNumbers(overallStats.total_loss)}
           </h1>
@@ -155,7 +151,7 @@ export default function Stats() {
               OverAll RR
             </h1>
           </div>
-          <h1 className="flex items-center gap-2 pl-2 text-xl font-bold dark:text-white">
+          <h1 className="flex items-center gap-2 pl-2 text-xl font-medium dark:text-white">
             {overallStats.overall_rr > 0 ? (
               <ArrowUpIcon
                 height={20}
@@ -188,7 +184,7 @@ export default function Stats() {
               Average Risk
             </h1>
           </div>
-          <h1 className="flex items-center gap-2 pl-2 text-xl font-bold dark:text-white">
+          <h1 className="flex items-center gap-2 pl-2 text-xl font-medium dark:text-white">
             <RupeeIcon height={20} width={20} />
             {FormatNumbers(overallStats.average_risk_per_trade)}
           </h1>

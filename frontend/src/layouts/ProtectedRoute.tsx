@@ -6,12 +6,8 @@ import type { ContextProviderProps } from "../types/context.types.js";
 export default function ProtectedRoute({ children }: ContextProviderProps) {
   const { user, authLoading } = useAuthContext();
 
-  if (authLoading)
-    return (
-      <div className="flex absolute items-center justify-center h-full w-full">
-        <ScaleLoader color="#20dfbc" />
-      </div>
-    );
+  if (authLoading) return null;
+
   if (!user) return <Navigate to="/signin" replace />;
   return children;
 }

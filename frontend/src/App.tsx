@@ -16,13 +16,7 @@ import { useAuthContext } from "./hooks/useAuthContext.js";
 export default function App() {
   const { user } = useAuthContext();
   return (
-    <Suspense
-      fallback={
-        <div className="flex absolute h-full w-full justify-between items-center">
-          <ScaleLoader color="##20dfbc" />
-        </div>
-      }
-    >
+    <Suspense fallback={null}>
       <Routes>
         <Route
           path="/"
