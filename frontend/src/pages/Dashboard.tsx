@@ -1,4 +1,4 @@
-import Stats from "../components/stats/Stats.js";
+import Stats from "../components/stats/StatsContent.js";
 
 export default function Dashboard() {
   return (
