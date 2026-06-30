@@ -6,7 +6,6 @@ import {
   getCompleteTradeFromDB,
   getExecutionsByIdsFromDB,
   getExecutionsFromDB,
-  getFilteredStatsRepo,
   getTradeFromDB,
   getTradeLogsByIdFromDB,
   getTradeLogsFromDB,
