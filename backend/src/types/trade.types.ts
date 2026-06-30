@@ -183,6 +183,11 @@ export interface GetCompleteTradeQueryResult {
   created_at: Date;
   updated_at: Date;
 
+  trades_count: number;
+  win_rate: number;
+  total_pnl: number;
+  total_rr: number;
+
   executions: Omit<GetExecutionsByTradeIdQueryResult, "trade_id">[];
 
   trade_logs: Omit<GetTradeLogsByIdQueryResult, "trade_id" | "user_id">;

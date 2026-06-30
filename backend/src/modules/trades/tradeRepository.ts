@@ -286,29 +286,195 @@ export const getTradesWithPaginationFromDB = async ({
   orderBy,
   limit,
   offset,
-}: GetTradeRepoParams): Promise<GetTradeQueryResult[] | null> => {
-  const query = `
-        SELECT
-            trade_id,
-            symbol,
-            market_type,
-            order_status,
-            position,
-            risk,
-            direction,
-            trade_rating,
-            entry_time,
-            exit_time,
-            pnl,
-            created_at,
-            updated_at
-        FROM trades
-        WHERE ${whereClause}
-        ORDER BY ${orderBy}
-        LIMIT $${index} OFFSET $${index + 1}
-    `;
+}: GetTradeRepoParams): Promise<GetCompleteTradeQueryResult[] | null> => {
+  // const query = `
+  //       WITH trades_page AS (
+  //         SELECT *
+  //         FROM trades
+  //         WHERE ${whereClause}
+  //         ORDER BY ${orderBy}
+  //         LIMIT $${index} OFFSET $${index + 1}
+  //       )
+  //       SELECT
+  //         t.trade_id,
+  //         t.symbol,
+  //         t.market_type,
+  //         t.order_status,
+  //         t.position,
+  //         t.risk,
+  //         t.direction,
+  //         t.trade_rating,
+  //         t.entry_time,
+  //         t.exit_time,
+  //         t.pnl,
+  //         t.created_at,
+  //         t.updated_at,
 
-  const result = await pool.query<GetTradeQueryResult>(query, [
+  //       e.executions,
+
+  //       tl.trade_logs,
+
+  //       e.avg_buy_price,
+  //       e.avg_sell_price,
+
+  //       e.total_buy_qty,
+  //       e.total_sell_qty,
+
+  //       e.total_qty,
+
+  //       e.rr_ratio
+  //       FROM trades_page t
+  //       LEFT JOIN LATERAL (
+  //         SELECT
+  //           COALESCE(
+  //             json_agg(
+  //               json_build_object(
+  //                 'execution_id', e.execution_id,
+  //                 'order_type', e.order_type,
+  //                 'price', e.price,
+  //                 'quantity', e.quantity,
+  //                 'executed_at', e.executed_at,
+  //                 'created_at', e.created_at,
+  //                 'updated_at', e.updated_at
+  //                 )
+  //               ORDER BY e.executed_at ASC
+  //             ) FILTER (WHERE e.execution_id IS NOT NULL),
+  //             '[]'
+  //           ) AS executions,
+
+  //           ROUND(AVG(e.price) FILTER (WHERE e.order_type = 'buy')::NUMERIC,2) AS avg_buy_price,
+  //           ROUND(AVG(e.price) FILTER (WHERE e.order_type = 'sell')::NUMERIC,2) AS avg_sell_price,
+
+  //           SUM(e.quantity) FILTER (WHERE e.order_type = 'buy') AS total_buy_qty,
+  //           SUM(e.quantity) FILTER (WHERE e.order_type = 'sell') AS total_sell_qty,
+
+  //           (
+  //             COALESCE(SUM(e.quantity) FILTER (WHERE e.order_type = 'buy'),0)
+  //             + COALESCE(SUM(e.quantity) FILTER (WHERE e.order_type = 'sell'),0)
+  //           ) AS total_qty,
+
+  //           ROUND(
+  //             (
+  //               CASE
+  //               WHEN t.risk = 0 THEN NULL
+  //               ELSE
+  //                 t.pnl / t.risk
+  //             END
+  //             )::NUMERIC,
+  //           2) AS rr_ratio
+
+  //         FROM executions e
+  //         WHERE e.trade_id = t.trade_id
+  //       ) e ON true
+  //       LEFT JOIN LATERAL (
+  //         SELECT json_build_object(
+  //           'trade_logs_id', tl.trade_logs_id,
+  //           'description' , tl.description,
+  //           'created_at' , tl.created_at,
+  //           'updated_at' , tl.updated_at
+  //         ) AS trade_logs
+  //         FROM trade_logs tl
+  //         WHERE tl.trade_id = t.trade_id
+  //         LIMIT 1
+  //       ) tl ON true
+  //   `;
+  const query: string = `
+    WITH stats AS (
+      SELECT 
+        COUNT(*) AS trades_count,
+        ROUND(AVG(CASE WHEN pnl > 0 THEN 1.0 ELSE 0.0 END) * 100,2) AS win_rate,
+        SUM(pnl) AS total_pnl,
+        ROUND(AVG(CASE WHEN risk > 0 THEN pnl/risk ELSE NULL END),2) AS total_rr
+      FROM trades
+      WHERE ${whereClause}
+    ),
+    page AS (
+      SELECT *
+      FROM trades
+      WHERE ${whereClause}
+      ORDER BY ${orderBy}
+      LIMIT $${index} OFFSET $${index + 1}
+    )
+    
+    SELECT
+      t.trade_id,
+      t.symbol,
+      t.market_type,
+      t.order_status,
+      t.position,
+      t.risk,
+      t.direction,
+      t.trade_rating,
+      t.entry_time,
+      t.exit_time,
+      t.pnl,
+      t.created_at,
+      t.updated_at,
+
+      s.trades_count, s.win_rate, s.total_pnl, s.total_rr,
+
+      e.executions, tl.trade_logs,
+      e.avg_buy_price, e.avg_sell_price,
+      e.total_buy_qty, e.total_sell_qty, e.total_qty, e.rr_ratio
+
+    FROM page t
+    CROSS JOIN stats s
+    LEFT JOIN LATERAL (
+      SELECT
+        COALESCE(
+          json_agg(
+            json_build_object(
+              'execution_id', e.execution_id,
+              'order_type', e.order_type,
+              'price', e.price,
+              'quantity', e.quantity,
+              'executed_at', e.executed_at,
+              'created_at', e.created_at,
+              'updated_at', e.updated_at
+              )
+            ORDER BY e.executed_at ASC
+          ) FILTER (WHERE e.execution_id IS NOT NULL),
+          '[]'
+        ) AS executions,
+
+        ROUND(AVG(e.price) FILTER (WHERE e.order_type = 'buy')::NUMERIC,2) AS avg_buy_price,
+        ROUND(AVG(e.price) FILTER (WHERE e.order_type = 'sell')::NUMERIC,2) AS avg_sell_price,
+
+        SUM(e.quantity) FILTER (WHERE e.order_type = 'buy') AS total_buy_qty,
+        SUM(e.quantity) FILTER (WHERE e.order_type = 'sell') AS total_sell_qty,
+
+        (
+          COALESCE(SUM(e.quantity) FILTER (WHERE e.order_type = 'buy'),0)
+          + COALESCE(SUM(e.quantity) FILTER (WHERE e.order_type = 'sell'),0)
+        ) AS total_qty,
+
+        ROUND(
+          (
+            CASE
+            WHEN t.risk = 0 THEN NULL
+            ELSE
+              t.pnl / t.risk
+          END
+          )::NUMERIC,
+        2) AS rr_ratio
+        
+      FROM executions e
+      WHERE e.trade_id = t.trade_id
+    ) e ON true
+    
+    LEFT JOIN LATERAL (
+      SELECT json_build_object(
+        'trade_logs_id', tl.trade_logs_id,
+        'description' , tl.description,
+        'created_at' , tl.created_at,
+        'updated_at' , tl.updated_at
+      ) AS trade_logs
+      FROM trade_logs tl
+      WHERE tl.trade_id = t.trade_id
+      LIMIT 1
+    ) tl ON true
+  `;
+  const result = await pool.query<GetCompleteTradeQueryResult>(query, [
     ...values,
     limit,
     offset,
@@ -421,6 +587,18 @@ export const getFilteredStatsRepo = async ({
 
   return result.rows[0] || undefined;
 };
+
+// export const getTradesFromDB = async ({user_id, whereClause, values}) => {
+//   const query: string = `
+//     SELECT
+
+//     FROM trades t
+//     LEFT JOIN executions e ON e.user_id = t.user_id
+//     LEFT JOIN trade_logs tl ON tl.trade_id = t.user_id
+//     WHERE $${whereClause}
+//     GROUP BY t.trade_id
+//   `;
+// };
 
 export const getCompleteTradeFromDB = async (
   trade_id: string,
