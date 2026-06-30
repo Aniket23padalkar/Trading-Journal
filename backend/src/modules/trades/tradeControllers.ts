@@ -78,10 +78,15 @@ export const getTrades = async (
   req: Request<{}, {}, {}, GetTradeQueryData>,
   res: Response<{ success: boolean; data: GetTradesResponse; message: string }>,
 ) => {
+  const entryTime = Number(process.hrtime.bigint() - (req as any)._start) / 1e6;
+  console.log(`Time to reach handler: ${entryTime}ms`);
+
+  console.time("API");
   const result = await getTradesService({
     query: req.validated?.query,
     user_id: req.user.user_id,
   });
+  console.timeEnd("API");
 
   return res.status(200).json({
     success: true,

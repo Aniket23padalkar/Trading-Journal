@@ -339,7 +339,7 @@ export const getTradesService = async ({
     user_id,
   );
 
-  const tradesRes = await getTradesWithPaginationFromDB({
+  const rows = await getTradesWithPaginationFromDB({
     whereClause,
     values,
     index,
@@ -348,65 +348,23 @@ export const getTradesService = async ({
     offset,
   });
 
-  if (!tradesRes) {
-    throw new AppError("Trade not found", 404);
+  if (!rows || rows.length === 0) {
+    throw new AppError("Trades not found", 404);
   }
 
-  const tradeIds = tradesRes?.map((t) => t.trade_id) ?? [];
-
-  const logsRes = await getExecutionsByIdsFromDB(tradeIds);
-
-  if (!logsRes) {
-    throw new AppError("Executions not found", 404);
-  }
-
-  const logsMap = groupBy(logsRes, "trade_id");
-
-  const tradeLogs = await getTradeLogsByIdFromDB(tradeIds, user_id);
-
-  if (!tradeLogs) {
-    throw new AppError("Trade logs not found", 404);
-  }
-
-  const tradeLogsMap = mapBy(tradeLogs, "trade_id");
-
-  const statsRes = await getTradeStatsFromDB(user_id, tradeIds);
-
-  if (!statsRes) {
-    throw new AppError("Error while getting stats", 500);
-  }
-
-  const statsMap = mapBy(statsRes, "trade_id");
-
-  const totalRes = await getTradesCountFromDB({ whereClause, values });
-
-  if (!totalRes) {
-    throw new AppError("Trade count not found", 404);
-  }
-
-  const total: number = totalRes.count;
-
-  const totalPages: number = Math.ceil(total / limit);
-
-  const filteredStatsRaw = await getFilteredStatsRepo({ whereClause, values });
-
-  if (!filteredStatsRaw || filteredStatsRaw === undefined) {
-    throw new AppError("Error while fetching filtered stats", 500);
-  }
+  const first = rows[0];
+  const total = Number(first?.trades_count);
+  const totalPages = Math.ceil(total / limit);
 
   const filtered_stats: GetFilteredStatsData = {
-    trades_count: Number(filteredStatsRaw.trades_count),
-    win_rate: Number(filteredStatsRaw.win_rate),
-    total_pnl: Number(filteredStatsRaw.total_pnl),
-    total_rr: Number(filteredStatsRaw.total_rr),
+    trades_count: Number(first?.trades_count),
+    win_rate: Number(first?.win_rate),
+    total_pnl: Number(first?.total_pnl),
+    total_rr: Number(first?.total_rr),
   };
 
-  const trades_data: TradesDataType[] = tradesRes.map((trade) => {
-    const executions_raw = logsMap[trade.trade_id] || [];
-    const trade_logs_raw = tradeLogsMap[trade.trade_id] || null;
-    const stats_raw = statsMap[trade.trade_id] || null;
-
-    const executions = executions_raw.map((item) => {
+  const trades_data: TradesDataType[] = rows.map((trade) => {
+    const executions = trade.executions.map((item) => {
       return {
         execution_id: item.execution_id,
         order_type: item.order_type,
@@ -418,22 +376,22 @@ export const getTradesService = async ({
       };
     });
 
-    const trade_logs = trade_logs_raw
+    const trade_logs = trade.trade_logs
       ? {
-          trade_logs_id: trade_logs_raw?.trade_logs_id,
-          description: trade_logs_raw?.description,
-          created_at: new Date(trade_logs_raw.created_at),
-          updated_at: new Date(trade_logs_raw.updated_at),
+          trade_logs_id: trade.trade_logs?.trade_logs_id,
+          description: trade.trade_logs?.description,
+          created_at: new Date(trade.trade_logs.created_at),
+          updated_at: new Date(trade.trade_logs.updated_at),
         }
       : null;
 
     const stats = {
-      avg_buy_price: Number(stats_raw?.avg_buy_price),
-      avg_sell_price: Number(stats_raw?.avg_sell_price),
-      total_buy_qty: Number(stats_raw?.total_buy_qty),
-      total_sell_qty: Number(stats_raw?.total_sell_qty),
-      total_qty: Number(stats_raw?.total_qty),
-      rr_ratio: Number(stats_raw?.rr_ratio),
+      avg_buy_price: Number(trade.avg_buy_price),
+      avg_sell_price: Number(trade.avg_sell_price),
+      total_buy_qty: Number(trade.total_buy_qty),
+      total_sell_qty: Number(trade.total_sell_qty),
+      total_qty: Number(trade.total_qty),
+      rr_ratio: Number(trade.rr_ratio),
     };
 
     return {
