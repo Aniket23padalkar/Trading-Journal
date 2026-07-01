@@ -5,7 +5,6 @@ import type {
   GetTradeQueryData,
   UpdateTradeData,
 } from "../schemas/trade.schema.js";
-import type { GetFilteredStatsData } from "./stats.types.js";
 
 export type DB = Pool | PoolClient;
 
@@ -163,10 +162,33 @@ interface PaginationType {
   totalPages: number;
 }
 
+export interface FilteredStatsData {
+  trades_count: number;
+  win_rate: number;
+  total_pnl: number;
+  total_rr: number;
+}
+
+export interface OverallStatsData {
+  overall_pnl: number;
+  max_profit: number;
+  max_loss: number;
+  overall_profit: number;
+  overall_loss: number;
+  overall_rr: number;
+  average_risk_per_trade: number;
+  overall_profit_trades: number;
+  overall_loss_trades: number;
+  ctc_trades: number;
+  closed_trades: number;
+  overall_win_rate: number;
+}
+
 export interface GetTradesResponse {
   trades_data: TradesDataType[];
   pagination: PaginationType;
-  filtered_stats: GetFilteredStatsData;
+  filtered_stats: FilteredStatsData;
+  overall_stats: OverallStatsData;
 }
 
 export interface GetCompleteTradeQueryResult {
@@ -182,6 +204,19 @@ export interface GetCompleteTradeQueryResult {
   exit_time: Date;
   created_at: Date;
   updated_at: Date;
+
+  overall_pnl: number;
+  max_profit: number;
+  max_loss: number;
+  overall_profit: number;
+  overall_loss: number;
+  overall_rr: number;
+  average_risk_per_trade: number;
+  overall_profit_trades: number;
+  overall_loss_trades: number;
+  ctc_trades: number;
+  closed_trades: number;
+  overall_win_rate: number;
 
   trades_count: number;
   win_rate: number;
