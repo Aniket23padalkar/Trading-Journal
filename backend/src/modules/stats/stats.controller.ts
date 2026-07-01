@@ -1,34 +1,8 @@
 import type { Request, Response } from "express";
-import {
-  getMonthlyPnlService,
-  getOverallStatsService,
-} from "./stats.services.js";
+import { getMonthlyPnlService } from "./stats.services.js";
 import { AppError } from "../../utils/AppError.js";
-import type {
-  GetMonthlyPnlData,
-  GetOverallStatsData,
-} from "../../types/stats.types.js";
+import type { GetMonthlyPnlData } from "../../types/stats.types.js";
 import type { GetMonthlyPnlQueryData } from "../../schemas/trade.schema.js";
-
-export const getOverallStats = async (
-  req: Request,
-  res: Response<{
-    success: boolean;
-    data: GetOverallStatsData;
-    message: string;
-  }>,
-) => {
-  if (!req.user.user_id) {
-    throw new AppError("Unauthorized", 401);
-  }
-  const result = await getOverallStatsService(req.user.user_id);
-
-  return res.status(200).json({
-    success: true,
-    data: result,
-    message: "Overall stats successfully fetched",
-  });
-};
 
 export const getMonthlyPnl = async (
   req: Request<{}, {}, {}, GetMonthlyPnlQueryData>,

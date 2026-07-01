@@ -284,12 +284,39 @@ export const getTradesWithPaginationFromDB = async ({
   offset,
 }: GetTradeRepoParams): Promise<GetCompleteTradeQueryResult[] | null> => {
   const query: string = `
-    WITH stats AS (
+    WITH overall_stats AS (
+      SELECT
+            COALESCE(SUM(pnl) FILTER (WHERE order_status = 'closed'),0) AS overall_pnl,
+
+            COALESCE(MAX(pnl) FILTER (WHERE pnl > 0 AND order_status = 'closed'),0) AS max_profit,
+            COALESCE(MIN(pnl) FILTER (WHERE pnl < 0 AND order_status = 'closed'),0) AS max_loss,
+
+            COALESCE(SUM(pnl) FILTER (WHERE pnl > 0 AND order_status = 'closed'),0) AS overall_profit,
+            COALESCE(SUM(pnl) FILTER (WHERE pnl < 0 AND order_status = 'closed'),0) AS overall_loss,
+
+            COALESCE(SUM(pnl / risk),0) AS overall_rr,
+            COALESCE(AVG(risk),0) AS average_risk_per_trade,
+
+            COALESCE(COUNT(*) FILTER (WHERE pnl > 0 AND order_status = 'closed'),0) AS overall_profit_trades,
+            COALESCE(COUNT(*) FILTER (WHERE pnl < 0 AND order_status = 'closed'),0) AS overall_loss_trades,
+            COALESCE(COUNT(*) FILTER (WHERE pnl = 0 AND order_status = 'closed'),0) AS ctc_trades,
+            COALESCE(COUNT(*) FILTER (WHERE order_status = 'closed'),0) AS closed_trades,
+
+            COALESCE(
+              CAST(
+                (COUNT(*) FILTER(WHERE pnl > 0) * 100)
+                / NULLIF(COUNT(*) FILTER (WHERE order_status = 'closed'),0)
+                AS NUMERIC(5,2))
+            ,0) AS overall_win_rate
+        FROM trades
+        WHERE user_id = $1
+    ),
+    stats AS (
       SELECT 
         COUNT(*) AS trades_count,
         ROUND(AVG(CASE WHEN pnl > 0 THEN 1.0 ELSE 0.0 END) * 100,2) AS win_rate,
         SUM(pnl) AS total_pnl,
-        ROUND(AVG(CASE WHEN risk > 0 THEN pnl/risk ELSE NULL END),2) AS total_rr
+        ROUND(SUM(CASE WHEN risk > 0 THEN pnl/risk ELSE NULL END),2) AS total_rr
       FROM trades
       WHERE ${whereClause}
     ),
@@ -316,6 +343,10 @@ export const getTradesWithPaginationFromDB = async ({
       t.created_at,
       t.updated_at,
 
+      o.overall_pnl, o.max_profit, o.max_loss, o.overall_profit, o.overall_loss,
+      o.overall_rr, o.average_risk_per_trade, o.overall_profit_trades, o.overall_loss_trades,
+      o.ctc_trades, o.closed_trades, o.overall_win_rate,
+
       s.trades_count, s.win_rate, s.total_pnl, s.total_rr,
 
       e.executions, tl.trade_logs,
@@ -323,6 +354,7 @@ export const getTradesWithPaginationFromDB = async ({
       e.total_buy_qty, e.total_sell_qty, e.total_qty, e.rr_ratio
 
     FROM page t
+    CROSS JOIN overall_stats o
     CROSS JOIN stats s
     LEFT JOIN LATERAL (
       SELECT

@@ -26,9 +26,11 @@ import {
 import { AppError } from "../../utils/AppError.js";
 import type {
   ExecutionsRow,
+  FilteredStatsData,
   GetTradesResponse,
   GetTradesServicesParams,
   GetYearAndMonthType,
+  OverallStatsData,
   TradesDataType,
   UpdateExecutionsData,
   UpdateTradeServiceParams,
@@ -43,9 +45,7 @@ import {
 import { safeMerge } from "../../utils/merge.utils.js";
 import { removeUndefined } from "../../utils/removeundefined.utils.js";
 import pool from "../../config/db.js";
-import { groupBy, mapBy } from "../../utils/array.utils.js";
 import calculateStats from "../../utils/calculateStats.js";
-import type { GetFilteredStatsData } from "../../types/stats.types.js";
 
 export const createTradeService = async (
   body: CreateTradeData,
@@ -355,7 +355,22 @@ export const getTradesService = async ({
   const total = Number(first?.trades_count);
   const totalPages = Math.ceil(total / limit);
 
-  const filtered_stats: GetFilteredStatsData = {
+  const overall_stats: OverallStatsData = {
+    overall_pnl: Number(first?.overall_pnl),
+    max_profit: Number(first?.max_profit),
+    max_loss: Number(first?.max_loss),
+    overall_profit: Number(first?.overall_profit),
+    overall_loss: Number(first?.overall_loss),
+    overall_rr: Number(first?.overall_rr),
+    average_risk_per_trade: Number(first?.average_risk_per_trade),
+    overall_profit_trades: Number(first?.overall_profit_trades),
+    overall_loss_trades: Number(first?.overall_loss_trades),
+    ctc_trades: Number(first?.ctc_trades),
+    closed_trades: Number(first?.closed_trades),
+    overall_win_rate: Number(first?.overall_win_rate),
+  };
+
+  const filtered_stats: FilteredStatsData = {
     trades_count: Number(first?.trades_count),
     win_rate: Number(first?.win_rate),
     total_pnl: Number(first?.total_pnl),
@@ -424,6 +439,7 @@ export const getTradesService = async ({
       totalPages,
     },
     filtered_stats,
+    overall_stats,
   };
 };
 
