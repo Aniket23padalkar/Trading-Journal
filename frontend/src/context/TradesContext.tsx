@@ -7,15 +7,24 @@ import type {
 import type {
   FilterValues,
   FilterValuesUI,
+  OverallStatsData,
   Pagination,
   TradesData,
 } from "../types/trades.types.js";
 import { cleanParams } from "../utils/cleanParams.js";
 import type { GetFilteredStatsData } from "../types/stats.types.js";
+import { useAuthContext } from "../hooks/useAuthContext.js";
+import { getErrorMessage } from "../utils/error.handler.js";
 
 export const TradeContext = createContext<TradesContextType | null>(null);
 
 export default function TradeProvider({ children }: ContextProviderProps) {
+  const { user, authLoading } = useAuthContext();
+
+  const [overallStats, setOverallStats] = useState<OverallStatsData | null>(
+    null,
+  );
+
   const [fetchLoading, setFetchLoading] = useState<boolean>(true);
   const [trades, setTrades] = useState<TradesData[]>([]);
   const [pagination, setPagination] = useState<Pagination>({
@@ -62,15 +71,15 @@ export default function TradeProvider({ children }: ContextProviderProps) {
   async function fetchTrades() {
     setFetchLoading(true);
     try {
-      const data = await getTradesData(params);
+      const result = await getTradesData(params);
 
-      setTrades(data?.trades_data);
-
-      setPagination(data?.pagination);
-
-      setFilteredStats(data?.filtered_stats);
-    } catch (err) {
-      console.log(err);
+      setOverallStats(result?.overall_stats);
+      setTrades(result?.trades_data);
+      setPagination(result?.pagination);
+      setFilteredStats(result?.filtered_stats);
+    } catch (err: unknown) {
+      const message = getErrorMessage(err);
+      console.log(message);
     } finally {
       setFetchLoading(false);
     }
@@ -85,6 +94,7 @@ export default function TradeProvider({ children }: ContextProviderProps) {
       value={{
         trades,
         setTrades,
+        overallStats,
         pagination,
         setPagination,
         currentPage,

@@ -1,30 +1,7 @@
 import type { ApiResponse } from "../types/api.response.js";
-import type {
-  GetFilteredStatsData,
-  GetMonthlyPnlData,
-  GetOverallStatsData,
-} from "../types/stats.types.js";
+import type { GetMonthlyPnlData } from "../types/stats.types.js";
 
 const API = import.meta.env.VITE_API_URL;
-
-export const GetOverallStats = async (): Promise<GetOverallStatsData> => {
-  try {
-    const res = await fetch(`${API}/api/stats/overallstats`, {
-      method: "GET",
-      credentials: "include",
-    });
-
-    const result: ApiResponse<GetOverallStatsData> = await res.json();
-
-    if (!result.success) {
-      throw new Error(result.message);
-    }
-
-    return result.data;
-  } catch (err) {
-    throw err;
-  }
-};
 
 export async function getMonthlyPnl(
   year: number,

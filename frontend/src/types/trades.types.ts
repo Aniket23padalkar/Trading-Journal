@@ -57,10 +57,26 @@ export interface Pagination {
   totalPages: number;
 }
 
+export interface OverallStatsData {
+  overall_pnl: number;
+  max_profit: number;
+  max_loss: number;
+  overall_profit: number;
+  overall_loss: number;
+  overall_rr: number;
+  average_risk_per_trade: number;
+  overall_profit_trades: number;
+  overall_loss_trades: number;
+  ctc_trades: number;
+  closed_trades: number;
+  overall_win_rate: number;
+}
+
 export interface Data {
   trades_data: TradesData[] | [];
   pagination: Pagination;
   filtered_stats: GetFilteredStatsData;
+  overall_stats: OverallStatsData;
 }
 
 export interface FilterValuesUI {
