@@ -8,13 +8,13 @@ import BullsEyeIcon from "../../icons/BullsEyeIcon.svg?react";
 import ExclamationIcon from "../../icons/ExclamationIcon.svg?react";
 import BarChartIcon from "../../icons/BarChartIcon.svg?react";
 import FormatNumbers from "../../utils/FormatNumbers.js";
-import { useStatsContext } from "../../hooks/useStatsContext.js";
 import StatsSkeleton from "./StatsSkeleton.js";
+import { useTradesContext } from "../../hooks/useTradesContext.js";
 
 export default function Stats() {
-  const { overallStats, overallStatsLoading } = useStatsContext();
+  const { overallStats, fetchLoading } = useTradesContext();
 
-  if (overallStatsLoading || !overallStats) {
+  if (fetchLoading || !overallStats) {
     return <StatsSkeleton />;
   }
 
@@ -24,7 +24,7 @@ export default function Stats() {
         <div className="flex flex-col gap-4 ">
           <div className="flex gap-4 h-15">
             <div className="flex items-center justify-center h-15 w-15 bg-white rounded-2xl">
-              {overallStats.total_pnl >= 0 ? (
+              {overallStats.overall_pnl >= 0 ? (
                 <ArrowTrendUpIcon
                   height={32}
                   width={32}
@@ -47,7 +47,7 @@ export default function Stats() {
           <div className="flex-1 relative">
             <h1 className=" flex gap-2 items-center font-bold text-4xl absolute left-0 text-white bottom-3">
               <RupeeIcon height={32} width={32} className="text-3xl" />{" "}
-              {FormatNumbers(overallStats.total_pnl)}
+              {FormatNumbers(overallStats.overall_pnl)}
             </h1>
           </div>
         </div>
@@ -106,7 +106,7 @@ export default function Stats() {
             strokeWidth={1}
             className="text-xl"
           />
-          {overallStats.win_rate}%
+          {overallStats.overall_win_rate}%
         </h1>
       </article>
 
@@ -115,24 +115,24 @@ export default function Stats() {
           <div className="flex items-center h-10">
             <div className="h-5 w-5 bg-green-500 rounded-xl"></div>
             <h1 className="font-medium pl-2 text-lg text-gray-600 dark:text-gray-400">
-              Total-Profit
+              Overall Profit
             </h1>
           </div>
           <h1 className="flex mt-2 gap-2 items-center text-xl font-medium dark:text-white">
             <RupeeIcon height={20} width={20} />
-            {FormatNumbers(overallStats.total_profit)}
+            {FormatNumbers(overallStats.overall_profit)}
           </h1>
         </div>
         <div>
           <div className="flex items-center h-10">
             <div className="h-5 w-5 bg-red-500 rounded-xl"></div>
             <h1 className="font-medium pl-2 text-lg text-gray-600 dark:text-gray-400">
-              Total-Loss
+              Overall Loss
             </h1>
           </div>
           <h1 className="flex mt-2 gap-2 items-center text-xl font-medium dark:text-white">
             <RupeeIcon height={20} width={20} />
-            {FormatNumbers(overallStats.total_loss)}
+            {FormatNumbers(overallStats.overall_loss)}
           </h1>
         </div>
       </article>
@@ -148,7 +148,7 @@ export default function Stats() {
               />
             </div>
             <h1 className="font-medium pl-2 text-lg text-gray-600 dark:text-gray-400">
-              OverAll RR
+              Overall RR
             </h1>
           </div>
           <h1 className="flex items-center gap-2 pl-2 text-xl font-medium dark:text-white">
@@ -203,7 +203,7 @@ export default function Stats() {
               />
             </div>
             <h1 className="text-xl font-medium dark:text-white  ">
-              Total Closed Trades
+              Overall Closed Trades
             </h1>
           </div>
           <h1 className="text-2xl font-bold dark:text-white">
@@ -214,13 +214,13 @@ export default function Stats() {
           <div className="flex-1">
             <p className="dark:text-white">Profit-Trades</p>
             <h1 className="text-2xl font-medium text-green-600 dark:text-green-400">
-              {overallStats.total_profit_trades}
+              {overallStats.overall_profit_trades}
             </h1>
           </div>
           <div className="flex-1 border-l-gray-400 border-l">
             <p className="dark:text-white">Loss-Trades</p>
             <h1 className="text-2xl font-medium text-red-500 dark:text-red-600">
-              {overallStats.total_loss_trades}
+              {overallStats.overall_loss_trades}
             </h1>
           </div>
           <div className="flex-1 border-l-gray-400 border-l">

@@ -1,11 +1,8 @@
 import type { User } from "./auth.types.js";
+import type { GetFilteredStatsData } from "./stats.types.js";
 import type {
-  GetFilteredStatsData,
-  GetOverallStatsData,
-} from "./stats.types.js";
-import type {
-  FilterValues,
   FilterValuesUI,
+  OverallStatsData,
   Pagination,
   TradesData,
 } from "./trades.types.js";
@@ -28,6 +25,7 @@ export interface ThemeContextType {
 }
 
 export interface TradesContextType {
+  overallStats: OverallStatsData | null;
   trades: TradesData[];
   setTrades: React.Dispatch<React.SetStateAction<[] | TradesData[]>>;
   pagination: Pagination;
@@ -42,6 +40,6 @@ export interface TradesContextType {
 }
 
 export interface StatsContextType {
-  overallStats: GetOverallStatsData | null;
+  overallStats: OverallStatsData | null;
   overallStatsLoading: boolean;
 }
