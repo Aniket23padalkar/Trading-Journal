@@ -1,4 +1,4 @@
-import PollIcon from "../../icons/PollIcon.svg?react";
+import Icon from "../../ui/Icon.js";
 import {
   BarChart,
   Bar,
@@ -25,9 +25,9 @@ export default function BarPnlChart({ monthlyPnl }: BarChartParams) {
       <div className="flex w-full justify-between items-center h-10 mb-4">
         <div className="flex items-center  gap-2">
           <div className="flex items-center justify-center h-10 w-10 bg-cyan-600 dark:bg-blue-500 dark:shadow-none rounded-xl shadow shadow-gray-400">
-            <PollIcon
-              height={22}
-              width={22}
+            <Icon
+              size={22}
+              name="PollIcon"
               className="text-white text-xl"
             />{" "}
           </div>

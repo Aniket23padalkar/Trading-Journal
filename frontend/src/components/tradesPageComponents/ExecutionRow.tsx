@@ -4,7 +4,7 @@ import type {
   HandleExecutionEntries,
 } from "../../types/trades.types.js";
 import formatDateTimeLocal from "../../utils/formatDateTimeLocal.js";
-import TrashIcon from "../../icons/TrashIcon.svg?react";
+import Icon from "../../ui/Icon.js";
 
 interface ExecutionRowParams {
   execution: ExecutionsUIType;
@@ -104,9 +104,9 @@ export default function ExecutionRow({
               onClick={() => onDelete(index)}
               className="cursor-pointer"
             >
-              <TrashIcon
-                height={17}
-                width={17}
+              <Icon
+                size={17}
+                name="TrashIcon"
                 className="text-red-400 text-xs"
               />
             </button>

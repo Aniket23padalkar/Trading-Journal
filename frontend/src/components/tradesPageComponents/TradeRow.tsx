@@ -1,9 +1,8 @@
 import React, { useCallback } from "react";
-import EditIcon from "../../icons/EditIcon.svg?react";
-import TrashIcon from "../../icons/TrashIcon.svg?react";
 import formatDateTime from "../../utils/formatDateTime.js";
 import type { TradesData } from "../../types/trades.types.js";
 import { useTradesContext } from "../../hooks/useTradesContext.js";
+import Icon from "../../ui/Icon.js";
 
 interface TradeRowParams {
   trade: TradesData;
@@ -87,13 +86,13 @@ function TradeRow({
             })}
         {trade.trade.order_status === "open" ? "-" : "/-"}
       </td>
-      <td className="2xl:text-sm" style={{ fontWeight: 600 }}>
+      <td className="2xl:text-sm">
         {trade.trade.order_status === "open"
           ? "-"
           : Number(trade.stats.rr_ratio).toFixed(1)}
         {trade.trade.order_status === "open" ? "-" : "X"}
       </td>
-      <td className="capitalize ">{trade.trade.trade_rating}</td>
+      <td className="capitalize font-medium">{trade.trade.trade_rating}</td>
       <td>
         <button
           onClick={(e) => {
@@ -102,9 +101,10 @@ function TradeRow({
           }}
           className="cursor-pointer bg-transparent"
         >
-          <EditIcon
-            height={12}
-            width={12}
+          <Icon
+            size={12}
+            name="EditIcon"
+            stroke="currentColor"
             strokeWidth={0.5}
             className="text-blue-400"
           />
@@ -116,7 +116,7 @@ function TradeRow({
           }}
           className="cursor-pointer bg-transparent xl:pl-2"
         >
-          <TrashIcon height={15} width={15} className="text-red-400" />
+          <Icon size={15} name="TrashIcon" className="text-red-400" />
         </button>
       </td>
     </tr>

@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import useDrag from "../../hooks/useDrag.js";
-import ExclamationIcon from "../../icons/ExclamationIcon.svg?react";
 import ExecutionRow from "./ExecutionRow.js";
 import { insertTrade, updateTrade } from "../../api/tradesService.js";
 import { toast } from "react-toastify";
@@ -16,6 +15,7 @@ import type {
 } from "../../types/trades.types.js";
 import formatDateTimeLocal from "../../utils/formatDateTimeLocal.js";
 import getChangedFields from "../../utils/getChangedFields.js";
+import Icon from "../../ui/Icon.js";
 
 interface AddModalParams {
   editTrade: EditTrade | null;
@@ -393,9 +393,10 @@ export default function AddModal({
           </div>
           <div className=" flex-1 relative">
             <p className="flex items-center absolute right-0 text-xs font-medium text-gray-500">
-              <ExclamationIcon
-                height={17}
-                width={17}
+              <Icon
+                size={17}
+                name="ExclamationIcon"
+                stroke="currentColor"
                 strokeWidth={0}
                 className="text-red-500 text-sm"
               />

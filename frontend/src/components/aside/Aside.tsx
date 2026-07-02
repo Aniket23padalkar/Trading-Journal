@@ -1,9 +1,5 @@
 import { NavLink } from "react-router-dom";
-import ContactIcon from "../../icons/ContactIcon.svg?react";
-import DashBoardIcon from "../../icons/DashboardIcon.svg?react";
-import BarChartIcon from "../../icons/BarChartIcon.svg?react";
-import ChartIcon from "../../icons/ChartIcon.svg?react";
-import CalendarIcon from "../../icons/CalendarIcon.svg?react";
+import Icon from "../../ui/Icon.js";
 
 interface AsideParams {
   isAsideOpen: boolean;
@@ -30,9 +26,9 @@ export default function Aside({ isAsideOpen }: AsideParams) {
           {({ isActive }) => (
             <li className="flex items-center pl-2">
               <span>
-                <DashBoardIcon
-                  height={20}
-                  width={20}
+                <Icon
+                  size={20}
+                  name="DashboardIcon"
                   className={`text-xl ${
                     isActive ? "text-teal-600" : "text-gray-400"
                   }`}
@@ -55,9 +51,10 @@ export default function Aside({ isAsideOpen }: AsideParams) {
           {({ isActive }) => (
             <li className="flex items-center pl-2">
               <span>
-                <BarChartIcon
-                  height={20}
-                  width={20}
+                <Icon
+                  size={20}
+                  name="BarChartIcon"
+                  stroke="currentColor"
                   strokeWidth={0.5}
                   className={`text-xl ${
                     isActive ? "text-teal-600" : "text-gray-400"
@@ -82,9 +79,9 @@ export default function Aside({ isAsideOpen }: AsideParams) {
           {({ isActive }) => (
             <li className="flex items-center pl-2">
               <span>
-                <ChartIcon
-                  height={20}
-                  width={20}
+                <Icon
+                  size={20}
+                  name="ChartIcon"
                   className={`text-xl ${
                     isActive ? "text-teal-600" : "text-gray-400"
                   }`}
@@ -108,9 +105,9 @@ export default function Aside({ isAsideOpen }: AsideParams) {
           {({ isActive }) => (
             <li className="flex items-center pl-2">
               <span>
-                <CalendarIcon
-                  height={20}
-                  width={20}
+                <Icon
+                  size={20}
+                  name="CalendarIcon"
                   className={`text-xl ${
                     isActive ? "text-teal-600" : "text-gray-400"
                   }`}
@@ -134,9 +131,9 @@ export default function Aside({ isAsideOpen }: AsideParams) {
           {({ isActive }) => (
             <li className="flex items-center pl-2">
               <span>
-                <ContactIcon
-                  width={20}
-                  height={20}
+                <Icon
+                  size={20}
+                  name="ContactIcon"
                   className={`text-xl ${
                     isActive ? "text-teal-600" : "text-gray-400"
                   }`}

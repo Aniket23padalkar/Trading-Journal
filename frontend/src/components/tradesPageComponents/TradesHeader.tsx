@@ -1,5 +1,4 @@
 import React, { Suspense, useCallback, useMemo, useState } from "react";
-import FilterIcon from "../../icons/FilterIcon.svg?react";
 const Filters = React.lazy(() => import("./Filters.js"));
 import { ScaleLoader } from "react-spinners";
 import { useEffect } from "react";
@@ -12,6 +11,7 @@ import type {
 import { useTradesContext } from "../../hooks/useTradesContext.js";
 import { getErrorMessage } from "../../utils/error.handler.js";
 import { getFormattedMonths } from "../../utils/formattedMonths.js";
+import Icon from "../../ui/Icon.js";
 
 interface TradesHeaderParams {
   setAddModal: React.Dispatch<React.SetStateAction<boolean>>;
@@ -154,7 +154,7 @@ function TradesHeader({ setAddModal }: TradesHeaderParams) {
           }
           onClick={handleViewFilter}
         >
-          <FilterIcon height={20} width={20} className="text-lg lg:text-sm" />{" "}
+          <Icon size={19} name="FilterIcon" className="text-lg lg:text-sm" />{" "}
           <span className="hidden lg:block">Filters</span>
         </button>
 

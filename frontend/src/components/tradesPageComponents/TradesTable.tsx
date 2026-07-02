@@ -1,6 +1,4 @@
 import React from "react";
-import ArrowUpIcon from "../../icons/ArrowUpIcon.svg?react";
-import ArrowDownIcon from "../../icons/ArrowDownIcon.svg?react";
 import { ScaleLoader } from "react-spinners";
 import Swal from "sweetalert2";
 import TradeRow from "./TradeRow.js";
@@ -8,6 +6,7 @@ import { deleteTrade } from "../../api/tradesService.js";
 import { useTradesContext } from "../../hooks/useTradesContext.js";
 import { getErrorMessage } from "../../utils/error.handler.js";
 import type { TradesData } from "../../types/trades.types.js";
+import Icon from "../../ui/Icon.js";
 
 interface TradesTableParams {
   handleSetViewModal: React.Dispatch<React.SetStateAction<boolean>>;
@@ -105,11 +104,26 @@ function TradesTable({
                   onClick={handleDateTimeSort}
                 >
                   {filterValues.dateTimeSort === "desc" ? (
-                    <ArrowDownIcon height={12} width={12} />
+                    <Icon
+                      size={12}
+                      name="ArrowDownIcon"
+                      stroke="currentColor"
+                      strokeWidth={0.5}
+                    />
                   ) : filterValues.dateTimeSort === "asc" ? (
-                    <ArrowUpIcon height={12} width={12} />
+                    <Icon
+                      size={12}
+                      name="ArrowUpIcon"
+                      stroke="currentColor"
+                      strokeWidth={0.5}
+                    />
                   ) : (
-                    <ArrowDownIcon height={12} width={12} />
+                    <Icon
+                      size={12}
+                      name="ArrowDownIcon"
+                      stroke="currentColor"
+                      strokeWidth={0.5}
+                    />
                   )}{" "}
                   <p>Entry Time</p>
                 </th>
@@ -119,11 +133,26 @@ function TradesTable({
                   onClick={handleFilterChange}
                 >
                   {filterValues.pnlSort === "desc" ? (
-                    <ArrowDownIcon height={12} width={12} />
+                    <Icon
+                      size={12}
+                      name="ArrowDownIcon"
+                      stroke="currentColor"
+                      strokeWidth={0.5}
+                    />
                   ) : filterValues.pnlSort === "asc" ? (
-                    <ArrowDownIcon height={12} width={12} />
+                    <Icon
+                      size={12}
+                      name="ArrowUpIcon"
+                      stroke="currentColor"
+                      strokeWidth={0.5}
+                    />
                   ) : (
-                    <ArrowDownIcon height={12} width={12} />
+                    <Icon
+                      size={12}
+                      name="ArrowDownIcon"
+                      stroke="currentColor"
+                      strokeWidth={0.5}
+                    />
                   )}{" "}
                   <p>P&L (₹)</p>
                 </th>
