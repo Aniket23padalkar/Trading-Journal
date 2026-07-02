@@ -1,15 +1,7 @@
-import ArrowTrendUpIcon from "../../icons/ArrowTrendUpIcon.svg?react";
-import ArrowTrendDownIcon from "../../icons/ArrowTrendDownIcon.svg?react";
-import ArrowUpIcon from "../../icons/ArrowUpIcon.svg?react";
-import ArrowDownIcon from "../../icons/ArrowDownIcon.svg?react";
-import RupeeIcon from "../../icons/RupeeIcon.svg?react";
-import GraphUpIcon from "../../icons/GraphUpIcon.svg?react";
-import BullsEyeIcon from "../../icons/BullsEyeIcon.svg?react";
-import ExclamationIcon from "../../icons/ExclamationIcon.svg?react";
-import BarChartIcon from "../../icons/BarChartIcon.svg?react";
 import FormatNumbers from "../../utils/FormatNumbers.js";
 import StatsSkeleton from "./StatsSkeleton.js";
 import { useTradesContext } from "../../hooks/useTradesContext.js";
+import Icon from "../../ui/Icon.js";
 
 export default function Stats() {
   const { overallStats, fetchLoading } = useTradesContext();
@@ -25,15 +17,15 @@ export default function Stats() {
           <div className="flex gap-4 h-15">
             <div className="flex items-center justify-center h-15 w-15 bg-white rounded-2xl">
               {overallStats.overall_pnl >= 0 ? (
-                <ArrowTrendUpIcon
-                  height={32}
-                  width={32}
+                <Icon
+                  size={32}
+                  name="ArrowTrendUpIcon"
                   className="text-2xl text-green-500 font-extralight"
                 />
               ) : (
-                <ArrowTrendDownIcon
-                  height={32}
-                  width={32}
+                <Icon
+                  size={32}
+                  name="ArrowTrendDownIcon"
                   className="text-2xl text-red-500 font-extralight"
                 />
               )}{" "}
@@ -46,7 +38,7 @@ export default function Stats() {
           </div>
           <div className="flex-1 relative">
             <h1 className=" flex gap-2 items-center font-bold text-4xl absolute left-0 text-white bottom-3">
-              <RupeeIcon height={32} width={32} className="text-3xl" />{" "}
+              <Icon size={32} name="RupeeIcon" className="text-3xl" />{" "}
               {FormatNumbers(overallStats.overall_pnl)}
             </h1>
           </div>
@@ -71,7 +63,7 @@ export default function Stats() {
             </h1>
           </div>
           <h1 className="flex mt-2 gap-2 items-center text-xl font-medium dark:text-white">
-            <RupeeIcon height={20} width={20} />
+            <Icon size={20} name="RupeeIcon" />
             {FormatNumbers(overallStats.max_profit)}
           </h1>
         </div>
@@ -83,7 +75,7 @@ export default function Stats() {
             </h1>
           </div>
           <h1 className="flex mt-2 font-medium gap-2 items-center text-xl dark:text-white">
-            <RupeeIcon height={20} width={20} />
+            <Icon size={20} name="RupeeIcon" />
             {FormatNumbers(overallStats.max_loss)}
           </h1>
         </div>
@@ -91,18 +83,20 @@ export default function Stats() {
 
       <article className="flex flex-col gap-4 items-center h-50 lg:h-60 xl:h-65 2xl:h-73 justify-center p-8 col-start-5 col-end-9 lg:col-start-7 lg:col-end-9 rounded-2xl shadow shadow-gray-400 dark:shadow-none bg-linear-to-b from-blue-300 to-blue-50 dark:from-blue-950 dark:to-blue-400">
         <div className="flex items-center justify-center h-12 w-12 rounded-md bg-green-500 shadow">
-          <GraphUpIcon
-            height={30}
-            width={30}
+          <Icon
+            size={30}
+            name="GraphUpIcon"
+            stroke="currentColor"
             strokeWidth={1}
             className="text-white text-3xl"
           />
         </div>
         <p className="dark:text-gray-300 text-blue-800">Win Rate</p>
         <h1 className="flex items-center gap-2 text-3xl font-medium text-blue-900 dark:text-white">
-          <ArrowUpIcon
-            height={20}
-            width={20}
+          <Icon
+            size={20}
+            name="ArrowUpIcon"
+            stroke="currentColor"
             strokeWidth={1}
             className="text-xl"
           />
@@ -119,7 +113,7 @@ export default function Stats() {
             </h1>
           </div>
           <h1 className="flex mt-2 gap-2 items-center text-xl font-medium dark:text-white">
-            <RupeeIcon height={20} width={20} />
+            <Icon size={20} name="RupeeIcon" />
             {FormatNumbers(overallStats.overall_profit)}
           </h1>
         </div>
@@ -131,7 +125,7 @@ export default function Stats() {
             </h1>
           </div>
           <h1 className="flex mt-2 gap-2 items-center text-xl font-medium dark:text-white">
-            <RupeeIcon height={20} width={20} />
+            <Icon size={20} name="RupeeIcon" />
             {FormatNumbers(overallStats.overall_loss)}
           </h1>
         </div>
@@ -141,9 +135,9 @@ export default function Stats() {
         <div className="flex flex-col gap-3">
           <div className="flex items-center gap-2">
             <div className="flex items-center justify-center h-8 w-8 bg-red-200 rounded-md">
-              <BullsEyeIcon
-                height={25}
-                width={25}
+              <Icon
+                size={25}
+                name="BullsEyeIcon"
                 className="text-xl text-red-500"
               />
             </div>
@@ -153,16 +147,18 @@ export default function Stats() {
           </div>
           <h1 className="flex items-center gap-2 pl-2 text-xl font-medium dark:text-white">
             {overallStats.overall_rr > 0 ? (
-              <ArrowUpIcon
-                height={20}
-                width={20}
+              <Icon
+                size={20}
+                name="ArrowUpIcon"
+                stroke="currentColor"
                 strokeWidth={1}
                 className="text-lg"
               />
             ) : (
-              <ArrowDownIcon
-                height={20}
-                width={20}
+              <Icon
+                size={20}
+                name="ArrowDownIcon"
+                stroke="currentColor"
                 strokeWidth={1}
                 className="text-lg"
               />
@@ -173,9 +169,10 @@ export default function Stats() {
         <div className="flex flex-col gap-3">
           <div className="flex items-center gap-2">
             <div className="flex items-center justify-center h-8 w-8 bg-emerald-200 shadow rounded-md">
-              <ExclamationIcon
-                height={25}
-                width={25}
+              <Icon
+                size={25}
+                name="ExclamationIcon"
+                stroke="currentColor"
                 strokeWidth={1}
                 className="text-xl text-emerald-600"
               />
@@ -185,7 +182,7 @@ export default function Stats() {
             </h1>
           </div>
           <h1 className="flex items-center gap-2 pl-2 text-xl font-medium dark:text-white">
-            <RupeeIcon height={20} width={20} />
+            <Icon size={20} name="RupeeIcon" />
             {FormatNumbers(overallStats.average_risk_per_trade)}
           </h1>
         </div>
@@ -195,9 +192,10 @@ export default function Stats() {
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <div className="flex items-center justify-center h-12 w-12 bg-violet-500 dark:bg-purple-600 rounded-xl">
-              <BarChartIcon
-                height={25}
-                width={25}
+              <Icon
+                size={25}
+                name="BarChartIcon"
+                stroke="currentColor"
                 strokeWidth={0}
                 className="text-white text-2xl"
               />

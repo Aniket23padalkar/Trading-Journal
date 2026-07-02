@@ -1,10 +1,10 @@
 import { useState } from "react";
 import formatDateTime from "../../utils/formatDateTime.js";
 import useDrag from "../../hooks/useDrag.js";
-import RupeeIcon from "../../icons/RupeeIcon.svg?react";
 import ReactMarkdown from "react-markdown";
 import { useThemeContext } from "../../hooks/useThemeContext.js";
 import type { TradesData } from "../../types/trades.types.js";
+import Icon from "../../ui/Icon.js";
 
 interface ViewModalParams {
   setViewModal: React.Dispatch<React.SetStateAction<boolean>>;
@@ -84,7 +84,7 @@ export default function ViewModal({
           <div className="view-modal-section">
             <span className="view-modal-span">Avg-Risk</span>
             <h1 className="flex items-center justify-center view-modal-h1">
-              <RupeeIcon height={15} width={15} />
+              <Icon size={15} name="RupeeIcon" />
               {Number(currentViewTrade?.trade.risk).toFixed(2)}
             </h1>
           </div>
@@ -120,7 +120,7 @@ export default function ViewModal({
           <div className="view-modal-section">
             <span className="view-modal-span">Total PnL</span>
             <h1
-              className={`view-modal-h1 flex items-center justify-center gap-1 ${
+              className={`view-modal-h1 flex items-center justify-center mt-1 ${
                 currentViewTrade?.trade.pnl
                   ? currentViewTrade?.trade.pnl > 0
                     ? "text-green-500"
@@ -128,7 +128,7 @@ export default function ViewModal({
                   : null
               }`}
             >
-              <RupeeIcon height={15} width={15} />
+              <Icon size={15} name="RupeeIcon" />
               {Number(currentViewTrade.trade.pnl).toLocaleString("en-IN", {
                 maximumFractionDigits: 2,
                 minimumFractionDigits: 2,

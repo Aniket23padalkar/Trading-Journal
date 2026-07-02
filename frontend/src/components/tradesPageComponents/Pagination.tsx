@@ -1,7 +1,6 @@
-import ChevronLeftIcon from "../../icons/ChevronLeftIcon.svg?react";
-import ChevronRightIcon from "../../icons/ChevronRightIcon.svg?react";
 import React from "react";
 import { useTradesContext } from "../../hooks/useTradesContext.js";
+import Icon from "../../ui/Icon.js";
 
 interface PaginationParams {
   handleNextPage: () => void;
@@ -39,7 +38,12 @@ function Pagination({
         onClick={handlePrevPage}
         disabled={currentPage === 1 || trades.length === 0}
       >
-        <ChevronLeftIcon height={15} width={15} />
+        <Icon
+          size={15}
+          name="ChevronLeftIcon"
+          stroke="currentColor"
+          strokeWidth={1}
+        />
         <p>Prev</p>
       </button>
       <div className="flex items-center justify-center gap-2 min-w-75">
@@ -87,7 +91,12 @@ function Pagination({
         disabled={currentPage === pagination?.totalPages || trades.length === 0}
       >
         <p>Next</p>
-        <ChevronRightIcon height={15} width={15} />
+        <Icon
+          size={15}
+          name="ChevronRightIcon"
+          stroke="currentColor"
+          strokeWidth={1}
+        />
       </button>
     </div>
   );
