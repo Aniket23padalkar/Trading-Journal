@@ -7,7 +7,7 @@ import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
 import authRoutes from "./modules/auth/auth.routes.js";
 import tradeRoutes from "./modules/trades/trade.routes.js";
-import statsRoutes from "../src/modules/stats/stats.routes.js";
+import statsRoutes from "./modules/stats/stats.routes.js";
 import { errorHandler } from "./middleware/error.middleware.js";
 import { globalLimiter } from "./middleware/rate.limiter.js";
 import { corsMiddleware } from "./middleware/cors.middleware.js";
