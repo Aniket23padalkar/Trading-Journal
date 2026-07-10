@@ -1,8 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { ScaleLoader } from "react-spinners";
-import DashboardImg from "../assets/Dashboard_V1.1.png";
-import TradesImg from "../assets/Trades_V1.1.png";
 import { toast } from "react-toastify";
 import { registerUser } from "../api/authService.js";
 import type { UserSignUpData } from "../types/auth.types.js";
@@ -78,14 +76,14 @@ export default function SignUp() {
           <div className="h-60 shadow-lg shadow-gray-500 absolute top-5 right-4 rounded-xl overflow-hidden">
             <img
               className="object-cover h-full w-full"
-              src={TradesImg}
+              src="/Trades_V1.1.webp"
               alt="trades page img"
             />
           </div>
           <div className="absolute z-10 h-60 shadow-lg shadow-gray-500 bottom-5 left-0 rounded-xl overflow-hidden">
             <img
               className="h-full w-full object-cover"
-              src={DashboardImg}
+              src="/Dashboard_V1.1.webp"
               alt="dashboard img"
             />
           </div>
