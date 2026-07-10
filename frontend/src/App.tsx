@@ -1,16 +1,15 @@
-import React, { Suspense, useContext } from "react";
+import React, { Suspense } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import ProtectedRoute from "./layouts/ProtectedRoute.js";
 import Dashboard from "./pages/Dashboard.js";
 const Trades = React.lazy(() => import("./pages/Trades.js"));
 const Charts = React.lazy(() => import("./pages/Charts.js"));
-const Calender = React.lazy(() => import("./pages/Calender.jsx"));
-const ContactUs = React.lazy(() => import("./pages/ContactUs.jsx"));
+const Calender = React.lazy(() => import("./pages/Calender.js"));
+const ContactUs = React.lazy(() => import("./pages/ContactUs.js"));
 import MainLayout from "./layouts/MainLayout.js";
 import AuthLayout from "./layouts/AuthLayout.js";
 import SignUp from "./pages/SignUp.js";
 import SignIn from "./pages/SignIn.js";
-import { ScaleLoader } from "react-spinners";
 import { useAuthContext } from "./hooks/useAuthContext.js";
 
 export default function App() {
