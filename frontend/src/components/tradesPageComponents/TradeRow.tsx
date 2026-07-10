@@ -1,0 +1,125 @@
+import React, { useCallback } from "react";
+import formatDateTime from "../../utils/formatDateTime.js";
+import type { TradesData } from "../../types/trades.types.js";
+import { useTradesContext } from "../../hooks/useTradesContext.js";
+import Icon from "../../ui/Icon.js";
+
+interface TradeRowParams {
+  trade: TradesData;
+  index: number;
+  handleSetEditTrade: (trade: TradesData) => void;
+  handleDeleteTrade: (trade_id: string) => void;
+  setCurrentViewTrade: React.Dispatch<React.SetStateAction<TradesData | null>>;
+  handleSetViewModal: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+function TradeRow({
+  trade,
+  index,
+  handleSetEditTrade,
+  handleDeleteTrade,
+  setCurrentViewTrade,
+  handleSetViewModal,
+}: TradeRowParams) {
+  const { pagination } = useTradesContext();
+  const handleViewModal = useCallback(() => {
+    setCurrentViewTrade(trade);
+    handleSetViewModal((prev) => !prev);
+  }, [[trade, setCurrentViewTrade, handleSetViewModal]]);
+
+  const startIndex = (pagination.page - 1) * pagination.limit;
+  return (
+    <tr
+      className="hover:bg-gray-100 dark:hover:bg-sky-900 h-10 lg:h-5"
+      onClick={handleViewModal}
+    >
+      <td className="bg-gray-200 dark:bg-gray-900">{startIndex + index + 1}</td>
+      <td className="text-left whitespace-nowrap w-30 font-medium capitalize px-1 bg-gray-100 dark:bg-gray-800">
+        {trade.trade.symbol}
+      </td>
+      <td>
+        <p
+          className={` px-1 border rounded font-medium capitalize ${
+            trade.trade.direction === "long"
+              ? "text-[#03c988] border-[#03c988]"
+              : trade.trade.direction === "short"
+                ? "text-[#ff7779ff] border-[#ff7779ff] "
+                : "text-white"
+          }`}
+        >
+          {trade.trade.direction}
+        </p>
+      </td>
+      <td className=" capitalize dark:text-gray-300">
+        {trade.trade.order_status}
+      </td>
+      <td className="dark:text-gray-300 capitalize ">
+        {trade.trade.market_type}
+      </td>
+      <td className="2xl:text-sm">{trade.stats.total_qty}</td>
+
+      <td>
+        <p className="text-xs bg-blue-100 dark:text-black dark:bg-blue-400 capitalize rounded">
+          {trade.trade.position}
+        </p>
+      </td>
+      <td className=" text-blue-700 dark:text-sky-500 whitespace-nowrap">
+        {formatDateTime(trade.trade.entry_time)}
+      </td>
+      <td className="2xl:text-sm">{trade.trade.risk}</td>
+      <td
+        className={`font-bold ${
+          trade.trade.pnl
+            ? trade.trade.pnl >= 0
+              ? "text-green-600 dark:text-green-500"
+              : "text-red-500 dark:text-red-400"
+            : null
+        }`}
+      >
+        {" "}
+        {trade.trade.pnl && trade.trade.pnl > 0 && "+"}
+        {trade.trade.order_status === "open"
+          ? "-"
+          : Number(trade.trade.pnl).toLocaleString("en-IN", {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2,
+            })}
+        {trade.trade.order_status === "open" ? "-" : "/-"}
+      </td>
+      <td className="2xl:text-sm">
+        {trade.trade.order_status === "open"
+          ? "-"
+          : Number(trade.stats.rr_ratio).toFixed(1)}
+        {trade.trade.order_status === "open" ? "-" : "X"}
+      </td>
+      <td className="capitalize font-medium">{trade.trade.trade_rating}</td>
+      <td>
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            handleSetEditTrade(trade);
+          }}
+          className="cursor-pointer bg-transparent"
+        >
+          <Icon
+            size={12}
+            name="EditIcon"
+            stroke="currentColor"
+            strokeWidth={0.5}
+            className="text-blue-400"
+          />
+        </button>
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            handleDeleteTrade(trade.trade.trade_id);
+          }}
+          className="cursor-pointer bg-transparent xl:pl-2"
+        >
+          <Icon size={15} name="TrashIcon" className="text-red-400" />
+        </button>
+      </td>
+    </tr>
+  );
+}
+export default React.memo(TradeRow);

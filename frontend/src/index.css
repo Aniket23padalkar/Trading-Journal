@@ -1,11 +1,15 @@
-@import url("https://fonts.googleapis.com/css2?family=Epunda+Sans:ital,wght@0,300..900;1,300..900&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Manrope:wght@200..800&family=Outfit:wght@100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto+Slab:wght@100..900&family=Roboto:ital,wght@0,100..900;1,100..900&family=Rubik:ital,wght@0,300..900;1,300..900&display=swap");
 @import "tailwindcss";
+@layer theme, base, components, utilities;
 @plugin "@tailwindcss/typography";
 @custom-variant dark (&:where(.dark, .dark *));
 
 @layer base {
   html {
     height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     font-family: "Manrope", system-ui, serif;
     font-feature-settings: normal;
     font-variation-settings: normal;
@@ -14,15 +18,15 @@
 
   #root,
   body {
-    @apply flex flex-col w-full;
+    @apply flex flex-col w-full max-w-[1600px];
   }
 
   th {
-    @apply p-2 text-sm capitalize;
+    @apply p-2 text-sm lg:text-xs md:text-xs 2xl:text-base capitalize font-medium;
   }
 
   td {
-    @apply p-2 text-sm text-center border-t border-gray-300 dark:border-gray-700;
+    @apply p-2 text-sm lg:text-xs md:text-xs 2xl:text-base text-center border-t border-gray-300 dark:border-gray-700;
   }
 }
 
