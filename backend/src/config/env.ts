@@ -6,7 +6,6 @@ const requiredEnvVars = [
   "PORT",
   "NODE_ENV",
   "DB_URL",
-  "DB_URL_DEV",
   "JWT_SECRET",
   "JWT_ISSUER",
 ];
@@ -21,7 +20,7 @@ export const config = {
   jwtSecret: process.env.JWT_SECRET as string,
   jwtIssuer: process.env.JWT_ISSUER as string,
   db: {
-    connectionString: process.env.DB_URL_DEV as string,
+    connectionString: process.env.DB_URL as string,
   },
   port: Number(process.env.PORT),
 };
